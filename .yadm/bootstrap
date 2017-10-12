@@ -7,14 +7,6 @@ cd "$HOME"
 echo "Init submodules"
 yadm submodule update --recursive --init
 
-# Install rmux plugin manager
-if [ ! -d ~/.tmux/plugins/tpm ]; then
-    echo "Cloning tpm"
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-    echo "Installing tmux plugins"
-    ~/.tmux/plugins/tpm/bin/install_plugins
-fi
-
 system_type=$(uname -s)
 
 if [ "$system_type" = "Darwin" ]; then
