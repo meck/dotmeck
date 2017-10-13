@@ -2,8 +2,8 @@
 
 # Because Git submodule commands cannot operate without a work tree, they must
 # be run from within $HOME (assuming this is the root of your dotfiles)
+# Zpresto is installed as a submodule
 cd "$HOME"
-
 echo "Init submodules"
 yadm submodule update --recursive --init
 
@@ -33,3 +33,8 @@ if [ "$system_type" = "Darwin" ]; then
   fi
 
 fi
+
+
+# Default shell to zsh
+echo "Setting shell to zsh"
+sudo chsh -s '$(which zsh)' '$USER'
