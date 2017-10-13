@@ -1,18 +1,14 @@
 tap "homebrew/core"
 tap "homebrew/bundle"
-tap "d12frosted/emacs-plus"
-tap "go-delve/delve"
 tap "caskroom/fonts"
 tap "caskroom/versions"
 tap "caskroom/cask"
 tap "neovim/neovim"
-cask "osxfuse"
 brew "coreutils"
 brew "cowsay"
 brew "ctags"
 brew "go"
 brew "dep"
-brew "elinks", args: ["devel"]
 brew "exa"
 brew "fd"
 brew "fortune"
@@ -25,7 +21,6 @@ brew "iperf3"
 brew "luajit"
 brew "markdown"
 brew "mas"
-brew "micro"
 brew "mtr"
 brew "neofetch"
 brew "neovim", args: ["HEAD"]
@@ -36,7 +31,6 @@ brew "python"
 brew "python3"
 brew "rclone"
 brew "ripgrep"
-brew "rtv"
 brew "shellcheck"
 brew "smartmontools"
 brew "sshfs"
@@ -49,65 +43,8 @@ brew "vim", args: ["with-override-system-vi"]
 brew "wget"
 brew "yadm"
 brew "zsh"
-brew "go-delve/delve/delve"
-cask "0xed"
-cask "amethyst"
-cask "arduino"
-cask "calibre"
-cask "coconutbattery"
-cask "dropbox"
-cask "duet"
-cask "google-chrome"
-cask "iina"
-cask "istumbler"
 cask "iterm2"
-cask "java"
-cask "keka"
-cask "mactex"
-cask "macvim"
-cask "omnidisksweeper"
-cask "omnigraffle"
-cask "qlcolorcode"
-cask "qlstephen"
-cask "qlvideo"
-cask "qutebrowser"
-cask "reaper"
-cask "servo"
-cask "skype"
-cask "spectacle"
-cask "spotify"
-cask "steam"
-cask "sublime"
-cask "sublime-text"
-cask "transmission"
-cask "vimr"
-cask "visual-studio-code"
-cask "vlc"
-cask "vmware-fusion"
-cask "wifi-explorer"
-cask "wireshark"
-cask "xld"
 cask "caskroom/fonts/font-hasklig"
 cask "caskroom/fonts/font-iosevka"
 cask "caskroom/fonts/font-source-code-pro-for-powerline"
 cask "caskroom/versions/iterm2-nightly"
-mas "1Password", id: 443987910
-mas "Airmail 3", id: 918858936
-mas "AJA System Test Lite", id: 1092006274
-mas "Apple Configurator 2", id: 1037126344
-mas "Blackmagic Disk Speed Test", id: 425264550
-mas "Bredbandskollen", id: 1147976909
-mas "Buy Me a Pie!", id: 1208019955
-mas "iMovie", id: 408981434
-mas "Keynote", id: 409183694
-mas "Microsoft Remote Desktop", id: 715768417
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541
-mas "PCalc", id: 403504866
-mas "PiPifier", id: 1160374471
-mas "Reeder", id: 880001334
-mas "Slack", id: 803453959
-mas "StageTimer Display", id: 634542074
-mas "StageTimer2", id: 655220201
-mas "The Unarchiver", id: 425424353
-mas "Xcode", id: 497799835
