@@ -9,6 +9,10 @@ let g:intero_start_immediately = 0
 " Use ALE (works even when not using Intero)
 let g:intero_use_neomake = 0
 
+" ---- eagletmt/neco-ghc -----
+
+"  Show type in autocomplete
+let g:necoghc_enable_detailed_browse = 1
 
 " ----- hindent & stylish-haskell -----
 

@@ -59,6 +59,10 @@ let g:netrw_banner = 0
 
 " Neovim Stuff
 if has('nvim')
+
+  " Enable Truecolor
+  set termguicolors
+
   "Navigate terminal window
   tnoremap <C-h> <C-\><C-n><C-w>h
   tnoremap <C-j> <C-\><C-n><C-w>j
@@ -68,6 +72,10 @@ if has('nvim')
 
   " Always enter terminal in insert mode
   autocmd BufWinEnter,WinEnter term://* startinsert
+  autocmd BufLeave term://* stopinsert
+
+  " no linenumbers in terminals
+  autocmd TermOpen * setlocal nonumber norelativenumber
 
   " Live substitution
   set inccommand=split
@@ -130,7 +138,7 @@ autocmd VimEnter * nested
 Plug 'vim-airline/vim-airline'
 
 " Best theme
-Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
+Plug 'meck/nord-vim', { 'branch': 'develop' }
 
 " Asynchronous Lint Engine
 if has('timers') && exists('*job_start') && exists('*ch_close_in') || has('nvim')
@@ -287,43 +295,9 @@ let g:fzf_colors =
   \ 'header':  ['fg', 'Comment'] }
 
 " Theme
+let g:nord_comment_brightness = 5
 colorscheme nord
 
-if has('gui_vimr')
-  let s:nord0_gui = '#2e3440'
-  let s:nord1_gui = '#3b4252'
-  let s:nord2_gui = '#434c5e'
-  let s:nord3_gui = '#4c566a'
-  let s:nord4_gui = '#d8dee9'
-  let s:nord5_gui = '#e5e9f0'
-  let s:nord6_gui = '#eceff4'
-  let s:nord7_gui = '#8fbcbb'
-  let s:nord8_gui = '#88c0d0'
-  let s:nord9_gui = '#81a1c1'
-  let s:nord10_gui = '#5e81ac'
-  let s:nord11_gui = '#bf616a'
-  let s:nord12_gui = '#d08770'
-  let s:nord13_gui = '#ebcb8b'
-  let s:nord14_gui = '#a3be8c'
-  let s:nord15_gui = '#b48ead'
-
-  let g:terminal_color_0 = s:nord1_gui
-  let g:terminal_color_1 = s:nord11_gui
-  let g:terminal_color_2 = s:nord14_gui
-  let g:terminal_color_3 = s:nord13_gui
-  let g:terminal_color_4 = s:nord9_gui
-  let g:terminal_color_5 = s:nord15_gui
-  let g:terminal_color_6 = s:nord8_gui
-  let g:terminal_color_7 = s:nord5_gui
-  let g:terminal_color_8 = s:nord3_gui
-  let g:terminal_color_9 = s:nord11_gui
-  let g:terminal_color_10 = s:nord14_gui
-  let g:terminal_color_11 = s:nord13_gui
-  let g:terminal_color_12 = s:nord9_gui
-  let g:terminal_color_13 = s:nord15_gui
-  let g:terminal_color_14 = s:nord7_gui
-  let g:terminal_color_15 = s:nord6_gui
-endif
 
 """"""""""""""
 "  Mappings  "
@@ -333,7 +307,7 @@ endif
 nnoremap <silent><esc> :noh<return><esc>
 
 " Netrw explorer enter/return
-nnoremap <Leader>e :Rexplore<CR>
+nnoremap <Leader>e :Lexplore<CR>
 
 " Tagbar
 nnoremap <Leader>tb :TagbarToggle <CR>
