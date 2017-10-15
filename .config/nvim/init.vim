@@ -70,12 +70,16 @@ if has('nvim')
   tnoremap <C-l> <C-\><C-n><C-w>l
   tnoremap <Esc> <C-\><C-n>
 
-  " Always enter terminal in insert mode
-  autocmd BufWinEnter,WinEnter term://* startinsert
-  autocmd BufLeave term://* stopinsert
+  augroup nvim_term
+    autocmd!
 
-  " no linenumbers in terminals
-  autocmd TermOpen * setlocal nonumber norelativenumber
+    " Always enter terminal in insert mode
+    autocmd BufWinEnter,WinEnter,TermOpen term://* startinsert
+    autocmd BufLeave term://* stopinsert
+
+    " no linenumbers in terminals
+    autocmd TermOpen * setlocal nonumber norelativenumber
+  augroup END
 
   " Live substitution
   set inccommand=split
@@ -90,17 +94,21 @@ map <Space> <Leader>
 """""""""""""
 
 " Automatically install the plugin manager
+augroup plug_auto_install
+  autocmd!
+augroup END
+
 if has('nvim')
   if empty(glob('~/.config/nvim/autoload/plug.vim'))
     silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    autocmd plug_auto_install VimEnter * PlugInstall --sync | source $MYVIMRC
   endif
 else
   if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    autocmd plug_auto_install VimEnter * PlugInstall --sync | source $MYVIMRC
   endif
 endif
 
@@ -128,11 +136,15 @@ Plug 'tpope/vim-repeat'
 
 " Automanagment of sessions
 Plug 'tpope/vim-obsession'
+
 " Autoload any session in the current directory if we start without arguments
-autocmd VimEnter * nested
-          \ if !argc() && empty(v:this_session) && filereadable('Session.vim') |
-          \   source Session.vim |
-          \ endif
+augroup obsssions_autoload
+  autocmd!
+  autocmd VimEnter * nested
+            \ if !argc() && empty(v:this_session) && filereadable('Session.vim') |
+            \   source Session.vim |
+            \ endif
+augroup END
 
 " Statusline
 Plug 'vim-airline/vim-airline'
@@ -269,7 +281,10 @@ if has('nvim')
 endif
 
 " Close quickfix when done
-autocmd CompleteDone * silent! pclose!
+augroup comp_qlist_autoclose
+  autocmd!
+  autocmd CompleteDone * silent! pclose!
+augroup END
 
 " Airline
 let g:airline_powerline_fonts = 1
@@ -295,7 +310,7 @@ let g:fzf_colors =
   \ 'header':  ['fg', 'Comment'] }
 
 " Theme
-let g:nord_comment_brightness = 5
+let g:nord_comment_brightness = 10
 colorscheme nord
 
 
