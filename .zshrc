@@ -40,8 +40,6 @@ setopt transient_rprompt
 RPS1='${vim_mode}'
 
 
-# source fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 
 ###########
@@ -69,6 +67,21 @@ path_to_rustc=$(which rustc)
 if [[ -x "$path_to_rustc" ]]; then
   export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 fi
+
+
+#########
+#  fzf  #
+#########
+
+# source fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# --files: List files that would be searched but do not search
+# --no-ignore: Do not respect .gitignore, etc...
+# --hidden: Search hidden files and folders
+# --follow: Follow symlinks
+# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+(( $+commands[rg] )) && export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 
 #############
 #  Aliases  #
