@@ -1,7 +1,15 @@
+scriptencoding utf-8                             " Encoding of this script
+
+" A variable to use in diffrent places in this file
+if has('nvim')
+  let s:vimDir = '$HOME/.config/nvim'
+else
+  let s:vimDir = '$HOME/.vim'
+endif
+
 """"""""""""""""""""""
 "  Built in settings  "
 """""""""""""""""""""""
-scriptencoding utf-8                             " Encoding of this script
 set t_Co=256                                     " Yhea colors for everyone
 set clipboard^=unnamed,unnamedplus               " Use MacOs / Linux clipboard
 language en_US.UTF-8                             " Not MacOS Lang
@@ -34,6 +42,16 @@ set scrolloff=4                                  " Start scrolling before we hit
 set sidescrolloff=5
 set softtabstop=2
 set shiftwidth=2
+
+" Persistent Undo
+if has('persistent_undo')
+  " Create the undo directory if it dosent exsist
+  let s:myUndoDir = expand(s:vimDir . '/undodir')
+  call system('mkdir -p ' . s:myUndoDir)
+  " Set the directory
+  let &undodir = s:myUndoDir
+  set undofile
+endif
 
 
 set completeopt=menuone,longest,preview,noselect " Completion
@@ -98,23 +116,13 @@ augroup plug_auto_install
   autocmd!
 augroup END
 
-if has('nvim')
-  if empty(glob('~/.config/nvim/autoload/plug.vim'))
-    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd plug_auto_install VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
-else
-  if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd plug_auto_install VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
+if empty(glob(expand(s:vimDir . '/autoload/plug.vim')))
+  execute('silent !curl -fLo ' . s:vimDir . '/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+  autocmd plug_auto_install VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-
 " Start the plugin manager
-call plug#begin('~/.vim/plugged')
+call plug#begin(expand(s:vimDir . '/plugged'))
 
 " Adds seamless navigation between tmux and vim
 "<ctrl-h> => Left
@@ -174,6 +182,9 @@ Plug 'ervandew/supertab'
 
 " Tagbar
 Plug 'majutsushi/tagbar'
+
+" UndoTree
+Plug 'mbbill/undotree'
 
 " Snippets Manager and default Snippets
 Plug 'SirVer/ultisnips'
@@ -248,7 +259,6 @@ let g:UltiSnipsExpandTrigger='<C-s>'
 let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
-
 " SuperTab
 let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
 let g:SuperTabLongestEnhanced=1
@@ -261,8 +271,8 @@ let g:gitgutter_sign_modified = '∙'
 let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
+" Deoplete
 if has('nvim')
-    " Deoplete
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#ignore_sources = {}
   let g:deoplete#ignore_sources._ = ['buffer', 'member', 'tag']
@@ -313,6 +323,16 @@ let g:fzf_colors =
 let g:nord_comment_brightness = 10
 colorscheme nord
 
+"""""""""""""""
+"  Functions  "
+"""""""""""""""
+
+" Whitespace removal
+fun! TrimWhitespace()
+    let l:save = winsaveview()
+    %s/\s\+$//e
+    call winrestview(l:save)
+endfun
 
 """"""""""""""
 "  Mappings  "
@@ -330,6 +350,9 @@ nnoremap <Leader>tb :TagbarToggle <CR>
 " Change buffer
 nnoremap <Leader>b :ls<CR>:b<Space>
 
+" UndoTree
+nnoremap <silent><Leader>u :UndotreeToggle<CR>
+
 " FZF
 " Search for files
 nnoremap <Leader>zf :Files<CR>
@@ -343,14 +366,7 @@ cmap w!! w !sudo tee >/dev/null %
 nnoremap <silent> <Leader>te :belowright split +resize\ 20 \| terminal <CR>
 nnoremap <silent> <Leader>vte :belowright vsplit \| terminal <CR>
 
-" Whitespace removal
-fun! TrimWhitespace()
-    let l:save = winsaveview()
-    %s/\s\+$//e
-    call winrestview(l:save)
-endfun
-
-command! TrimWhitespace call TrimWhitespace()
+" Whitespace Clean
 noremap <Leader>ws :call TrimWhitespace()<CR>
 
 " Tab Navigation hjkl
