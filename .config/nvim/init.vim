@@ -158,7 +158,7 @@ augroup END
 Plug 'vim-airline/vim-airline'
 
 " Best theme
-Plug 'meck/nord-vim', { 'branch': 'develop' }
+Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
 
 " Asynchronous Lint Engine
 if has('timers') && exists('*job_start') && exists('*ch_close_in') || has('nvim')
