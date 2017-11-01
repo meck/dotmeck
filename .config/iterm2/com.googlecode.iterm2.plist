@@ -883,17 +883,19 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 126 606 469 0 0 1680 1050 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>649 631 796 473 0 0 2560 1417 </string>
+	<string>325 462 918 401 0 0 1680 1027 </string>
+	<key>NSWindow Frame UKCrashReporter</key>
+	<string>230 833 592 584 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>513 229 1010 1023 0 0 2560 1417 </string>
+	<string>194 156 1010 1027 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>733 258 1794 1080 0 0 2560 1417 </string>
+	<string>2660 -31 1514 993 2560 -48 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>1333 0 1010 1073 0 0 2560 1417 </string>
+	<string>576 0 1010 1027 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>40 113 1770 1133 0 0 2560 1417 </string>
+	<string>311 69 1858 1077 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>490 117 1594 1013 0 0 2880 1597 </string>
+	<string>368 0 1010 1027 0 0 1680 1027 </string>
 	<key>NeverWarnAboutShortLivedSessions_067F3752-E1C4-4C74-8EE9-B390B168C590</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_067F3752-E1C4-4C74-8EE9-B390B168C590_selection</key>
@@ -1558,7 +1560,7 @@
 			<key>Normal Font</key>
 			<string>Iosevka-Light 16</string>
 			<key>Only The Default BG Color Uses Transparency</key>
-			<true/>
+			<false/>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>
@@ -1623,7 +1625,7 @@
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Transparency</key>
-			<real>0.025399870562130177</real>
+			<real>0.01774401713573423</real>
 			<key>Unlimited Scrollback</key>
 			<false/>
 			<key>Use Bold Font</key>
@@ -2447,7 +2449,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-10-13T13:14:23Z</date>
+	<date>2017-10-23T08:30:51Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -2460,6 +2462,8 @@
 	<integer>25</integer>
 	<key>TerminalVMargin</key>
 	<integer>25</integer>
+	<key>UKCrashReporterLastCrashReportDate</key>
+	<real>1508515328</real>
 	<key>URLHandlersByGuid</key>
 	<dict>
 		<key>ssh</key>

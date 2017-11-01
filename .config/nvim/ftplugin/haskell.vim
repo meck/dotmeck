@@ -21,6 +21,7 @@ let g:hindent_on_save = 0
 
 " Helper function, called below with mappings
 function! HaskellFormat(which) abort
+  let l:save = winsaveview()
   if a:which ==# 'hindent' || a:which ==# 'both'
     :Hindent
   endif
@@ -28,6 +29,7 @@ function! HaskellFormat(which) abort
     silent! exe 'undojoin'
     silent! exe 'keepjumps %!stylish-haskell'
   endif
+  call winrestview(l:save)
 endfunction
 
 " Key bindings
