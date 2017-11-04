@@ -6,6 +6,7 @@ let g:ale_linters.haskell = ['stack-ghc-mod', 'hlint']
 
 " Prefer starting Intero manually (faster startup times)
 let g:intero_start_immediately = 0
+
 " Use ALE (works even when not using Intero)
 let g:intero_use_neomake = 0
 
@@ -16,32 +17,24 @@ let g:necoghc_enable_detailed_browse = 1
 
 " ----- hindent & stylish-haskell -----
 
-" Indenting on save is too aggressive for me
+" Formating on save is too aggressive for me
 let g:hindent_on_save = 0
+let g:stylishask_on_save = 0
 
-" Helper function, called below with mappings
-function! HaskellFormat(which) abort
-  let l:save = winsaveview()
-  if a:which ==# 'hindent' || a:which ==# 'both'
-    :Hindent
-  endif
-  if a:which ==# 'stylish' || a:which ==# 'both'
-    silent! exe 'undojoin'
-    silent! exe 'keepjumps %!stylish-haskell'
-  endif
-  call winrestview(l:save)
+function! HaskellFormat()
+  :Hindent
+  :Stylishask
 endfunction
 
-" Key bindings
-augroup haskellStylish
-  au!
-  " Just hindent
-  nnoremap <leader>hi :Hindent<CR>
-  " Just stylish-haskell
-  nnoremap <leader>hs :call HaskellFormat('stylish')<CR>
-  " First hindent, then stylish-haskell
-  nnoremap <leader>hf :call HaskellFormat('both')<CR>
-augroup END
+" Just hindent
+nnoremap <leader>fi :Hindent<CR>
+" Just stylish-haskell
+nnoremap <leader>fs :Stylishask<CR>
+" First hindent, then stylish-haskell
+nnoremap <leader>ff :call HaskellFormat()<CR>
+
+
+" ----- Intero -----
 
 nnoremap <silent> <leader>io :InteroOpen<CR>
 nnoremap <silent> <leader>iov :InteroOpen<CR><C-W>H
@@ -67,6 +60,26 @@ autocmd BufWinEnter,WinEnter Intero startinsert
 " " Reload the file in Intero after saving
 " autocmd! BufWritePost *.hs InteroReload
 
+
+" ----- Hoogle -----
+
+" Hoogle the word under the cursor
+nnoremap <silent> <leader>hh :Hoogle<CR>
+
+" Hoogle and prompt for input
+nnoremap <leader>hH :Hoogle
+
+" Hoogle for detailed documentation (e.g. "Functor")
+nnoremap <silent> <leader>hi :HoogleInfo<CR>
+
+" Hoogle for detailed documentation and prompt for input
+nnoremap <leader>hI :HoogleInfo
+
+" Hoogle, close the Hoogle window
+nnoremap <silent> <leader>hz :HoogleClose<CR>
+
+
+" ----- Tagbar -----
 
 " Hasktags for tagbar
 let g:tagbar_type_haskell = {

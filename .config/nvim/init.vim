@@ -212,7 +212,9 @@ endif
 "Syntax
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
 Plug 'alx741/vim-hindent', { 'for': 'haskell' }
+Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
 Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 
 " Arduino
 Plug 'sudar/vim-arduino-syntax'
@@ -220,7 +222,6 @@ Plug 'meck/ale-platformio'
 
 " Markdown
 Plug 'plasticboy/vim-markdown'
-Plug 'JamshedVesuna/vim-markdown-preview', { 'for' : 'markdown' }
 
 " Python
 Plug 'zchee/deoplete-jedi' , { 'for': 'python' }
@@ -335,6 +336,9 @@ endif
 
 " Theme
 let g:nord_comment_brightness = 10
+" let g:nord_uniform_status_lines = 1
+let g:nord_italic_comments = 1
+let g:nord_uniform_diff_background = 1
 colorscheme nord
 
 """""""""""""""
