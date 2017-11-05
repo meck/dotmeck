@@ -267,9 +267,9 @@ xmap <C-k>     <Plug>(neosnippet_expand_target)
 let g:neosnippet#enable_snipmate_compatibility = 1
 
 " For conceal markers in snippets
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
+" if has('conceal')
+"   set conceallevel=2 concealcursor=niv
+" endif
 
 " Traverse the popup menu with Tab
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
