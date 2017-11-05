@@ -15,11 +15,12 @@ let g:intero_use_neomake = 0
 "  Show type in autocomplete
 let g:necoghc_enable_detailed_browse = 1
 
-" ----- hindent & stylish-haskell -----
+" ----- Code formating -----
 
 " Formating on save is too aggressive for me
 let g:hindent_on_save = 0
 let g:stylishask_on_save = 0
+let g:brittany_on_save = 0
 
 function! HaskellFormat()
   :Hindent
@@ -30,6 +31,8 @@ endfunction
 nnoremap <leader>fi :Hindent<CR>
 " Just stylish-haskell
 nnoremap <leader>fs :Stylishask<CR>
+" Brittany
+nnoremap <leader>fb :Brittany<CR>
 " First hindent, then stylish-haskell
 nnoremap <leader>ff :call HaskellFormat()<CR>
 
@@ -78,6 +81,18 @@ nnoremap <leader>hI :HoogleInfo
 " Hoogle, close the Hoogle window
 nnoremap <silent> <leader>hz :HoogleClose<CR>
 
+
+" ----- Pointfree convertion -----
+
+function! Pointfree()
+  call setline('.', split(system('pointfree '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
+endfunction
+vnoremap <silent> <leader>h. :call Pointfree()<CR>
+
+function! Pointful()
+  call setline('.', split(system('pointful '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
+endfunction
+vnoremap <silent> <leader>h> :call Pointful()<CR>
 
 " ----- Tagbar -----
 

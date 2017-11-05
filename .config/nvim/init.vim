@@ -172,13 +172,14 @@ Plug 'godlygeek/tabular'
 " Completion engine
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
 " Displays function signatures from completions in the command line.
 Plug 'Shougo/echodoc.vim'
-
-" Tab-complete
-Plug 'ervandew/supertab'
 
 " Tagbar
 Plug 'majutsushi/tagbar'
@@ -187,7 +188,8 @@ Plug 'majutsushi/tagbar'
 Plug 'mbbill/undotree'
 
 " Snippets Manager and default Snippets
-Plug 'SirVer/ultisnips'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'
 
 " Vim Git runtime files
@@ -215,6 +217,7 @@ Plug 'alx741/vim-hindent', { 'for': 'haskell' }
 Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
 Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug 'meck/vim-brittany', { 'for': 'haskell' }
 
 " Arduino
 Plug 'sudar/vim-arduino-syntax'
@@ -255,16 +258,22 @@ if has_key(g:plugs, 'ale')
   let g:ale_sign_column_always = 1
 endif
 
-" UltiSnips
-let g:UltiSnipsExpandTrigger='<C-s>'
-let g:UltiSnipsJumpForwardTrigger='<tab>'
-let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
+" Expand snippets
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-" SuperTab
-let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
-let g:SuperTabLongestEnhanced=1
-let g:SuperTabLongestHighlight=1
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+" Load other snippets
+let g:neosnippet#enable_snipmate_compatibility = 1
+
+" For conceal markers in snippets
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+" Traverse the popup menu with Tab
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " GitGutter
 let g:gitgutter_sign_added = '∙'
@@ -273,23 +282,21 @@ let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
 " Deoplete
-if has('nvim')
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#ignore_sources = {}
-  let g:deoplete#ignore_sources._ = ['buffer', 'member', 'tag']
-  let g:deoplete#max_list = 30
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#ignore_sources = {}
+let g:deoplete#ignore_sources._ = ['buffer', 'member', 'tag']
+let g:deoplete#max_list = 30
 
-  " Disable comments as source
-  call deoplete#custom#source('_',
-  \ 'disabled_syntaxes', ['Comment', 'String'])
+" Disable comments as source
+call deoplete#custom#source('_',
+\ 'disabled_syntaxes', ['Comment', 'String'])
 
-  " Use auto delimiter feature
-  call deoplete#custom#source('_', 'converters',
-  \ ['converter_auto_delimiter', 'remove_overlap'])
+" Use auto delimiter feature
+call deoplete#custom#source('_', 'converters',
+\ ['converter_auto_delimiter', 'remove_overlap'])
 
-  " Move completions from around in the current buffer lower
-  call deoplete#custom#source('around', 'rank', 100)
-endif
+" Move completions from around in the current buffer lower
+call deoplete#custom#source('around', 'rank', 100)
 
 " Close quickfix when done
 augroup comp_qlist_autoclose
@@ -352,12 +359,39 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 
+" Toggles shows or hides the nonempty lists
+" and turns on Ales auto open
+fun! ToggleAleAutoList()
+  let l:winnr = winnr()
+  if g:ale_open_list
+    let g:ale_open_list = 0
+    cclose
+    lclose
+  else
+    if len(getqflist()) != 0
+      copen
+      stopinsert
+    endif
+    if len(getloclist(0)) != 0
+      lopen
+    endif
+    let g:ale_open_list = 1
+  endif
+  if l:winnr !=# winnr()
+      wincmd p
+  endif
+endfun
+
+
 """"""""""""""
 "  Mappings  "
 """"""""""""""
 
 " Clear search hightligh
 nnoremap <silent><esc> :noh<return><esc>
+
+" Toggle the autoopening of lists
+nnoremap <silent><Leader>q :call ToggleAleAutoList()<CR>
 
 " Netrw explorer enter/return
 nnoremap <Leader>e :Lexplore<CR>
