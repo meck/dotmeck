@@ -1,4 +1,6 @@
 #
+# Executes commands at the start of an interactive session.
+#
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
@@ -82,6 +84,11 @@ fi
 # --follow: Follow symlinks
 # --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 (( $+commands[rg] )) && export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+
+(( $+commands[fd] )) && export FZF_CTRL_T_COMMAND='fd . $HOME'
+(( $+commands[fd] )) && export FZF_ALT_C_COMMAND='fd -t d . $HOME'
+
+
 
 #############
 #  Aliases  #
