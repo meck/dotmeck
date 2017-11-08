@@ -79,7 +79,7 @@ let g:netrw_banner = 0
 if has('nvim')
 
   " Enable Truecolor
-  if &term !~? 'rxvt'
+  if $TERM !~? 'rxvt'
     set termguicolors
   endif
 
