@@ -79,7 +79,9 @@ let g:netrw_banner = 0
 if has('nvim')
 
   " Enable Truecolor
-  set termguicolors
+  if &term !~? 'rxvt'
+    set termguicolors
+  endif
 
   "Navigate terminal window
   tnoremap <C-h> <C-\><C-n><C-w>h
