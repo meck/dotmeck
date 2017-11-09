@@ -319,6 +319,7 @@ call deoplete#custom#source('around', 'rank', 100)
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
     \ 'haskell': ['hie', '--lsp'],
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ }
 
 " Show type info (and short doc) of identifier under cursor.
@@ -344,6 +345,9 @@ nnoremap <silent> <Leader>lS :call LanguageClient_workspace_symbol()<CR>
 
 " List all references of identifier under cursor.
 nnoremap <silent> <Leader>ll :call LanguageClient_textDocument_references()<CR>
+
+" Show code action
+nnoremap <silent> <Leader>la :call LanguageClient_textDocument_codeAction()<CR>
 
 
 

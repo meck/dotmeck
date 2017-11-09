@@ -12,36 +12,10 @@ fi
 
 # Customize to your needs...
 
+zstyle ':prezto:module:editor:info:keymap:primary' format ''
+zstyle ':prezto:module:editor:info:keymap:alternate' format '[NORMAL]'
 
-# Vim mode in promt
-vim_ins_mode=""
-vim_cmd_mode="[NORMAL]"
-vim_mode=$vim_ins_mode
-
-function zle-keymap-select {
-  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-  zle reset-prompt
-}
-zle -N zle-keymap-select
-
-function zle-line-finish {
-  vim_mode=$vim_ins_mode
-}
-zle -N zle-line-finish
-
-# Fix a bug when you C-c in CMD mode and you'd be prompted with CMD mode indicator, while in fact you would be in INS mode
-# Fixed by catching SIGINT (C-c), set vim_mode to INS and then repropagate the SIGINT, so if anything else depends on it, we will not break it
-function TRAPINT() {
-  vim_mode=$vim_ins_mode
-  return $(( 128 + $1 ))
-}
-
-# don't display RPROMPT for previously accepted lines; only display it next to current line
-setopt transient_rprompt
-
-RPS1='${vim_mode}'
-
-
+RPS1='$editor_info[keymap]'
 
 
 ###########

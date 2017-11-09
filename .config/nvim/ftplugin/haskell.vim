@@ -1,6 +1,8 @@
 " ----- w0rp/ale -----
 
-let g:ale_linters.haskell = ['stack-ghc-mod', 'hlint']
+" Testing Language Server For Linting
+let b:ale_enabled = 0
+" let g:ale_linters.haskell = ['stack-ghc-mod', 'hlint']
 
 " ----- Language Client Server -----
 
@@ -20,7 +22,6 @@ augroup interoMappings
   autocmd!
 
   nnoremap <silent> <leader>io :InteroOpen<CR>
-  nnoremap <silent> <leader>iov :InteroOpen<CR><C-W>H
   nnoremap <silent> <leader>ih :InteroHide<CR>
   nnoremap <silent> <leader>is :InteroStart<CR>
   nnoremap <silent> <leader>ik :InteroKill<CR>
