@@ -2,13 +2,48 @@
 
 let g:ale_linters.haskell = ['stack-ghc-mod', 'hlint']
 
+" ----- Language Client Server -----
+
+" Use for gq format and autoformat
+" Doesent Work with HIE currently
+setlocal formatexpr=LanguageClient_textDocument_rangeFormatting()
+
 " ----- parsonsmatt/intero-neovim -----
 
-" Prefer starting Intero manually (faster startup times)
-let g:intero_start_immediately = 0
+" Prefer starting Intero automatically
+let g:intero_start_immediately = 1
 
 " Use ALE (works even when not using Intero)
 let g:intero_use_neomake = 0
+
+augroup interoMappings
+  autocmd!
+
+  nnoremap <silent> <leader>io :InteroOpen<CR>
+  nnoremap <silent> <leader>iov :InteroOpen<CR><C-W>H
+  nnoremap <silent> <leader>ih :InteroHide<CR>
+  nnoremap <silent> <leader>is :InteroStart<CR>
+  nnoremap <silent> <leader>ik :InteroKill<CR>
+
+  " Reload the file in Intero after saving or do it manually
+  autocmd BufWritePost *.hs InteroReload
+  nnoremap <silent> <leader>wr :w \| :InteroReload<CR>
+
+  nnoremap <silent> <leader>il :InteroLoadCurrentModule<CR>
+  nnoremap <silent> <leader>if :InteroLoadCurrentFile<CR>
+
+  map <leader>t <Plug>InteroGenericType
+  map <leader>T <Plug>InteroType
+  nnoremap <silent> <leader>it :InteroTypeInsert<CR>
+
+  nnoremap <silent> <leader>jd :InteroGoToDef<CR>
+  nnoremap <silent> <leader>iu :InteroUses<CR>
+  nnoremap <leader>ist :InteroSetTargets<SPACE>
+
+  " Enter insertmode when going to the REPL
+  autocmd BufWinEnter,WinEnter Intero startinsert
+
+augroup END
 
 " ---- eagletmt/neco-ghc -----
 
@@ -17,52 +52,11 @@ let g:necoghc_enable_detailed_browse = 1
 
 " ----- Code formating -----
 
-" Formating on save is too aggressive for me
-let g:hindent_on_save = 0
-let g:stylishask_on_save = 0
-let g:brittany_on_save = 0
+" Formating on save
+let g:brittany_on_save = 1
 
-function! HaskellFormat()
-  :Hindent
-  :Stylishask
-endfunction
-
-" Just hindent
-nnoremap <leader>fi :Hindent<CR>
-" Just stylish-haskell
-nnoremap <leader>fs :Stylishask<CR>
 " Brittany
 nnoremap <leader>fb :Brittany<CR>
-" First hindent, then stylish-haskell
-nnoremap <leader>ff :call HaskellFormat()<CR>
-
-
-" ----- Intero -----
-
-nnoremap <silent> <leader>io :InteroOpen<CR>
-nnoremap <silent> <leader>iov :InteroOpen<CR><C-W>H
-nnoremap <silent> <leader>ih :InteroHide<CR>
-nnoremap <silent> <leader>is :InteroStart<CR>
-nnoremap <silent> <leader>ik :InteroKill<CR>
-
-nnoremap <silent> <leader>wr :w \| :InteroReload<CR>
-nnoremap <silent> <leader>il :InteroLoadCurrentModule<CR>
-nnoremap <silent> <leader>if :InteroLoadCurrentFile<CR>
-
-map <leader>t <Plug>InteroGenericType
-map <leader>T <Plug>InteroType
-nnoremap <silent> <leader>it :InteroTypeInsert<CR>
-
-nnoremap <silent> <leader>jd :InteroGoToDef<CR>
-nnoremap <silent> <leader>iu :InteroUses<CR>
-nnoremap <leader>ist :InteroSetTargets<SPACE>
-
-" Enter insertmode when going to the REPL
-autocmd BufWinEnter,WinEnter Intero startinsert
-
-" " Reload the file in Intero after saving
-" autocmd! BufWritePost *.hs InteroReload
-
 
 " ----- Hoogle -----
 

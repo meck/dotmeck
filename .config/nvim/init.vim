@@ -176,6 +176,17 @@ if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
   Plug 'Shougo/deoplete.nvim'
+endif
+
+" Language server client
+if has('nvim')
+  Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'autozimu/LanguageClient-neovim'
+endif
+
+" Needed for Deoplete and Language Server Client in vim
+if !has('nvim')
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -215,8 +226,6 @@ endif
 
 "Syntax
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
-Plug 'alx741/vim-hindent', { 'for': 'haskell' }
-Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
 Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
@@ -287,7 +296,7 @@ let g:gitgutter_sign_modified_removed = '∙'
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#ignore_sources = {}
 let g:deoplete#ignore_sources._ = ['buffer', 'member', 'tag']
-let g:deoplete#max_list = 30
+let g:deoplete#max_list = 60
 
 " Disable comments as source
 call deoplete#custom#source('_',
@@ -300,11 +309,43 @@ call deoplete#custom#source('_', 'converters',
 " Move completions from around in the current buffer lower
 call deoplete#custom#source('around', 'rank', 100)
 
-" Close quickfix when done
-augroup comp_qlist_autoclose
-  autocmd!
-  autocmd CompleteDone * silent! pclose!
-augroup END
+" Close quickfix when completion is done
+" augroup comp_qlist_autoclose
+"   autocmd!
+"   autocmd CompleteDone * silent! pclose!
+" augroup END
+
+" Language server client
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_serverCommands = {
+    \ 'haskell': ['hie', '--lsp'],
+    \ }
+
+" Show type info (and short doc) of identifier under cursor.
+nnoremap <silent> <Leader>lh :call LanguageClient_textDocument_hover()<CR>
+
+" Goto definition of identifier under cursor.
+nnoremap <silent> <Leader>ld :call LanguageClient_textDocument_definition()<CR>
+
+" Rename identifier under cursor.
+nnoremap <silent> <Leader>lr :call LanguageClient_textDocument_rename()<CR>
+
+" Format current document.
+nnoremap <silent> <Leader>lF :call LanguageClient_textDocument_formatting()<CR>
+
+" Format selected lines.
+nnoremap <silent> <Leader>lf :call LanguageClient_textDocument_rangeFormatting()<CR>
+
+" List of current buffer's symbols.
+nnoremap <silent> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+
+" List of project's symbols.
+nnoremap <silent> <Leader>lS :call LanguageClient_workspace_symbol()<CR>
+
+" List all references of identifier under cursor.
+nnoremap <silent> <Leader>ll :call LanguageClient_textDocument_references()<CR>
+
+
 
 " Airline
 let g:airline_powerline_fonts = 1
@@ -421,7 +462,7 @@ nnoremap <silent> <Leader>te :belowright split +resize\ 20 \| terminal <CR>
 nnoremap <silent> <Leader>vte :belowright vsplit \| terminal <CR>
 
 " Whitespace Clean
-noremap <Leader>ws :call TrimWhitespace()<CR>
+noremap <silent> <Leader>ws :call TrimWhitespace()<CR>
 
 " Tab Navigation hjkl
 nnoremap tk  :tabfirst<CR>
