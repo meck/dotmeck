@@ -1,7 +1,8 @@
 " ----- w0rp/ale -----
 
-" Testing Language Server For Linting
+" Testing Language Server For Linting instead of ale
 let b:ale_enabled = 0
+setlocal signcolumn=yes
 " let g:ale_linters.haskell = ['stack-ghc-mod', 'hlint']
 
 " ----- Language Client Server -----
@@ -21,7 +22,8 @@ let g:intero_use_neomake = 0
 augroup interoMappings
   autocmd!
 
-  nnoremap <silent> <leader>io :InteroOpen<CR>
+  " Open and go to the New window
+  nnoremap <silent> <leader>io :execute 'InteroOpen' <Bar> :wincmd w<CR>
   nnoremap <silent> <leader>ih :InteroHide<CR>
   nnoremap <silent> <leader>is :InteroStart<CR>
   nnoremap <silent> <leader>ik :InteroKill<CR>
@@ -30,8 +32,8 @@ augroup interoMappings
   autocmd BufWritePost *.hs InteroReload
   nnoremap <silent> <leader>wr :w \| :InteroReload<CR>
 
-  nnoremap <silent> <leader>il :InteroLoadCurrentModule<CR>
-  nnoremap <silent> <leader>if :InteroLoadCurrentFile<CR>
+  nnoremap <silent> <leader>il :execute 'InteroLoadCurrentModule' <Bar> :wincmd w<CR>
+  nnoremap <silent> <leader>if :execute 'InteroLoadCurrentFile' <Bar> :wincmd w<CR>
 
   map <leader>t <Plug>InteroGenericType
   map <leader>T <Plug>InteroType
@@ -43,7 +45,6 @@ augroup interoMappings
 
   " Enter insertmode when going to the REPL
   autocmd BufWinEnter,WinEnter Intero startinsert
-
 augroup END
 
 " ---- eagletmt/neco-ghc -----
@@ -55,9 +56,13 @@ let g:necoghc_enable_detailed_browse = 1
 
 " Formating on save
 let g:brittany_on_save = 1
+let g:hindent_on_save = 0
+let g:stylishask_on_save = 0
 
-" Brittany
+" Mappings
 nnoremap <leader>fb :Brittany<CR>
+nnoremap <leader>fi :Hindent<CR>
+nnoremap <leader>fs :Stylishask<CR>
 
 " ----- Hoogle -----
 

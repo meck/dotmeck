@@ -883,15 +883,15 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 126 606 469 0 0 1680 1050 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>325 462 918 401 0 0 1680 1027 </string>
+	<string>1389 722 918 452 0 0 2880 1597 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>230 833 592 584 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>194 156 1010 1027 0 0 2560 1417 </string>
+	<string>935 345 1210 1093 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>2660 -31 1514 993 2560 -48 1680 1027 </string>
+	<string>367 0 1010 1028 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>576 0 1010 1027 0 0 1680 1027 </string>
+	<string>285 216 2082 1313 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
 	<string>311 69 1858 1077 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
@@ -1625,7 +1625,7 @@
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Transparency</key>
-			<real>0.01774401713573423</real>
+			<real>0.0</real>
 			<key>Unlimited Scrollback</key>
 			<false/>
 			<key>Use Bold Font</key>
@@ -2449,13 +2449,13 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-10-23T08:30:51Z</date>
+	<date>2017-11-11T05:26:51Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>ShowBookmarkName</key>
 	<false/>
 	<key>TabStyle</key>
-	<integer>0</integer>
+	<integer>1</integer>
 	<key>TabViewType</key>
 	<integer>0</integer>
 	<key>TerminalMargin</key>
@@ -2480,7 +2480,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.1.20171008-nightly</string>
+	<string>3.1.5</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>7</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
