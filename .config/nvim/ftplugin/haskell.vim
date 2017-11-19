@@ -70,7 +70,7 @@ nnoremap <leader>fs :Stylishask<CR>
 nnoremap <silent> <leader>hh :Hoogle<CR>
 
 " Hoogle and prompt for input
-nnoremap <leader>hH :Hoogle
+nnoremap <leader>hH :Hoogle<space>
 
 " Hoogle for detailed documentation (e.g. "Functor")
 nnoremap <silent> <leader>hi :HoogleInfo<CR>

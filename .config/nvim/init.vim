@@ -22,7 +22,7 @@ set mouse=a                                      " Dont select line numbers with
 set history=1000                                 " Command history
 set visualbell                                   " Dont beep
 set noerrorbells
-set notimeout ttimeout ttimeoutlen=200           " Quickly time out on keycodes, but never time out on mappings
+set notimeout ttimeout ttimeoutlen=0             " Quickly time out on keycodes, but never time out on mappings
 set backspace=indent,eol,start                   " Proper backspace behavior
 set listchars=space:\·,eol:\¬,tab:\→\·           " Invisibles
 set laststatus=2                                 " Always show statusline
