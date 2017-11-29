@@ -13,8 +13,8 @@ setlocal formatexpr=LanguageClient_textDocument_rangeFormatting()
 
 " ----- parsonsmatt/intero-neovim -----
 
-" Prefer starting Intero automatically
-let g:intero_start_immediately = 1
+" Wait with starting Intero
+let g:intero_start_immediately = 0
 
 " Use ALE (works even when not using Intero)
 let g:intero_use_neomake = 0
@@ -28,9 +28,14 @@ augroup interoMappings
   nnoremap <silent> <leader>is :InteroStart<CR>
   nnoremap <silent> <leader>ik :InteroKill<CR>
 
-  " Reload the file in Intero after saving or do it manually
-  autocmd BufWritePost *.hs InteroReload
-  nnoremap <silent> <leader>wr :w \| :InteroReload<CR>
+  " Reload the file in Intero after saving but only when intero is running
+  function! ReloadInteroIfRunning()
+    if exists('g:intero_started') && g:intero_started
+      :InteroReload
+    endif
+  endfunction
+  autocmd BufWritePost *.hs call ReloadInteroIfRunning()
+  " nnoremap <silent> <leader>wr :w \| :InteroReload<CR>
 
   nnoremap <silent> <leader>il :execute 'InteroLoadCurrentModule' <Bar> :wincmd w<CR>
   nnoremap <silent> <leader>if :execute 'InteroLoadCurrentFile' <Bar> :wincmd w<CR>

@@ -29,6 +29,7 @@ set laststatus=2                                 " Always show statusline
 set nolist                                       " Start without list symbols
 set expandtab
 set hidden                                       " Allow hidden buffers
+set noequalalways                                " Dont resize when closing windows
 
 " Indenting
 set autoindent                                   " Auto indent
@@ -324,6 +325,33 @@ let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ }
 
+let g:LanguageClient_diagnosticsDisplay = {
+    \    1: {
+    \      'name': 'Error',
+    \      'texthl': 'ALEError',
+    \      'signText': 'X',
+    \      'signTexthl': 'ALEErrorSign',
+    \    },
+    \    2: {
+    \      'name': 'Warning',
+    \      'texthl': 'ALEWarning',
+    \      'signText': '▲',
+    \      'signTexthl': 'ALEWarningSign',
+    \    },
+    \    3: {
+    \      'name': 'Information',
+    \      'texthl': 'ALEInfo',
+    \      'signText': 'ⓘ',
+    \      'signTexthl': 'ALEWarningSign',
+    \    },
+    \    4: {
+    \      'name': 'Hint',
+    \      'texthl': 'ALEInfo',
+    \      'signText': '▶',
+    \      'signTexthl': 'ALEInfoSign',
+    \    },
+    \ }
+
 " Show type info (and short doc) of identifier under cursor.
 nnoremap <silent> <Leader>lh :call LanguageClient_textDocument_hover()<CR>
 
@@ -334,10 +362,10 @@ nnoremap <silent> <Leader>ld :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <Leader>lr :call LanguageClient_textDocument_rename()<CR>
 
 " Format current document.
-nnoremap <silent> <Leader>lF :call LanguageClient_textDocument_formatting()<CR>
+nnoremap <silent> <Leader>lf :call LanguageClient_textDocument_formatting()<CR>
 
 " Format selected lines.
-nnoremap <silent> <Leader>lf :call LanguageClient_textDocument_rangeFormatting()<CR>
+vnoremap <silent> <Leader>lf :call LanguageClient_textDocument_rangeFormatting()<CR>
 
 " List of current buffer's symbols.
 nnoremap <silent> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
