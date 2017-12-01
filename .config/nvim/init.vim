@@ -139,9 +139,12 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+" Surround editing and objects
+Plug 'machakann/vim-sandwich'
+
 " Smart stuff
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 
@@ -215,6 +218,8 @@ Plug 'tpope/vim-fugitive'
 " Shows git status in the gutter
 Plug 'airblade/vim-gitgutter'
 
+" highlight patterns and ranges for Ex-commands.
+Plug 'xtal8/traces.vim'
 
 """""""""""""""""""""""""""""""
 "  Language Specific Plugins  "
@@ -225,8 +230,7 @@ if has('nvim')
   Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
 endif
 
-"Syntax
-Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+Plug 'neovimhaskell/haskell-vim'
 Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
@@ -403,6 +407,19 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
+
+if has('nvim')
+  aug fzf_setup
+    autocmd!
+    " Changes the remapping of escape for fzf windows to be able to close
+    autocmd TermOpen term://*FZF tnoremap <silent> <buffer><nowait> <esc> <c-c>
+
+    " Hide the bar at bottom of fzf windows
+    autocmd! FileType fzf
+    autocmd  FileType fzf set laststatus=0
+      \| autocmd BufLeave <buffer> set laststatus=2
+  aug END
+end
 
 " --column: Show column number
 " --line-number: Show line number
