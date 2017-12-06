@@ -65,7 +65,7 @@ augroup END
 " ---- eagletmt/neco-ghc -----
 
 "  Show type in autocomplete
-let g:necoghc_enable_detailed_browse = 1
+" let g:necoghc_enable_detailed_browse = 1
 
 " ----- Code formating -----
 
