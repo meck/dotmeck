@@ -1,4 +1,8 @@
-scriptencoding utf-8                             " Encoding of this script
+" Misc {{{
+"""""""""""
+
+" Encoding of this script
+scriptencoding utf-8 
 
 " A variable to use in diffrent places in this file
 if has('nvim')
@@ -7,9 +11,133 @@ else
   let s:vimDir = '$HOME/.vim'
 endif
 
-""""""""""""""""""""""
-"  Built in settings  "
-"""""""""""""""""""""""
+
+" }}}
+
+"  Plugins {{{  
+""""""""""""""
+
+" Automatically install the plugin manager if not installed
+augroup plug_auto_install
+  autocmd!
+  if empty(glob(expand(s:vimDir . '/autoload/plug.vim')))
+    execute('silent !curl -fLo ' . s:vimDir . '/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    autocmd plug_auto_install VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
+augroup END
+
+" Start the plugin manager
+call plug#begin(expand(s:vimDir . '/plugged'))
+
+" Smart stuff
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-obsession'
+
+" Git Stuff
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
+Plug 'airblade/vim-gitgutter'
+
+" Surround editing and objects
+Plug 'machakann/vim-sandwich'
+
+" Aligning stuff
+Plug 'godlygeek/tabular'
+
+" highlight patterns and ranges for Ex-commands.
+Plug 'xtal8/traces.vim'
+
+" fuzzy all the things
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
+" Statusline and theme
+Plug 'vim-airline/vim-airline'
+Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
+
+" ALE Linter
+if has('timers') && exists('*job_start') && exists('*ch_close_in') || has('nvim')
+  Plug 'w0rp/ale'
+endif
+
+" Completion engine
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+endif
+
+" Displays function signatures from completions in the command line.
+Plug 'Shougo/echodoc.vim'
+
+" Language server client
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'make release'
+    \ }
+
+" Needed for Deoplete and Language Server Client in vim
+if !has('nvim')
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+" Adds seamless navigation between tmux and vim
+Plug 'christoomey/vim-tmux-navigator'
+
+" Snippets Manager and default Snippets
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'honza/vim-snippets'
+" Needed for Neosnippet
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+
+" Tagbar
+Plug 'majutsushi/tagbar'
+
+" UndoTree
+Plug 'mbbill/undotree'
+
+
+"}}}
+
+"  Language Specific Plugins {{{ 
+""""""""""""""""""""""""""""""""
+
+" Haskell
+if has('nvim')
+  Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
+endif
+Plug 'neovimhaskell/haskell-vim'
+" Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug 'meck/vim-brittany', { 'for': 'haskell' }
+Plug 'alx741/vim-hindent', { 'for': 'haskell' }
+Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
+
+" Markdown
+Plug 'plasticboy/vim-markdown'
+
+" Python
+Plug 'zchee/deoplete-jedi' , { 'for': 'python' }
+Plug 'jmcantrell/vim-virtualenv' , { 'for': 'python' }
+
+" Go
+Plug 'fatih/vim-go' , { 'for': 'go' }
+Plug 'zchee/deoplete-go', { 'for': 'go', 'do': 'make'}
+
+" Rust
+Plug 'rust-lang/rust.vim' , { 'for': 'rust' }
+Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
+
+call plug#end()
+
+"}}}
+
+"  Built in settings {{{
+""""""""""""""""""""""""
 set t_Co=256                                     " Yhea colors for everyone
 set clipboard^=unnamed,unnamedplus               " Use MacOs / Linux clipboard
 language en_US.UTF-8                             " Not MacOS Lang
@@ -29,7 +157,6 @@ set laststatus=2                                 " Always show statusline
 set nolist                                       " Start without list symbols
 set expandtab
 set hidden                                       " Allow hidden buffers
-set noequalalways                                " Dont resize when closing windows
 
 " Indenting
 set autoindent                                   " Auto indent
@@ -73,16 +200,18 @@ set numberwidth=5
 set relativenumber
 set number
 
+"Automatically switch line numbers
+augroup relativize
+  autocmd!
+  autocmd BufWinEnter,FocusGained,InsertLeave,WinEnter * call Relativize(1)
+  autocmd BufWinLeave,FocusLost,InsertEnter,WinLeave * call Relativize(0)
+augroup END
+
 " netrw
 let g:netrw_banner = 0
 
 " Neovim Stuff
 if has('nvim')
-
-  " Enable Truecolor
-  if $TERM !~? 'rxvt'
-    set termguicolors
-  endif
 
   "Navigate terminal window
   tnoremap <C-h> <C-\><C-n><C-w>h
@@ -106,52 +235,20 @@ if has('nvim')
   set inccommand=split
 endif
 
+" Traverse the popup menu with Tab
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 " Space as leader works with showcmd
 map <Space> <Leader>
 
+"}}}
 
-"""""""""""""
-"  Plugins  "
-"""""""""""""
+"  Plugin Settings {{{ 
+""""""""""""""""""""""
 
-" Automatically install the plugin manager
-augroup plug_auto_install
-  autocmd!
-augroup END
 
-if empty(glob(expand(s:vimDir . '/autoload/plug.vim')))
-  execute('silent !curl -fLo ' . s:vimDir . '/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-  autocmd plug_auto_install VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-" Start the plugin manager
-call plug#begin(expand(s:vimDir . '/plugged'))
-
-" Adds seamless navigation between tmux and vim
-"<ctrl-h> => Left
-"<ctrl-j> => Down
-"<ctrl-k> => Up
-"<ctrl-l> => Right
-"<ctrl-\> => Previous split
-Plug 'christoomey/vim-tmux-navigator'
-
-" fuzzy all the things
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-
-" Surround editing and objects
-Plug 'machakann/vim-sandwich'
-
-" Smart stuff
-Plug 'tpope/vim-unimpaired'
-" Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-repeat'
-
-" Automanagment of sessions
-Plug 'tpope/vim-obsession'
-
-" Autoload any session in the current directory if we start without arguments
+" Vim Obsession
 augroup obsssions_autoload
   autocmd!
   autocmd VimEnter * nested
@@ -160,108 +257,6 @@ augroup obsssions_autoload
             \ endif
 augroup END
 
-" Statusline
-Plug 'vim-airline/vim-airline'
-
-" Best theme
-Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
-
-" Asynchronous Lint Engine
-if has('timers') && exists('*job_start') && exists('*ch_close_in') || has('nvim')
-  Plug 'w0rp/ale'
-endif
-
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-
-Plug 'godlygeek/tabular'
-
-" Completion engine
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-endif
-
-" Language server client
-if has('nvim')
-  Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'autozimu/LanguageClient-neovim'
-endif
-
-" Needed for Deoplete and Language Server Client in vim
-if !has('nvim')
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-
-" Displays function signatures from completions in the command line.
-Plug 'Shougo/echodoc.vim'
-
-" Tagbar
-Plug 'majutsushi/tagbar'
-
-" UndoTree
-Plug 'mbbill/undotree'
-
-" Snippets Manager and default Snippets
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
-Plug 'honza/vim-snippets'
-
-" Vim Git runtime files
-Plug 'tpope/vim-git'
-
-" Git wrapper
-Plug 'tpope/vim-fugitive'
-
-" Shows git status in the gutter
-Plug 'airblade/vim-gitgutter'
-
-" highlight patterns and ranges for Ex-commands.
-Plug 'xtal8/traces.vim'
-
-"""""""""""""""""""""""""""""""
-"  Language Specific Plugins  "
-"""""""""""""""""""""""""""""""
-
-" Haskell
-if has('nvim')
-  Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
-endif
-
-Plug 'neovimhaskell/haskell-vim'
-" Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
-Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plug 'meck/vim-brittany', { 'for': 'haskell' }
-Plug 'alx741/vim-hindent', { 'for': 'haskell' }
-Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
-
-" Arduino
-Plug 'sudar/vim-arduino-syntax'
-Plug 'meck/ale-platformio'
-
-" Markdown
-Plug 'plasticboy/vim-markdown'
-
-" Python
-Plug 'zchee/deoplete-jedi' , { 'for': 'python' }
-Plug 'jmcantrell/vim-virtualenv' , { 'for': 'python' }
-
-" Go
-Plug 'fatih/vim-go' , { 'for': 'go' }
-Plug 'zchee/deoplete-go', { 'for': 'go', 'do': 'make'}
-
-" Rust
-Plug 'rust-lang/rust.vim' , { 'for': 'rust' }
-Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
-
-call plug#end()
-
-
-"""""""""""""""""""""
-"  Plugin Settings  "
-"""""""""""""""""""""
 
 " Ale
 if has_key(g:plugs, 'ale')
@@ -276,6 +271,7 @@ if has_key(g:plugs, 'ale')
   let g:ale_sign_column_always = 1
 endif
 
+
 " Expand snippets
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -284,20 +280,14 @@ xmap <C-k>     <Plug>(neosnippet_expand_target)
 " Load other snippets
 let g:neosnippet#enable_snipmate_compatibility = 1
 
-" For conceal markers in snippets
-" if has('conceal')
-"   set conceallevel=2 concealcursor=niv
-" endif
 
-" Traverse the popup menu with Tab
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " GitGutter
 let g:gitgutter_sign_added = '∙'
 let g:gitgutter_sign_modified = '∙'
 let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
+
 
 " Deoplete
 let g:deoplete#enable_at_startup = 1
@@ -316,11 +306,6 @@ call deoplete#custom#source('_', 'converters',
 " Move completions from around in the current buffer lower
 call deoplete#custom#source('around', 'rank', 100)
 
-" Close quickfix when completion is done
-" augroup comp_qlist_autoclose
-"   autocmd!
-"   autocmd CompleteDone * silent! pclose!
-" augroup END
 
 " Language server client
 let g:LanguageClient_autoStart = 1
@@ -356,39 +341,11 @@ let g:LanguageClient_diagnosticsDisplay = {
     \    },
     \ }
 
-" Show type info (and short doc) of identifier under cursor.
-nnoremap <silent> <Leader>lh :call LanguageClient_textDocument_hover()<CR>
-
-" Goto definition of identifier under cursor.
-nnoremap <silent> <Leader>ld :call LanguageClient_textDocument_definition()<CR>
-
-" Rename identifier under cursor.
-nnoremap <silent> <Leader>lr :call LanguageClient_textDocument_rename()<CR>
-
-" Format current document.
-nnoremap <silent> <Leader>lf :call LanguageClient_textDocument_formatting()<CR>
-
-" Format selected lines.
-vnoremap <silent> <Leader>lf :call LanguageClient_textDocument_rangeFormatting()<CR>
-
-" List of current buffer's symbols.
-nnoremap <silent> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
-
-" List of project's symbols.
-nnoremap <silent> <Leader>lS :call LanguageClient_workspace_symbol()<CR>
-
-" List all references of identifier under cursor.
-nnoremap <silent> <Leader>ll :call LanguageClient_textDocument_references()<CR>
-
-" Show code action
-nnoremap <silent> <Leader>la :call LanguageClient_textDocument_codeAction()<CR>
-
-
 
 " Airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#hunks#enabled=0
-let g:airline_section_z = '%{airline#util#wrap(airline#extensions#obsession#get_status(),0)}%3p%% %4l:%-2c'
+let g:airline_section_z = '%3p%% %4l:%-2c'
 let g:airline_skip_empty_sections = 1
 let g:airline#extensions#obsession#enabled = 1
 let g:airline#extensions#obsession#indicator_text = '$'
@@ -421,30 +378,28 @@ if has('nvim')
   aug END
 end
 
-" --column: Show column number
-" --line-number: Show line number
-" --no-heading: Do not show file headings in results
-" --fixed-strings: Search term as a literal string
-" --ignore-case: Case insensitive search
-" --no-ignore: Do not respect .gitignore, etc...
-" --hidden: Search hidden files and folders
-" --follow: Follow symlinks
-" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
-" --color: Search color options
+" Use Ripgrep for Fzf
 if executable('rg')
   command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 endif
 
 " Theme
 let g:nord_comment_brightness = 10
-" let g:nord_uniform_status_lines = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
 colorscheme nord
 
-"""""""""""""""
-"  Functions  "
-"""""""""""""""
+"}}}
+
+"  Functions {{{
+""""""""""""""""
+
+"Switch line numbers
+function! Relativize(v)
+  if &number
+    let &relativenumber = a:v
+  endif
+endfunction
 
 " Whitespace removal
 fun! TrimWhitespace()
@@ -476,10 +431,31 @@ fun! ToggleAleAutoList()
   endif
 endfun
 
+"}}}
 
+"  Mappings {{{ 
 """"""""""""""
-"  Mappings  "
-""""""""""""""
+
+" Language Client
+
+" Show type info (and short doc) of identifier under cursor.
+nnoremap <silent> <Leader>lh :call LanguageClient_textDocument_hover()<CR>
+" Goto definition of identifier under cursor.
+nnoremap <silent> <Leader>ld :call LanguageClient_textDocument_definition()<CR>
+" Rename identifier under cursor.
+nnoremap <silent> <Leader>lr :call LanguageClient_textDocument_rename()<CR>
+" Format current document.
+nnoremap <silent> <Leader>lf :call LanguageClient_textDocument_formatting()<CR>
+" Format selected lines.
+vnoremap <silent> <Leader>lf :call LanguageClient_textDocument_rangeFormatting()<CR>
+" List of current buffer's symbols.
+nnoremap <silent> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+" List of project's symbols.
+nnoremap <silent> <Leader>lS :call LanguageClient_workspace_symbol()<CR>
+" List all references of identifier under cursor.
+nnoremap <silent> <Leader>ll :call LanguageClient_textDocument_references()<CR>
+" Show code action
+nnoremap <silent> <Leader>la :call LanguageClient_textDocument_codeAction()<CR>
 
 " Clear search hightligh
 nnoremap <silent><esc> :noh<return><esc>
@@ -524,9 +500,4 @@ nnoremap tt  :tabedit<Space>
 nnoremap tm  :tabm<Space>
 nnoremap td  :tabclose<CR>
 
-" Platformio
-nnoremap <silent> <Leader>pir :belowright split +resize\ 20 \| terminal platformio run<CR>
-nnoremap <silent> <Leader>piu :belowright split +resize\ 20 \| terminal platformio run --target upload<CR>
-nnoremap <silent> <Leader>pic :belowright split +resize\ 20 \| terminal platformio run --target clean<CR>
-nnoremap <silent> <Leader>pid :belowright split +resize\ 20 \| terminal platformio update<CR>
-nnoremap <silent> <Leader>pim :belowright split +resize\ 20 \| terminal platformio device monitor<CR>
+" }}}
