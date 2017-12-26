@@ -2,7 +2,7 @@
 """""""""""
 
 " Encoding of this script
-scriptencoding utf-8 
+scriptencoding utf-8
 
 " A variable to use in diffrent places in this file
 if has('nvim')
@@ -13,8 +13,8 @@ endif
 
 
 " }}}
-
-"  Plugins {{{  
+"  Plugins {{{
+"
 """"""""""""""
 
 " Automatically install the plugin manager if not installed
@@ -46,12 +46,8 @@ Plug 'machakann/vim-sandwich'
 " Aligning stuff
 Plug 'godlygeek/tabular'
 
-" highlight patterns and ranges for Ex-commands.
-Plug 'xtal8/traces.vim'
-
 " fuzzy all the things
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegunn/fzf.vim'
 
 " Statusline and theme
 Plug 'vim-airline/vim-airline'
@@ -63,36 +59,20 @@ if has('timers') && exists('*job_start') && exists('*ch_close_in') || has('nvim'
 endif
 
 " Completion engine
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-endif
-
-" Displays function signatures from completions in the command line.
-Plug 'Shougo/echodoc.vim'
-
-" Language server client
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'make release'
-    \ }
-
-" Needed for Deoplete and Language Server Client in vim
+Plug 'roxma/nvim-completion-manager'
+" Needed for Completion in vim
 if !has('nvim')
-  Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
+
+" Language server client
+Plug 'autozimu/LanguageClient-neovim', {'tag': 'binary-*-x86_64-apple-darwin' }
 
 " Adds seamless navigation between tmux and vim
 Plug 'christoomey/vim-tmux-navigator'
 
 " Snippets Manager and default Snippets
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
-Plug 'honza/vim-snippets'
-" Needed for Neosnippet
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " Tagbar
 Plug 'majutsushi/tagbar'
@@ -100,10 +80,11 @@ Plug 'majutsushi/tagbar'
 " UndoTree
 Plug 'mbbill/undotree'
 
+" Dash for macOS
+Plug 'rizzatti/dash.vim'
 
 "}}}
-
-"  Language Specific Plugins {{{ 
+"  Language Specific Plugins {{{
 """"""""""""""""""""""""""""""""
 
 " Haskell
@@ -135,7 +116,6 @@ Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
 call plug#end()
 
 "}}}
-
 "  Built in settings {{{
 """"""""""""""""""""""""
 set t_Co=256                                     " Yhea colors for everyone
@@ -171,6 +151,8 @@ set sidescrolloff=5
 set softtabstop=2
 set shiftwidth=2
 
+set shortmess+=c                                 " Dont show the number of matches
+
 " Persistent Undo
 if has('persistent_undo')
   " Create the undo directory if it dosent exsist
@@ -181,8 +163,8 @@ if has('persistent_undo')
   set undofile
 endif
 
-
-set completeopt=menuone,longest,preview,noselect " Completion
+" Completion
+set completeopt=menuone,longest,preview,noselect
 
 " Command line completion
 set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox
@@ -236,15 +218,14 @@ if has('nvim')
 endif
 
 " Traverse the popup menu with Tab
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Space as leader works with showcmd
 map <Space> <Leader>
 
 "}}}
-
-"  Plugin Settings {{{ 
+"  Plugin Settings {{{
 """"""""""""""""""""""
 
 
@@ -272,16 +253,6 @@ if has_key(g:plugs, 'ale')
 endif
 
 
-" Expand snippets
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" Load other snippets
-let g:neosnippet#enable_snipmate_compatibility = 1
-
-
-
 " GitGutter
 let g:gitgutter_sign_added = '∙'
 let g:gitgutter_sign_modified = '∙'
@@ -289,28 +260,26 @@ let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
 
-" Deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#ignore_sources = {}
-let g:deoplete#ignore_sources._ = ['buffer', 'member', 'tag']
-let g:deoplete#max_list = 60
+"Snuppets
 
-" Disable comments as source
-call deoplete#custom#source('_',
-\ 'disabled_syntaxes', ['Comment', 'String'])
+" Navigate popup menu with tab
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-" Use auto delimiter feature
-call deoplete#custom#source('_', 'converters',
-\ ['converter_auto_delimiter', 'remove_overlap'])
+" Expand snippets with enter in completion menu
+imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
+imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<plug>(ultisnips_expand)":"\<CR>")
+let g:UltiSnipsExpandTrigger = '<Plug>(ultisnips_expand)'
 
-" Move completions from around in the current buffer lower
-call deoplete#custom#source('around', 'rank', 100)
+" Navigate snippets
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+let g:UltiSnipsRemoveSelectModeMappings = 0
 
 
 " Language server client
-let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '--lsp'],
+    \ 'haskell': ['hie', '--lsp', ],
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ }
 
@@ -389,8 +358,10 @@ let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
 colorscheme nord
 
-"}}}
+" Dash dont foreground
+let g:dash_activate=0
 
+"}}}
 "  Functions {{{
 """"""""""""""""
 
@@ -432,8 +403,7 @@ fun! ToggleAleAutoList()
 endfun
 
 "}}}
-
-"  Mappings {{{ 
+"  Mappings {{{
 """"""""""""""
 
 " Language Client
@@ -492,12 +462,16 @@ nnoremap <silent> <Leader>vte :belowright vsplit \| terminal <CR>
 noremap <silent> <Leader>ws :call TrimWhitespace()<CR>
 
 " Tab Navigation hjkl
-nnoremap tk  :tabfirst<CR>
-nnoremap tl  :tabnext<CR>
-nnoremap th  :tabprev<CR>
-nnoremap tj  :tablast<CR>
-nnoremap tt  :tabedit<Space>
-nnoremap tm  :tabm<Space>
-nnoremap td  :tabclose<CR>
+nnoremap <Leader>tk  :tabfirst<CR>
+nnoremap <Leader>tl  :tabnext<CR>
+nnoremap <Leader>th  :tabprev<CR>
+nnoremap <Leader>tj  :tablast<CR>
+nnoremap <Leader>tt  :tabedit<Space>
+nnoremap <Leader>tm  :tabm<Space>
+nnoremap <Leader>td  :tabclose<CR>
+
+"Dash search
+nmap <silent> <leader>d <Plug>DashSearch
+nmap <silent> <leader>D <Plug>DashGlobalSearch
 
 " }}}
