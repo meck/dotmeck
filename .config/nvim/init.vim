@@ -67,6 +67,7 @@ endif
 
 " Language server client
 Plug 'autozimu/LanguageClient-neovim', {'tag': 'binary-*-x86_64-apple-darwin' }
+" Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'make release'}
 
 " Adds seamless navigation between tmux and vim
 Plug 'christoomey/vim-tmux-navigator'
@@ -135,21 +136,25 @@ set backspace=indent,eol,start                   " Proper backspace behavior
 set listchars=space:\·,eol:\¬,tab:\→\·           " Invisibles
 set laststatus=2                                 " Always show statusline
 set nolist                                       " Start without list symbols
-set expandtab
+set autoread                                     " Read when a file is changed from the outside
 set hidden                                       " Allow hidden buffers
-
-" Indenting
-set autoindent                                   " Auto indent
-set smartindent                                  " Smart indent
-set wrap                                         " Wrap lines
-set textwidth=500                                " Textwidth
-set linebreak                                    " Linebreak
 
 " Scrolling
 set scrolloff=4                                  " Start scrolling before we hit the buffer
 set sidescrolloff=5
+
+" Indenting
+set smartindent                                  " Smart indent
+set autoindent                                   " Auto indent
+set expandtab
 set softtabstop=2
 set shiftwidth=2
+set smarttab
+
+" Linebreaks
+set wrap                                         " Wrap lines
+set textwidth=500                                " Textwidth
+set linebreak                                    " Linebreak
 
 set shortmess+=c                                 " Dont show the number of matches
 
@@ -175,7 +180,6 @@ set wildmenu
 set incsearch
 set smartcase
 set ignorecase
-set smarttab
 
 " Line numbers
 set numberwidth=5
@@ -195,12 +199,8 @@ let g:netrw_banner = 0
 " Neovim Stuff
 if has('nvim')
 
-  "Navigate terminal window
-  tnoremap <C-h> <C-\><C-n><C-w>h
-  tnoremap <C-j> <C-\><C-n><C-w>j
-  tnoremap <C-k> <C-\><C-n><C-w>k
-  tnoremap <C-l> <C-\><C-n><C-w>l
-  tnoremap <Esc> <C-\><C-n>
+  " Live substitution
+  set inccommand=split
 
   augroup nvim_term
     autocmd!
@@ -213,16 +213,7 @@ if has('nvim')
     autocmd TermOpen * setlocal nonumber norelativenumber
   augroup END
 
-  " Live substitution
-  set inccommand=split
 endif
-
-" Traverse the popup menu with Tab
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" Space as leader works with showcmd
-map <Space> <Leader>
 
 "}}}
 "  Plugin Settings {{{
@@ -261,10 +252,6 @@ let g:gitgutter_sign_modified_removed = '∙'
 
 
 "Snuppets
-
-" Navigate popup menu with tab
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Expand snippets with enter in completion menu
 imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
@@ -406,6 +393,40 @@ endfun
 "  Mappings {{{
 """"""""""""""
 
+" Built in
+
+" Space as leader works with showcmd
+map <Space> <Leader>
+
+" Clear search hightligt
+nnoremap <silent><esc> :noh<return><esc>
+
+" Change buffer
+nnoremap <Leader>b :ls<CR>:b<Space>
+
+" w!! expands to a sudo save
+cmap w!! w !sudo tee >/dev/null %
+
+" Netrw explorer enter/return
+nnoremap <Leader>e :Lexplore<CR>
+
+" Navigate popup menu with tab
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Neovim Stuff
+if has('nvim')
+
+  "Navigate terminal window
+  tnoremap <C-h> <C-\><C-n><C-w>h
+  tnoremap <C-j> <C-\><C-n><C-w>j
+  tnoremap <C-k> <C-\><C-n><C-w>k
+  tnoremap <C-l> <C-\><C-n><C-w>l
+  tnoremap <Esc> <C-\><C-n>
+
+endif
+
+
 " Language Client
 
 " Show type info (and short doc) of identifier under cursor.
@@ -427,20 +448,11 @@ nnoremap <silent> <Leader>ll :call LanguageClient_textDocument_references()<CR>
 " Show code action
 nnoremap <silent> <Leader>la :call LanguageClient_textDocument_codeAction()<CR>
 
-" Clear search hightligh
-nnoremap <silent><esc> :noh<return><esc>
-
 " Toggle the autoopening of lists
 nnoremap <silent><Leader>q :call ToggleAleAutoList()<CR>
 
-" Netrw explorer enter/return
-nnoremap <Leader>e :Lexplore<CR>
-
 " Tagbar
 nnoremap <Leader>tb :TagbarToggle <CR>
-
-" Change buffer
-nnoremap <Leader>b :ls<CR>:b<Space>
 
 " UndoTree
 nnoremap <silent><Leader>u :UndotreeToggle<CR>
@@ -450,9 +462,6 @@ nnoremap <silent><Leader>u :UndotreeToggle<CR>
 nnoremap <Leader>zf :Files<CR>
 " Search buffers
 nnoremap <Leader>zb :Buffers<CR>
-
-" w!! expands to a sudo save
-cmap w!! w !sudo tee >/dev/null %
 
 " Terminals
 nnoremap <silent> <Leader>te :belowright split +resize\ 20 \| terminal <CR>

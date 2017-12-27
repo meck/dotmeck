@@ -52,16 +52,9 @@ fi
 # source fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# --files: List files that would be searched but do not search
-# --no-ignore: Do not respect .gitignore, etc...
-# --hidden: Search hidden files and folders
-# --follow: Follow symlinks
-# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
-(( $+commands[rg] )) && export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-
-(( $+commands[fd] )) && export FZF_CTRL_T_COMMAND='fd . $HOME'
-(( $+commands[fd] )) && export FZF_ALT_C_COMMAND='fd -t d . $HOME'
-
+(( $+commands[fd] )) && export FZF_DEFAULT_COMMAND='fd . $HOME'
+(( $+commands[fd] )) && export FZF_CTRL_T_COMMAND='fd --follow --hidden . $home'
+(( $+commands[fd] )) && export FZF_ALT_C_COMMAND='fd --follow -t d . $HOME'
 
 
 #############

@@ -26,6 +26,10 @@ padding:
   x: 50
   y: 50
 
+  # Window decorations
+  # Setting this to false will result in window without borders and title bar.
+  decorations: true
+
 # Display tabs using this many cells (changes require restart)
 tabspaces: 8
 
