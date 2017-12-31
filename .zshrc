@@ -69,3 +69,12 @@ if [[ "$OSTYPE" == darwin* ]]; then
   # Do all the homebrew stuff
   alias brewme='brew update && brew upgrade && brew cleanup && brew doctor'
 fi
+
+
+#############################
+#  Machine Specific Extras  #
+#############################
+
+if [[ -r $HOME/.config/machine ]]; then
+  source $HOME/.config/machine
+fi
