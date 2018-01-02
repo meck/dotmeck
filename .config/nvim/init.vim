@@ -11,6 +11,21 @@ else
   let s:vimDir = '$HOME/.vim'
 endif
 
+" Architecture of the current system
+let s:uname = substitute(system('uname -ms'), '\n', '', '')
+if match(s:uname, 'Darwin.*64$') !=# '-1'
+  let s:arch = 'MacOs'
+elseif match(s:uname, 'Linux.*86$') !=# '-1'
+  let s:arch = 'LinuxI32'
+elseif match(s:uname, 'Linux.*64$') !=# '-1'
+  let s:arch = 'LinuxI64'
+elseif match(s:uname, 'armv6.*') !=# '-1'
+  let s:arch = 'Arm32'
+elseif match(s:uname, 'armv7.*') !=# '-1'
+  let s:arch = 'Arm64'
+else
+  let s:arch = 'Unknown'
+endif
 
 " }}}
 "  Plugins {{{
@@ -60,14 +75,25 @@ endif
 
 " Completion engine
 Plug 'roxma/nvim-completion-manager'
+
+" Show completion signature in echo area
+Plug 'Shougo/echodoc.vim'
+
 " Needed for Completion in vim
 if !has('nvim')
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
 " Language server client
-Plug 'autozimu/LanguageClient-neovim', {'tag': 'binary-*-x86_64-apple-darwin' }
-" Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'make release'}
+if s:arch ==# 'MacOs'
+  Plug 'autozimu/LanguageClient-neovim', { 'tag': 'binary-*-x86_64-apple-darwin',  }
+elseif s:arch ==# 'LinuxI32'
+  Plug 'autozimu/LanguageClient-neovim', { 'tag': 'binary-*-i686-unknown-linux-musl',  }
+elseif s:arch ==# 'LinuxI64'
+  Plug 'autozimu/LanguageClient-neovim', { 'tag': 'binary-*-x86_64-unknown-linux-musl',  }
+else
+  Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'make release'}
+endif
 
 " Adds seamless navigation between tmux and vim
 Plug 'christoomey/vim-tmux-navigator'
@@ -119,44 +145,44 @@ call plug#end()
 "}}}
 "  Built in settings {{{
 """"""""""""""""""""""""
-set t_Co=256                                     " Yhea colors for everyone
-set clipboard^=unnamed,unnamedplus               " Use MacOs / Linux clipboard
-language en_US.UTF-8                             " Not MacOS Lang
-filetype plugin indent on                        " Enabling filetype support provides filetype-specific indenting, syntax
-set omnifunc=syntaxcomplete#Complete             " Basic Compleation
-syntax on                                        " highlighting, omni-completion and other useful settings.
-set showcmd                                      " Show command
-set noshowmode                                   " mode is shown in airline
-set mouse=a                                      " Dont select line numbers with mouse
-set history=1000                                 " Command history
-set visualbell                                   " Dont beep
+set t_Co=256                            " Yhea colors for everyone
+set clipboard^=unnamed,unnamedplus      " Use MacOs / Linux clipboard
+language en_US.UTF-8                    " Not MacOS Lang
+filetype plugin indent on               " Enabling filetype support provides filetype-specific indenting, syntax
+set omnifunc=syntaxcomplete#Complete    " Basic Compleation
+syntax on                               " highlighting, omni-completion and other useful settings.
+set showcmd                             " Show command
+set noshowmode                          " mode is shown in airline
+set mouse=a                             " Dont select line numbers with mouse
+set history=1000                        " Command history
+set visualbell                          " Dont beep
 set noerrorbells
-set notimeout ttimeout ttimeoutlen=0             " Quickly time out on keycodes, but never time out on mappings
-set backspace=indent,eol,start                   " Proper backspace behavior
-set listchars=space:\·,eol:\¬,tab:\→\·           " Invisibles
-set laststatus=2                                 " Always show statusline
-set nolist                                       " Start without list symbols
-set autoread                                     " Read when a file is changed from the outside
-set hidden                                       " Allow hidden buffers
+set notimeout ttimeout ttimeoutlen=0    " Quickly time out on keycodes, but never time out on mappings
+set backspace=indent,eol,start          " Proper backspace behavior
+set listchars=space:\·,eol:\¬,tab:\→\·  " Invisibles
+set laststatus=2                        " Always show statusline
+set nolist                              " Start without list symbols
+set autoread                            " Read when a file is changed from the outside
+set hidden                              " Allow hidden buffers
 
 " Scrolling
-set scrolloff=4                                  " Start scrolling before we hit the buffer
+set scrolloff=4                         " Start scrolling before we hit the buffer
 set sidescrolloff=5
 
 " Indenting
-set smartindent                                  " Smart indent
-set autoindent                                   " Auto indent
+set smartindent                         " Smart indent
+set autoindent                          " Auto indent
 set expandtab
 set softtabstop=2
 set shiftwidth=2
 set smarttab
 
 " Linebreaks
-set wrap                                         " Wrap lines
-set textwidth=500                                " Textwidth
-set linebreak                                    " Linebreak
+set wrap                                " Wrap lines
+set textwidth=500                       " Textwidth
+set linebreak                           " Linebreak
 
-set shortmess+=c                                 " Dont show the number of matches
+set shortmess+=c                        " Dont show the number of matches
 
 " Persistent Undo
 if has('persistent_undo')
@@ -270,6 +296,12 @@ let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ }
 
+augroup LanguageClient_config
+  autocmd!
+  autocmd User LanguageClientStarted setlocal signcolumn=yes
+  autocmd User LanguageClientStopped setlocal signcolumn=auto
+augroup END
+
 let g:LanguageClient_diagnosticsDisplay = {
     \    1: {
     \      'name': 'Error',
@@ -341,6 +373,7 @@ endif
 
 " Theme
 let g:nord_comment_brightness = 10
+let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
 colorscheme nord
