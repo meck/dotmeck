@@ -85,15 +85,7 @@ if !has('nvim')
 endif
 
 " Language server client
-if s:arch ==# 'MacOs'
-  Plug 'autozimu/LanguageClient-neovim', { 'tag': 'binary-*-x86_64-apple-darwin',  }
-elseif s:arch ==# 'LinuxI32'
-  Plug 'autozimu/LanguageClient-neovim', { 'tag': 'binary-*-i686-unknown-linux-musl',  }
-elseif s:arch ==# 'LinuxI64'
-  Plug 'autozimu/LanguageClient-neovim', { 'tag': 'binary-*-x86_64-unknown-linux-musl',  }
-else
-  Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'make release'}
-endif
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'install.sh', }
 
 " Adds seamless navigation between tmux and vim
 Plug 'christoomey/vim-tmux-navigator'
@@ -367,8 +359,13 @@ if has('nvim')
 end
 
 " Use Ripgrep for Fzf
+" ? opens preview and :Find! is big preview
 if executable('rg')
-  command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+  command! -bang -nargs=* Find call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
 endif
 
 " Theme
@@ -421,6 +418,39 @@ fun! ToggleAleAutoList()
       wincmd p
   endif
 endfun
+
+" Edit vimrc with f5 and source it automatically when saved
+nmap <silent> <leader><f5> :e $MYVIMRC<CR>
+augroup reload_vimrc
+    autocmd!
+    autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+augroup END
+
+" Close all but the current buffer
+function! Buflist()
+    redir => l:bufnames
+    silent ls
+    redir END
+    let l:list = []
+    for l:i in split(l:bufnames, "\n")
+        let l:buf = split(l:i, '"' )
+        call add(l:list, l:buf[-2])
+    endfor
+    return l:list
+endfunction
+
+
+function! Bdeleteonly()
+    let l:list = filter(Buflist(), "v:val != bufname('%')")
+    for l:buffer in l:list
+        exec 'bdelete '.l:buffer
+    endfor
+endfunction
+
+command! Ball :silent call Bdeleteonly()
+
+
+
 
 "}}}
 "  Mappings {{{
