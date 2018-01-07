@@ -85,7 +85,7 @@ if !has('nvim')
 endif
 
 " Language server client
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'install.sh', }
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh', }
 
 " Adds seamless navigation between tmux and vim
 Plug 'christoomey/vim-tmux-navigator'
