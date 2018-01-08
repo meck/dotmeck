@@ -13,18 +13,19 @@ env:
   # `infocmp xterm-256color`.
   TERM: xterm-256color
 
-# Window dimensions in character columns and lines
-# (changes require restart)
-dimensions:
-  columns: 180
-  lines: 50
+window:
+  # Window dimensions in character columns and lines
+  # (changes require restart)
+  dimensions:
+    columns: 180
+    lines: 50
 
-# Adds this many blank pixels of padding around the window
-# Units are physical pixels; this is not DPI aware.
-# (change requires restart)
-padding:
-  x: 50
-  y: 50
+  # Adds this many blank pixels of padding around the window
+  # Units are physical pixels; this is not DPI aware.
+  # (change requires restart)
+  padding:
+    x: 50
+    y: 50
 
   # Window decorations
   # Setting this to false will result in window without borders and title bar.
@@ -37,24 +38,6 @@ tabspaces: 8
 draw_bold_text_with_bright_colors: false
 
 # Font configuration (changes require restart)
-#
-# Important font attributes like antialiasing, subpixel aa, and hinting can be
-# controlled through fontconfig. Specifically, the following attributes should
-# have an effect:
-#
-# * hintstyle
-# * antialias
-# * lcdfilter
-# * rgba
-#
-# For instance, if you wish to disable subpixel antialiasing, you might set the
-# rgba property to "none". If you wish to completely disable antialiasing, you
-# can set antialias to false.
-#
-# Please see these resources for more information on how to use fontconfig
-#
-# * https://wiki.archlinux.org/index.php/font_configuration#Fontconfig_configuration
-# * file:///usr/share/doc/fontconfig/fontconfig-user.html
 font:
   # The normal (roman) font face to use.
   normal:
@@ -220,11 +203,11 @@ live_config_reload: true
 #
 # You can set shell.program to the path of your favorite shell, e.g. /bin/fish.
 # Entries in shell.args are passed unmodified as arguments to the shell.
-# shell:
-#   program: /bin/bash
-#   args:
-#     - --login
-
+#
+shell:
+  program: /usr/local/bin/zsh
+  args:
+    - --login
 
 # Key bindings
 #
@@ -258,17 +241,11 @@ live_config_reload: true
 #   `command` must be a map containing a `program` string, and `args` array of
 #     strings. For example:
 #     - { ... , command: { program: "alacritty", args: ["-e", "vttest"] } }
-# (e.g. "\x1b[5~") is? Open another terminal (like xterm) without tmux,
-# then run `showkey -a` to get the sequence associated to a key combination.
 key_bindings:
   - { key: V,        mods: Command, action: Paste                        }
   - { key: C,        mods: Command, action: Copy                         }
   - { key: Q,        mods: Command, action: Quit                         }
   - { key: W,        mods: Command, action: Quit                         }
-  - { key: Insert,   mods: Shift,   action: PasteSelection               }
-  - { key: Key0,     mods: Control, action: ResetFontSize                }
-  - { key: Equals,   mods: Control, action: IncreaseFontSize             }
-  - { key: Subtract, mods: Control, action: DecreaseFontSize             }
   - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }
   - { key: Home,                    chars: "\x1b[H",   mode: ~AppCursor  }
   - { key: End,                     chars: "\x1bOF",   mode: AppCursor   }

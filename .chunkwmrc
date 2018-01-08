@@ -19,30 +19,17 @@ chunkc core::hotload 1
 #
 
 chunkc set global_desktop_mode           bsp
-# chunkc set 2_desktop_mode                monocle
-# chunkc set 5_desktop_mode                float
 
-chunkc set global_desktop_offset_top     20
-chunkc set global_desktop_offset_bottom  20
-chunkc set global_desktop_offset_left    20
-chunkc set global_desktop_offset_right   20
+chunkc set global_desktop_offset_top     15
+chunkc set global_desktop_offset_bottom  15
+chunkc set global_desktop_offset_left    15
+chunkc set global_desktop_offset_right   15
 chunkc set global_desktop_offset_gap     15
 
-# chunkc set 1_desktop_offset_top          190
-# chunkc set 1_desktop_offset_bottom       190
-# chunkc set 1_desktop_offset_left         190
-# chunkc set 1_desktop_offset_right        190
-# chunkc set 1_desktop_offset_gap          15
-
-# chunkc set 3_desktop_offset_top          190
-# chunkc set 3_desktop_offset_bottom       190
-# chunkc set 3_desktop_offset_left         190
-# chunkc set 3_desktop_offset_right        190
-
 chunkc set desktop_padding_step_size     10.0
-chunkc set desktop_gap_step_size         5.0
+chunkc set desktop_gap_step_size         10.0
 
-chunkc set bsp_spawn_left                1
+chunkc set bsp_spawn_left                0
 chunkc set bsp_optimal_ratio             1.618
 chunkc set bsp_split_mode                optimal
 chunkc set bsp_split_ratio               0.5
@@ -60,10 +47,10 @@ chunkc set window_region_locked          1
 #       to pass value containing a whitespace.
 #
 # chunkc set mouse_modifier              \"cmd shift\"
-chunkc set mouse_modifier                fn
+chunkc set mouse_modifier                alt
 
 chunkc set preselect_border_color        0xffd75f5f
-chunkc set preselect_border_width        5
+chunkc set preselect_border_width        2
 chunkc set preselect_border_radius       0
 
 #
@@ -99,6 +86,7 @@ chunkc core::load ffm.so
 # NOTE: shell commands require escaped quotes
 #       to pass value containing a whitespace.
 #
-
-chunkc tiling::rule --owner Finder --name Copy --state float
+chunkc tiling::rule --owner 1Password --state float
+# chunkc tiling::rule --owner Finder --name Copy --state float
+chunkc tiling::rule --owner Finder --state float
 chunkc tiling::rule --owner \"App Store\" --state float
