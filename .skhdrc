@@ -62,12 +62,13 @@
 alt - space ; wmMode
 wmMode < escape ; default
 
-cmd - return : /Applications/Kitty.app/Contents/MacOS/kitty --config ~/.config/kitty/kitty.conf
+cmd - return : open -na /Applications/Alacritty.app
+cmd + shift - return : osascript -e 'tell application "Safari" to make new document'
 
 # change layout of desktop
-ctrl + alt - a : chunkc tiling::desktop --layout bsp
-ctrl + alt - s : chunkc tiling::desktop --layout monocle
-ctrl + alt - d : chunkc tiling::desktop --layout float
+wmMode < n : chunkc tiling::desktop --layout bsp
+wmMode < m : chunkc tiling::desktop --layout monocle
+wmMode < 0x2B : chunkc tiling::desktop --layout float
 
 # focus window
 default, wmMode < alt - h : chunkc tiling::window --focus west
@@ -87,9 +88,9 @@ wmMode < i : chunkc tiling::desktop --mirror vertical
 # mirror tree x-axis
 wmMode < o : chunkc tiling::desktop --mirror horizontal
 
-# Adjust Gaps
-wmMode < m : chunkc tiling::desktop --gap inc
-wmMode < shift - m : chunkc tiling::desktop --gap dec
+# Adjust Gaps uses /? key
+wmMode < 0x2C : chunkc tiling::desktop --gap inc
+wmMode < shift - 0x2C : chunkc tiling::desktop --gap dec
 
 # toggle window native fullscreen
 wmMode < f : chunkc tiling::window --toggle native-fullscreen
@@ -130,19 +131,19 @@ wmMode < 4 : chunkc tiling::window --send-to-desktop 4
 wmMode < 5 : chunkc tiling::window --send-to-desktop 5
 wmMode < 6 : chunkc tiling::window --send-to-desktop 6
 
-# focus monitor
-ctrl + alt - z  : chunkc tiling::monitor -f prev
-ctrl + alt - c  : chunkc tiling::monitor -f next
-ctrl + alt - 1  : chunkc tiling::monitor -f 1
-ctrl + alt - 2  : chunkc tiling::monitor -f 2
-ctrl + alt - 3  : chunkc tiling::monitor -f 3
-
 # send window to monitor and follow focus
-ctrl + cmd - z  : chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
-ctrl + cmd - c  : chunkc tiling::window --send-to-monitor next; chunkc tiling::monitor -f next
-ctrl + cmd - 1  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
-ctrl + cmd - 2  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
-ctrl + cmd - 3  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
+wmMode < shift - z  : chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
+wmMode < shift - c  : chunkc tiling::window --send-to-monitor next; chunkc tiling::monitor -f next
+wmMode < shift - 1  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
+wmMode < shift - 2  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
+wmMode < shift - 3  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
+
+# focus monitor
+wmMode < alt - z  : chunkc tiling::monitor -f prev
+wmMode < alt - c  : chunkc tiling::monitor -f next
+wmMode < alt - 1  : chunkc tiling::monitor -f 1
+wmMode < alt - 2  : chunkc tiling::monitor -f 2
+wmMode < alt - 3  : chunkc tiling::monitor -f 3
 
 # increase region size
 wmMode < a : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
