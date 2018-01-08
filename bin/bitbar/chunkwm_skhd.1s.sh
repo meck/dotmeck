@@ -41,6 +41,11 @@ case $1 in
     chunkc core::unload "$2".so
     exit 0
   ;;
+  "quicklook" )
+    qlmanage -p "$2" > /dev/null 2>&1
+    exit 0
+  ;;
+
 esac
 
 
@@ -76,3 +81,4 @@ fi
 
 echo "--Restart | bash='$0' param1=restart terminal=false"
 echo "--Stop | bash='$0' param1=stop terminal=false"
+echo "View Bindings | bash='$0' param1=quicklook param2='$HOME/.skhdrc' terminal=false"

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ "$1" != "false" ] && [ "$1" != "true" ] ; then
+  echo "Usage: darkmode true"
+  echo "       darkmode false"
+  exit 1
+fi
+
+osascript <<END
+tell application "System Events"
+    tell appearance preferences
+      set dark mode to $1
+  end tell
+end tell
+END

@@ -1,10 +1,14 @@
-## NOTE(koekeishiya): A list of all built-in modifier and literal keywords can
+#  NOTE(koekeishiya): A list of all built-in modifier and literal keywords can
 #                     be found at https://github.com/koekeishiya/skhd/issues/1
 #
 #                     A hotkey is written according to the following rules:
 #
-#                       hotkey   = <keysym> ':' <command> |
-#                                  <keysym> '->' ':' <command>
+#                       hotkey   = <mode> '<' <action> | <action>
+#
+#                       mode     = 'name of mode' | <mode> ',' <mode>
+#
+#                       action   = <keysym> ':' <command> | <keysym> '->' ':' <command>
+#                                  <keysym> ';' <mode>    | <keysym> '->' ';' <mode>
 #
 #                       keysym   = <mod> '-' <key> | <key>
 #
@@ -28,11 +32,36 @@
 #                                  prepend '\' at the end of the previous line.
 #
 #                                  an EOL character signifies the end of the bind.
+#
+#
 
+#  NOTE(koekeishiya): Modal operations
+#
+#                     defines a new mode 'switcher' with an on_enter command
+#                       :: switcher : chunkc border::color 0xff24ccaa
+#
+#                     defines a new mode named 'test'
+#                       :: test
+#
+#                     from 'default' mode, activate mode 'test'
+#                       cmd - x ; test
+#
+#                     from 'test' mode, activate mode 'default'
+#                       test < cmd - x ; default
+#
+#                     launch a new terminal instance when in either 'default' or 'test' mode
+#                       default, test < cmd - return : open -na /Applications/Terminal.app
 
-# open terminal, blazingly fast compared to iTerm/Hyper
-# cmd - return : open -na /Applications/Alacritty.app
-# cmd - return : open -na /Applications/Kitty.app
+# The default mode
+:: default : $HOME/bin/darkmode false
+
+# A mode for window operations
+:: wmMode : $HOME/bin/darkmode true
+
+# enter and exit wmmode
+alt - space ; wmMode
+wmMode < escape ; default
+
 cmd - return : /Applications/Kitty.app/Contents/MacOS/kitty --config ~/.config/kitty/kitty.conf
 
 # change layout of desktop
@@ -41,72 +70,65 @@ ctrl + alt - s : chunkc tiling::desktop --layout monocle
 ctrl + alt - d : chunkc tiling::desktop --layout float
 
 # focus window
-alt - h : chunkc tiling::window --focus west
-alt - j : chunkc tiling::window --focus south
-alt - k : chunkc tiling::window --focus north
-alt - l : chunkc tiling::window --focus east
+default, wmMode < alt - h : chunkc tiling::window --focus west
+default, wmMode < alt - j : chunkc tiling::window --focus south
+default, wmMode < alt - k : chunkc tiling::window --focus north
+default, wmMode < alt - l : chunkc tiling::window --focus east
 
-cmd - j : chunkc tiling::window --focus prev
-cmd - k : chunkc tiling::window --focus next
+# cmd - j : chunkc tiling::window --focus prev
+# cmd - k : chunkc tiling::window --focus next
 
 # rotate tree
-alt - r : chunkc tiling::desktop --rotate 90
+wmMode < u : chunkc tiling::desktop --rotate 90
 
 # mirror tree y-axis
-alt - y : chunkc tiling::desktop --mirror vertical
+wmMode < i : chunkc tiling::desktop --mirror vertical
 
 # mirror tree x-axis
-alt - x : chunkc tiling::desktop --mirror horizontal
-
-# Turn on and off border
-alt - n : chunkc core::load border.so
-shift + alt - n : chunkc core::unload border.so
+wmMode < o : chunkc tiling::desktop --mirror horizontal
 
 # Adjust Gaps
-alt - m : chunkc tiling::desktop --gap inc;\
-          chunkc tiling::desktop --padding inc
-
-shift + alt - m : chunkc tiling::desktop --gap dec;\
-          chunkc tiling::desktop --padding dec
+wmMode < m : chunkc tiling::desktop --gap inc
+wmMode < shift - m : chunkc tiling::desktop --gap dec
 
 # toggle window native fullscreen
-alt - f : chunkc tiling::window --toggle native-fullscreen
+wmMode < f : chunkc tiling::window --toggle native-fullscreen
 
 # toggle window parent zoom
-alt - d : chunkc tiling::window --toggle parent
+wmMode < r : chunkc tiling::window --toggle parent
 
 # toggle window split type
-alt - e : chunkc tiling::window --toggle split
+wmMode < t : chunkc tiling::window --toggle split
 
 # float / unfloat window and center on screen
-alt - t : chunkc tiling::window --toggle float;\
-          chunkc tiling::window --grid-layout 6:6:1:1:4:4
+wmMode < g : chunkc tiling::window --toggle float;\
+             chunkc tiling::window --grid-layout 6:6:1:1:4:4
 
 # equalize size of windows
-shift + alt - 0 : chunkc tiling::desktop --equalize
+wmMode < q : chunkc tiling::desktop --equalize
 
 # swap window
-shift + alt - h : chunkc tiling::window --swap west
-shift + alt - j : chunkc tiling::window --swap south
-shift + alt - k : chunkc tiling::window --swap north
-shift + alt - l : chunkc tiling::window --swap east
+wmMode < h : chunkc tiling::window --swap west
+wmMode < j : chunkc tiling::window --swap south
+wmMode < k : chunkc tiling::window --swap north
+wmMode < l : chunkc tiling::window --swap east
 
 # move window
-shift + cmd - h : chunkc tiling::window --warp west
-shift + cmd - j : chunkc tiling::window --warp south
-shift + cmd - k : chunkc tiling::window --warp north
-shift + cmd - l : chunkc tiling::window --warp east
+wmMode < shift - h : chunkc tiling::window --warp west
+wmMode < shift - j : chunkc tiling::window --warp south
+wmMode < shift - k : chunkc tiling::window --warp north
+wmMode < shift - l : chunkc tiling::window --warp east
 
 # send window to desktop
-shift + alt - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
-shift + alt - z : chunkc tiling::window --send-to-desktop prev
-shift + alt - c : chunkc tiling::window --send-to-desktop next
-shift + alt - 1 : chunkc tiling::window --send-to-desktop 1
-shift + alt - 2 : chunkc tiling::window --send-to-desktop 2
-shift + alt - 3 : chunkc tiling::window --send-to-desktop 3
-shift + alt - 4 : chunkc tiling::window --send-to-desktop 4
-shift + alt - 5 : chunkc tiling::window --send-to-desktop 5
-shift + alt - 6 : chunkc tiling::window --send-to-desktop 6
+wmMode < x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
+wmMode < z : chunkc tiling::window --send-to-desktop prev
+wmMode < c : chunkc tiling::window --send-to-desktop next
+wmMode < 1 : chunkc tiling::window --send-to-desktop 1
+wmMode < 2 : chunkc tiling::window --send-to-desktop 2
+wmMode < 3 : chunkc tiling::window --send-to-desktop 3
+wmMode < 4 : chunkc tiling::window --send-to-desktop 4
+wmMode < 5 : chunkc tiling::window --send-to-desktop 5
+wmMode < 6 : chunkc tiling::window --send-to-desktop 6
 
 # focus monitor
 ctrl + alt - z  : chunkc tiling::monitor -f prev
@@ -123,15 +145,15 @@ ctrl + cmd - 2  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::moni
 ctrl + cmd - 3  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
 
 # increase region size
-shift + alt - a : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
-shift + alt - s : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south
-shift + alt - w : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north
-shift + alt - d : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
+wmMode < a : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
+wmMode < s : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south
+wmMode < w : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north
+wmMode < d : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
 
 # decrease region size
-shift + cmd - a : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
-shift + cmd - s : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south
-shift + cmd - w : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
-shift + cmd - d : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
+wmMode < shift - d : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
+wmMode < shift - w : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south
+wmMode < shift - s : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
+wmMode < shift - a : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
 
-ctrl + alt - w : chunkc tiling::desktop --deserialize ~/.chunkwm_layouts/dev_3
+# ctrl + alt - w : chunkc tiling::desktop --deserialize ~/.chunkwm_layouts/dev_3
