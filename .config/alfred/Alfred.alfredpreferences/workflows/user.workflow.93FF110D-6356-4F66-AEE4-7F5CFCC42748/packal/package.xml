@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<workflow>
+  <name>Network</name>
+  <version>1.0</version>
+  <bundle>dk.rodalgaard.alfred.network</bundle>
+  <updated>1458553903</updated>
+  <file>network.alfredworkflow</file>
+</workflow>

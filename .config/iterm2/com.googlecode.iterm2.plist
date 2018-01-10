@@ -883,19 +883,21 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 126 606 469 0 0 1680 1050 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>112 200 796 473 0 0 1680 1027 </string>
+	<string>264 1068 918 381 0 0 2880 1597 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>230 833 592 584 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>496 14 1010 1013 0 0 1680 1027 </string>
+	<string>1447 17 1418 773 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>1843 269 1010 1073 0 0 2880 1597 </string>
+	<string>18 17 1410 773 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>285 456 1010 1073 0 0 2880 1597 </string>
+	<string>1451 17 1410 773 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>311 69 1858 1077 0 0 2560 1417 </string>
+	<string>720 422 1434 793 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>368 0 1010 1027 0 0 1680 1027 </string>
+	<string>121 372 1010 1073 0 0 2880 1597 </string>
+	<key>NSWindow Frame iTerm Window 5</key>
+	<string>474 126 1010 1073 0 0 2880 1597 </string>
 	<key>NeverWarnAboutShortLivedSessions_067F3752-E1C4-4C74-8EE9-B390B168C590</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_067F3752-E1C4-4C74-8EE9-B390B168C590_selection</key>
@@ -1633,6 +1635,8 @@
 			<key>Use Bold Font</key>
 			<true/>
 			<key>Use Bright Bold</key>
+			<false/>
+			<key>Use Cursor Guide</key>
 			<false/>
 			<key>Use Italic Font</key>
 			<true/>
@@ -2387,6 +2391,8 @@
 			<string>/Users/meck</string>
 		</dict>
 	</array>
+	<key>NoSyncHaveUsedCopyMode</key>
+	<true/>
 	<key>NoSyncHaveWarnedAboutIncompatibleSoftware</key>
 	<true/>
 	<key>NoSyncHaveWarnedAboutPasteConfirmationChange</key>
@@ -2451,7 +2457,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-11-11T22:47:36Z</date>
+	<date>2018-01-09T20:49:51Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>ShowBookmarkName</key>

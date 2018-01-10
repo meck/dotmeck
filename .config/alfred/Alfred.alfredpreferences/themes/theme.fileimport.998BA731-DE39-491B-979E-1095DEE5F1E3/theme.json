@@ -1,0 +1,61 @@
+{
+  "alfredtheme" : {
+    "result" : {
+      "textSpacing" : 5,
+      "subtext" : {
+        "size" : 10,
+        "colorSelected" : "#65728DFF",
+        "font" : "Hasklig",
+        "color" : "#4A556BFF"
+      },
+      "shortcut" : {
+        "size" : 16,
+        "colorSelected" : "#FFFFFFFF",
+        "font" : "Hasklig",
+        "color" : "#FEFFFF43"
+      },
+      "backgroundSelected" : "#00000031",
+      "text" : {
+        "size" : 16,
+        "colorSelected" : "#80A1C0FF",
+        "font" : "Hasklig",
+        "color" : "#D6DEEAA1"
+      },
+      "iconPaddingHorizontal" : 10,
+      "paddingVertical" : 9,
+      "iconSize" : 29
+    },
+    "search" : {
+      "paddingVertical" : 0,
+      "background" : "#00000000",
+      "spacing" : 8,
+      "text" : {
+        "size" : 28,
+        "colorSelected" : "#000000FF",
+        "font" : "Hasklig",
+        "color" : "#FEFFFFFF"
+      },
+      "backgroundSelected" : "#B2D7FFFF"
+    },
+    "window" : {
+      "color" : "#2C3341E1",
+      "paddingHorizontal" : 0,
+      "width" : 721,
+      "borderPadding" : 0,
+      "borderColor" : "#00000000",
+      "blur" : 40,
+      "roundness" : 3,
+      "paddingVertical" : 7
+    },
+    "credit" : "@mattpirelli",
+    "separator" : {
+      "color" : "#CBCBCBF3",
+      "thickness" : 0
+    },
+    "scrollbar" : {
+      "color" : "#5D81ABFF",
+      "thickness" : 2
+    },
+    "name" : "Nord"
+  }
+}

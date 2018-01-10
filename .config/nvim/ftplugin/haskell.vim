@@ -59,6 +59,7 @@ augroup interoMappings
 
   " Enter insertmode when going to the REPL
   autocmd BufWinEnter,WinEnter Intero startinsert
+
 augroup END
 
 " ---- eagletmt/neco-ghc -----
