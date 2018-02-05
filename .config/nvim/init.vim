@@ -85,7 +85,7 @@ if !has('nvim')
 endif
 
 " Language server client
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh', }
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
 
 " Adds seamless navigation between tmux and vim
 Plug 'christoomey/vim-tmux-navigator'
@@ -288,12 +288,6 @@ let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ }
 
-augroup LanguageClient_config
-  autocmd!
-  autocmd User LanguageClientStarted setlocal signcolumn=yes
-  autocmd User LanguageClientStopped setlocal signcolumn=auto
-augroup END
-
 let g:LanguageClient_diagnosticsDisplay = {
     \    1: {
     \      'name': 'Error',
@@ -369,7 +363,7 @@ if executable('rg')
 endif
 
 " Theme
-let g:nord_comment_brightness = 10
+let g:nord_comment_brightness = 20
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
@@ -496,6 +490,7 @@ endif
 nnoremap <silent> <Leader>lh :call LanguageClient_textDocument_hover()<CR>
 " Goto definition of identifier under cursor.
 nnoremap <silent> <Leader>ld :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <Leader>lD :call LanguageClient_textDocument_definition({'gotoCmd': 'split'})<CR>
 " Rename identifier under cursor.
 nnoremap <silent> <Leader>lr :call LanguageClient_textDocument_rename()<CR>
 " Format current document.
@@ -527,7 +522,7 @@ nnoremap <Leader>zf :Files<CR>
 nnoremap <Leader>zb :Buffers<CR>
 
 " Terminals
-nnoremap <silent> <Leader>te :belowright split +resize\ 20 \| terminal <CR>
+nnoremap <silent> <Leader>te :belowright split +resize\ 13 \| setlocal winfixheight \| terminal <CR>
 nnoremap <silent> <Leader>vte :belowright vsplit \| terminal <CR>
 
 " Whitespace Clean

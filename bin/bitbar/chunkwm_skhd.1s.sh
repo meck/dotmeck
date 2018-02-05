@@ -41,6 +41,7 @@ case $1 in
     chunkc core::unload "$2".so
     exit 0
   ;;
+
   "quicklook" )
     qlmanage -p "$2" > /dev/null 2>&1
     exit 0

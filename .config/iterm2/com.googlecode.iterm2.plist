@@ -883,15 +883,15 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 126 606 469 0 0 1680 1050 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>264 1068 918 381 0 0 2880 1597 </string>
+	<string>264 1094 1018 447 0 0 2880 1597 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>230 833 592 584 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>1447 17 1418 773 0 0 2880 1597 </string>
+	<string>526 249 1010 1027 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>18 17 1410 773 0 0 2880 1597 </string>
+	<string>1466 52 1362 1493 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>1451 17 1410 773 0 0 2880 1597 </string>
+	<string>1466 55 1362 713 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
 	<string>720 422 1434 793 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
@@ -2457,11 +2457,13 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2018-01-09T20:49:51Z</date>
+	<date>2018-01-31T12:53:45Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>ShowBookmarkName</key>
 	<false/>
+	<key>ShowMetalFPSmeter</key>
+	<true/>
 	<key>TabStyle</key>
 	<integer>1</integer>
 	<key>TabViewType</key>
@@ -2479,6 +2481,8 @@
 	</dict>
 	<key>UseBorder</key>
 	<false/>
+	<key>UseMetal</key>
+	<true/>
 	<key>WordCharacters</key>
 	<string>/-+\~_.</string>
 	<key>findIgnoreCase_iTerm</key>
@@ -2488,7 +2492,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.1.5</string>
+	<string>3.2.20180130-nightly</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>7</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

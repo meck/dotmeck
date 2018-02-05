@@ -110,7 +110,7 @@ class Search
                 ->subtitle('Search user (in alfred workflow)')
                 ->comparator($query)
                 ->autocomplete($title)
-                ->icon('repo')
+                ->icon('user')
                 ->valid(false)
             , false);
         }
@@ -363,7 +363,8 @@ class Search
                             ->comparator($parts[0].' *'.$commit->sha)
                             ->subtitle($commit->commit->author->date.'  ('.$commit->sha.')')
                             ->icon('commits')
-                            ->arg('https://github.com/'.$parts[0].'/commit/'.$commit->sha)
+                            ->arg('/'.$parts[0].'/commit/'.$commit->sha)
+                            ->prio(strtotime($commit->commit->author->date))
                         );
                     }
                     break;
@@ -403,16 +404,19 @@ class Search
                             ->subtitle($issue->title)
                             ->icon($issue->pull_request ? 'pull-request' : 'issue')
                             ->arg($issue->html_url)
+                            ->prio(strtotime($issue->updated_at))
                         );
                     }
                     break;
             }
         } else {
             $subs = array(
-                'admin' => array('Manage this repo'),
+                'admin' => array('Manage this repo', 'settings'),
                 'graphs' => array('All the graphs'),
                 'issues ' => array('List, show and create issues', 'issue'),
+                'milestones' => array('View milestones', 'milestone'),
                 'network' => array('See the network', 'graphs'),
+                'projects' => array('View projects', 'project'),
                 'pulls' => array('Show open pull requests', 'pull-request'),
                 'pulse' => array('See recent activity'),
                 'wiki' => array('Pull up the wiki'),
@@ -438,12 +442,6 @@ class Search
                 ->subtitle('Create new pull request')
                 ->icon('pull-request')
                 ->arg('/'.$parts[0].'/pull/new?source=c')
-            );
-            Workflow::addItem(Item::create()
-                ->title($parts[0].' milestones')
-                ->subtitle('View milestones')
-                ->icon('milestone')
-                ->arg('/'.$parts[0].'/milestones')
             );
             if (empty($parts[1])) {
                 $subs = array(
@@ -518,6 +516,9 @@ class Search
                 'assigned' => array($parts[1].'/assigned', 'View your assigned '.$items),
                 'mentioned' => array($parts[1].'/mentioned', 'View '.$items.' that mentioned you'),
             );
+            if ('pulls' === $parts[1]) {
+                $subs['review requested'] = array($parts[1].'/review-requested', 'View '.$items.' that require review');
+            }
             foreach ($subs as $key => $sub) {
                 Workflow::addItem(Item::create()
                     ->title('my '.$parts[1].' '.$key)

@@ -1,6 +1,14 @@
 #!/bin/bash
 
 #
+# NOTE: specify the desired level of logging.
+#
+#       - none, debug, warn, error
+#
+
+chunkc core::log_level error
+
+#
 # NOTE: specify the absolutepath to the directory to use when
 #       loading a plugin. '~' expansion is supported.
 #
@@ -37,7 +45,7 @@ chunkc set bsp_split_ratio               0.5
 chunkc set monitor_focus_cycle           1
 chunkc set window_focus_cycle            all
 
-chunkc set mouse_follows_focus           0
+chunkc set mouse_follows_focus           intrinsic
 chunkc set window_float_next             0
 chunkc set window_float_center           1
 chunkc set window_region_locked          1

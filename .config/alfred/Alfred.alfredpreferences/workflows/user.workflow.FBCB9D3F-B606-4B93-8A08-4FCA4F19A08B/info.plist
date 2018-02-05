@@ -111,7 +111,7 @@ end alfred_script</string>
 				<key>argumenttype</key>
 				<integer>1</integer>
 				<key>keyword</key>
-				<string>ns</string>
+				<string>sn</string>
 				<key>subtext</key>
 				<string>Open url in new Safari Window</string>
 				<key>text</key>

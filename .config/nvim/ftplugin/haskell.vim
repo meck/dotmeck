@@ -12,6 +12,7 @@ let g:haskell_backpack = 1                " to enable highlighting of backpack k
 
 " Testing Language Server For Linting instead of ale
 let b:ale_enabled = 0
+setlocal signcolumn=yes
 " let g:ale_linters.haskell = ['stack-ghc-mod', 'hlint']
 
 " ----- Language Client Server -----
@@ -58,7 +59,7 @@ augroup interoMappings
   nnoremap <leader>ist :InteroSetTargets<SPACE>
 
   " Enter insertmode when going to the REPL
-  autocmd BufWinEnter,WinEnter Intero startinsert
+  autocmd BufWinEnter,WinEnter Intero startinsert | setlocal winfixheight
 
 augroup END
 
