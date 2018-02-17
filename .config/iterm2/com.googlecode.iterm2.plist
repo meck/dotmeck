@@ -883,15 +883,15 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 126 606 469 0 0 1680 1050 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>264 1094 1018 447 0 0 2880 1597 </string>
+	<string>264 1146 1018 447 0 0 2880 1597 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>230 833 592 584 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>526 249 1010 1027 0 0 2880 1597 </string>
+	<string>133 135 1218 573 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>1466 52 1362 1493 0 0 2880 1597 </string>
+	<string>51 52 1362 1493 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>1466 55 1362 713 0 0 2880 1597 </string>
+	<string>1528 132 1218 1333 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
 	<string>720 422 1434 793 0 0 2880 1597 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
@@ -2457,7 +2457,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2018-01-31T12:53:45Z</date>
+	<date>2018-02-17T21:05:02Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -2479,6 +2479,8 @@
 		<key>ssh</key>
 		<string>067F3752-E1C4-4C74-8EE9-B390B168C590</string>
 	</dict>
+	<key>UseAdaptiveFrameRate</key>
+	<false/>
 	<key>UseBorder</key>
 	<false/>
 	<key>UseMetal</key>
@@ -2492,7 +2494,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.2.20180130-nightly</string>
+	<string>3.2.20180214-nightly</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>7</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

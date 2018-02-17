@@ -14,7 +14,7 @@ require 'curl.php';
 
 class Workflow
 {
-    const VERSION = '1.6.1';
+    const VERSION = '1.6.2';
     const BUNDLE = 'de.gh01.alfred.github';
     const DEFAULT_CACHE_MAX_AGE = 10;
 
@@ -248,7 +248,7 @@ class Workflow
 
                 if ($firstPageOnly) {
                     // do nothing
-                } elseif ($checkNext || $response->link && preg_match('/<(.+)>; rel="next"/U', $response->link, $match)) {
+                } elseif ($checkNext || $response->link && preg_match('/<([^<>]+)>; rel="next"/U', $response->link, $match)) {
                     $stmt = Workflow::getStatement('SELECT * FROM request_cache WHERE parent = ?');
                     $stmt->execute(array($url));
                     if ($checkNext) {
