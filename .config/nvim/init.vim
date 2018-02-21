@@ -137,7 +137,7 @@ call plug#end()
 "}}}
 "  Built in settings {{{
 """"""""""""""""""""""""
-set t_Co=256                            " Yhea colors for everyone
+set termguicolors                       " Lots of colors
 set clipboard^=unnamed,unnamedplus      " Use MacOs / Linux clipboard
 language en_US.UTF-8                    " Not MacOS Lang
 filetype plugin indent on               " Enabling filetype support provides filetype-specific indenting, syntax
@@ -363,7 +363,7 @@ if executable('rg')
 endif
 
 " Theme
-let g:nord_comment_brightness = 20
+let g:nord_comment_brightness = 8
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
