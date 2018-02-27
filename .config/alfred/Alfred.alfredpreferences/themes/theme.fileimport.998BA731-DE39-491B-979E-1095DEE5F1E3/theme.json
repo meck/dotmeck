@@ -22,7 +22,7 @@
         "color" : "#D6DEEAA1"
       },
       "iconPaddingHorizontal" : 10,
-      "paddingVertical" : 9,
+      "paddingVertical" : 2,
       "iconSize" : 29
     },
     "search" : {

@@ -52,7 +52,7 @@ fi
 # source fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-(( $+commands[fd] )) && export FZF_DEFAULT_COMMAND='fd . $HOME'
+(( $+commands[fd] )) && export FZF_DEFAULT_COMMAND='fd --type file'
 (( $+commands[fd] )) && export FZF_CTRL_T_COMMAND='fd --follow --hidden . $home'
 (( $+commands[fd] )) && export FZF_ALT_C_COMMAND='fd --follow -t d . $HOME'
 

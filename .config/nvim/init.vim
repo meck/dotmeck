@@ -151,7 +151,7 @@ set visualbell                          " Dont beep
 set noerrorbells
 set notimeout ttimeout ttimeoutlen=0    " Quickly time out on keycodes, but never time out on mappings
 set backspace=indent,eol,start          " Proper backspace behavior
-set listchars=space:\·,eol:\¬,tab:\→\·  " Invisibles
+set listchars=trail:\·,eol:\¬,tab:\▸\   " Invisibles
 set laststatus=2                        " Always show statusline
 set nolist                              " Start without list symbols
 set autoread                            " Read when a file is changed from the outside
@@ -269,7 +269,7 @@ let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
 
-"Snuppets
+"Snippets
 
 " Expand snippets with enter in completion menu
 imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
@@ -317,7 +317,7 @@ let g:LanguageClient_diagnosticsDisplay = {
 
 
 " Airline
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 let g:airline#extensions#hunks#enabled=0
 let g:airline_section_z = '%3p%% %4l:%-2c'
 let g:airline_skip_empty_sections = 1
@@ -352,7 +352,17 @@ if has('nvim')
   aug END
 end
 
-" Use Ripgrep for Fzf
+" Use fd for Fzf Files
+" ? opens preview and :Files! is big preview
+if executable('fd')
+    command! -bang -nargs=* Files call fzf#vim#grep(
+  \   'fd --type file --hidden --follow --exclude .git --color "always" '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+endif
+
+" Use Ripgrep for Fzf grep
 " ? opens preview and :Find! is big preview
 if executable('rg')
   command! -bang -nargs=* Find call fzf#vim#grep(
