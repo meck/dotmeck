@@ -352,16 +352,6 @@ if has('nvim')
   aug END
 end
 
-" Use fd for Fzf Files
-" ? opens preview and :Files! is big preview
-if executable('fd')
-    command! -bang -nargs=* Files call fzf#vim#grep(
-  \   'fd --type file --hidden --follow --exclude .git --color "always" '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-endif
-
 " Use Ripgrep for Fzf grep
 " ? opens preview and :Find! is big preview
 if executable('rg')

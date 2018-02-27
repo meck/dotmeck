@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<workflow>
+  <name>Flush DNS 10.6-10.13</name>
+  <version>1.2</version>
+  <bundle>com.harvey.flushdns</bundle>
+  <updated>1516806017</updated>
+  <file>flush_dns.alfredworkflow</file>
+</workflow>
