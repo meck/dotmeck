@@ -130,7 +130,7 @@ Plug 'zchee/deoplete-go', { 'for': 'go', 'do': 'make'}
 
 " Rust
 Plug 'rust-lang/rust.vim' , { 'for': 'rust' }
-Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
+" Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
 
 call plug#end()
 
