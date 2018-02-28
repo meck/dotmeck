@@ -17,6 +17,10 @@ zstyle ':prezto:module:editor:info:keymap:alternate' format '[NORMAL]'
 
 RPS1='$editor_info[keymap]'
 
+# dircolors
+if [[ -s "$XDG_CONFIG_HOME/dircolors" ]]; then
+  eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors)"
+fi
 
 ###########
 #  PATHS  #
