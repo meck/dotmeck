@@ -1,6 +1,8 @@
+tap "crisidev/chunkwm"
 tap "homebrew/core"
 tap "homebrew/bundle"
-tap "d12frosted/emacs-plus"
+tap "homebrew/services"
+tap "koekeishiya/formulae"
 tap "sbdchd/skim"
 tap "go-delve/delve"
 tap "caskroom/fonts"
@@ -14,8 +16,8 @@ brew "cowsay"
 brew "ctags"
 brew "go"
 brew "dep"
-brew "elinks", args: ["devel"]
 brew "fd"
+brew "ffmpeg"
 brew "fortune"
 brew "fzf"
 brew "haskell-stack"
@@ -27,7 +29,6 @@ brew "iperf3"
 brew "luajit"
 brew "markdown"
 brew "mas"
-brew "python3"
 brew "mosh"
 brew "mtr"
 brew "ncdu"
@@ -35,7 +36,7 @@ brew "neofetch"
 brew "neovim"
 brew "nmap"
 brew "platformio"
-brew "python"
+brew "python3"
 brew "rclone"
 brew "ripgrep"
 brew "rtv"
@@ -44,17 +45,18 @@ brew "smartmontools"
 brew "sshfs"
 brew "telnet"
 brew "tmux"
-brew "trash"
+brew "trash", args: ["HEAD"]
 brew "tree"
 brew "vim", args: ["with-override-system-vi"]
 brew "wget"
 brew "yadm"
 brew "zsh"
+brew "crisidev/chunkwm/chunkwm", args: ["HEAD"]
 brew "go-delve/delve/delve"
+brew "koekeishiya/formulae/skhd"
 cask "0xed"
 cask "arduino"
 cask "calibre"
-cask "cathode"
 cask "coconutbattery"
 cask "dropbox"
 cask "duet"
@@ -88,9 +90,9 @@ cask "xld"
 cask "caskroom/fonts/font-hasklig"
 cask "caskroom/fonts/font-iosevka"
 cask "caskroom/fonts/font-source-code-pro-for-powerline"
+cask "caskroom/versions/iterm2-nightly"
 mas "1Password", id: 443987910
 mas "Airmail 3", id: 918858936
-mas "Apple Configurator 2", id: 1037126344
 mas "PCalc", id: 403504866
 mas "PiPifier", id: 1160374471
 mas "Reeder", id: 880001334
@@ -98,4 +100,5 @@ mas "Slack", id: 803453959
 mas "StageTimer Display", id: 634542074
 mas "StageTimer2", id: 655220201
 mas "The Unarchiver", id: 425424353
+mas "Tweetbot", id: 557168941
 mas "Xcode", id: 497799835
