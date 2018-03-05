@@ -113,6 +113,7 @@ endif
 Plug 'neovimhaskell/haskell-vim'
 " Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
 Plug 'alx741/vim-hindent', { 'for': 'haskell' }
 Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
