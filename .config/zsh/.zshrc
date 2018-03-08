@@ -22,6 +22,15 @@ if [[ -s "$XDG_CONFIG_HOME/dircolors" ]]; then
   eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors)"
 fi
 
+#########
+#  Nix  #
+#########
+
+# Nix packages
+if [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
+
 ###########
 #  PATHS  #
 ###########

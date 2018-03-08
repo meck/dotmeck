@@ -29,11 +29,15 @@ let g:intero_start_immediately = 0
 " Use ALE (works even when not using Intero)
 let g:intero_use_neomake = 0
 
+" Show type on hover
+let g:intero_type_on_hover = 1
+set updatetime=1000
+
 augroup interoMappings
   autocmd!
 
   " Open and go to the New window
-  nnoremap <silent> <leader>io :execute 'InteroOpen' <Bar> :wincmd w<CR>
+  nnoremap <silent> <leader>io :execute 'InteroOpen' <Bar> :call <SID>win_by_bufname('Intero')<CR>
   nnoremap <silent> <leader>ih :InteroHide<CR>
   nnoremap <silent> <leader>is :InteroStart<CR>
   nnoremap <silent> <leader>ik :InteroKill<CR>
@@ -45,16 +49,16 @@ augroup interoMappings
     endif
   endfunction
   autocmd BufWritePost *.hs call ReloadInteroIfRunning()
+
   " nnoremap <silent> <leader>wr :w \| :InteroReload<CR>
 
-  nnoremap <silent> <leader>il :execute 'InteroLoadCurrentModule' <Bar> :wincmd w<CR>
-  nnoremap <silent> <leader>if :execute 'InteroLoadCurrentFile' <Bar> :wincmd w<CR>
+  nnoremap <silent> <leader>il :execute 'InteroLoadCurrentModule' <Bar> :call <SID>win_by_bufname('Intero')<CR>
+  nnoremap <silent> <leader>if :execute 'InteroLoadCurrentFile' <Bar> :call <SID>win_by_bufname('Intero')<CR>
 
-  map <leader>t <Plug>InteroGenericType
-  map <leader>T <Plug>InteroType
   nnoremap <silent> <leader>it :InteroTypeInsert<CR>
+  nnoremap <silent> <leader>iT :InteroToggleTypeOnHover<CR>
 
-  nnoremap <silent> <leader>jd :InteroGoToDef<CR>
+  nnoremap <silent> <leader>id :InteroGoToDef<CR>
   nnoremap <silent> <leader>iu :InteroUses<CR>
   nnoremap <leader>ist :InteroSetTargets<SPACE>
 
@@ -144,3 +148,10 @@ let g:tagbar_type_haskell = {
         \ 'type'   : 't'
     \ }
 \ }
+
+" Switch to buffer by name
+function! s:win_by_bufname(bufname)
+    let l:bufmap = map(range(1, winnr('$')), '[bufname(winbufnr(v:val)), v:val]')
+    let l:thewindow = filter(l:bufmap, 'v:val[0] =~ a:bufname')[0][1]
+    execute l:thewindow 'wincmd w'
+endfunction

@@ -278,8 +278,8 @@ imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<plug>(ultisnips
 let g:UltiSnipsExpandTrigger = '<Plug>(ultisnips_expand)'
 
 " Navigate snippets
-let g:UltiSnipsJumpForwardTrigger = '<c-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+let g:UltiSnipsJumpForwardTrigger = '<tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
 let g:UltiSnipsRemoveSelectModeMappings = 0
 
 
