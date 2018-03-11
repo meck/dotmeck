@@ -80,16 +80,6 @@ gpip3(){
 
 
 #########
-#  fzf  #
-#########
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-(( $+commands[fd] )) && export FZF_DEFAULT_COMMAND='fd --type file'
-(( $+commands[fd] )) && export FZF_CTRL_T_COMMAND='fd --follow --hidden . $home'
-(( $+commands[fd] )) && export FZF_ALT_C_COMMAND='fd --follow -t d . $HOME'
-
-#########
 #  Nix  #
 #########
 
@@ -105,6 +95,17 @@ fi
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
+
+
+#########
+#  fzf  #
+#########
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+(( $+commands[fd] )) && export FZF_DEFAULT_COMMAND='fd --type file'
+(( $+commands[fd] )) && export FZF_CTRL_T_COMMAND='fd --follow --hidden . $home'
+(( $+commands[fd] )) && export FZF_ALT_C_COMMAND='fd --follow -t d . $HOME'
 
 
 #############
