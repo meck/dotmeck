@@ -1,39 +1,35 @@
 #
 # Executes commands at the start of an interactive session.
 #
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+#####################
+#  Temporary Files  #
+#####################
+
+# Set TMPDIR if the variable is not set/empty or the directory doesn't exist
+if [[ -z "${TMPDIR}" ]]; then
+  export TMPDIR="/tmp/zsh-${UID}"
 fi
 
-# Customize to your needs...
-
-zstyle ':prezto:module:editor:info:keymap:primary' format ''
-zstyle ':prezto:module:editor:info:keymap:alternate' format '[NORMAL]'
-
-RPS1='$editor_info[keymap]'
-
-# dircolors
-if [[ -s "$XDG_CONFIG_HOME/dircolors" ]]; then
-  eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors)"
+if [[ ! -d "${TMPDIR}" ]]; then
+  mkdir -m 700 "${TMPDIR}"
 fi
 
-#########
-#  Nix  #
-#########
-
-# Nix packages
-if [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
-  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+if [[ ! -d "$TMUX_TMPDIR" ]]; then
+  export TMUX_TMPDIR="/tmp/"
 fi
+
+TMPPREFIX="${TMPDIR%/}/zsh"
+
 
 ###########
 #  PATHS  #
 ###########
+
+# Coreutils path for GNU
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
 # For my own scripts
 export PATH=$HOME/bin:$PATH
@@ -41,7 +37,28 @@ export PATH=$HOME/bin:$PATH
 # For haskell stack: ghc-mod hlint etc.
 export PATH=$HOME/.local/bin:$PATH
 
-# Go things
+
+###############
+#  Dircolors  #
+###############
+
+if [[ -s "$XDG_CONFIG_HOME/dircolors" ]]; then
+  eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors)"
+fi
+
+
+###############
+#  Languages  #
+###############
+
+# Rust
+path_to_rustc=$(which rustc)
+if [[ -x "$path_to_rustc" ]]; then
+  export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+fi
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Go
 if [[ "$OSTYPE" == darwin* ]]; then
   export GOPATH=$HOME/go
   export GOROOT=/usr/local/opt/go/libexec
@@ -51,23 +68,43 @@ else
   export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 fi
 
-# Rust
-path_to_rustc=$(which rustc)
-if [[ -x "$path_to_rustc" ]]; then
-  export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
-fi
+# Python
+# To run global pip commands
+gpip2(){
+   PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
+}
+
+gpip3(){
+   PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+}
 
 
 #########
 #  fzf  #
 #########
 
-# source fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 (( $+commands[fd] )) && export FZF_DEFAULT_COMMAND='fd --type file'
 (( $+commands[fd] )) && export FZF_CTRL_T_COMMAND='fd --follow --hidden . $home'
 (( $+commands[fd] )) && export FZF_ALT_C_COMMAND='fd --follow -t d . $HOME'
+
+#########
+#  Nix  #
+#########
+
+if [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
+
+
+############
+#  Prezto  #
+############
+
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
 
 
 #############

@@ -11,8 +11,8 @@
 # Print the message.
 cat <<-EOF
 
-Thank you. Come again!
-  -- Dr. Apu Nahasapeemapetilon
+Don't look back, because someone might be gaining on you.
+  -- Tom Waits
 EOF
 
 } >&2
