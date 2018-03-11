@@ -77,7 +77,7 @@ augroup END
 " Formating on save
 let g:brittany_on_save = 1
 let g:hindent_on_save = 0
-let g:stylishask_on_save = 0
+let g:stylishask_on_save = 1
 
 " Mappings
 nnoremap <leader>fb :Brittany<CR>
@@ -103,6 +103,17 @@ nnoremap <silent> <leader>hz :HoogleClose<CR>
 
 
 " ----- Pointfree convertion -----
+
+function! s:pointfree()
+  call system('pointfree '.shellescape(join(getline(a:firstline, a:lastline), "\n")))
+endfunction
+
+function! s:pointful()
+  call system('pointful '.shellescape(join(getline(a:firstline, a:lastline), "\n")))
+endfunction
+
+vnoremap <silent> <leader>hm :echo s:pointfree()<CR>
+vnoremap <silent> <leader>hM :echo s:pointful()<CR>
 
 function! Pointfree()
   call setline('.', split(system('pointfree '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
