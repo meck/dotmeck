@@ -61,6 +61,9 @@ Plug 'machakann/vim-sandwich'
 " Aligning stuff
 Plug 'godlygeek/tabular'
 
+" Better quickfix window
+Plug 'romainl/vim-qf'
+
 " fuzzy all the things
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegunn/fzf.vim'
 
@@ -109,6 +112,7 @@ Plug 'rizzatti/dash.vim'
 " Haskell
 if has('nvim')
   Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
+  " Plug '~/Drive/Programmering/intero-neovim', { 'for': 'haskell' }
 endif
 Plug 'neovimhaskell/haskell-vim'
 " Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
@@ -210,6 +214,14 @@ augroup relativize
   autocmd!
   autocmd BufWinEnter,FocusGained,InsertLeave,WinEnter * call Relativize(1)
   autocmd BufWinLeave,FocusLost,InsertEnter,WinLeave * call Relativize(0)
+augroup END
+
+" quickfix
+augroup quickfix
+    autocmd!
+    autocmd FileType qf setlocal wrap
+            \| setlocal norelativenumber
+            \| setlocal numberwidth=2
 augroup END
 
 " netrw
@@ -391,26 +403,46 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 
-" Toggles shows or hides the nonempty lists
-" and turns on Ales auto open
-fun! ToggleAleAutoList()
-  let l:winnr = winnr()
-  if g:ale_open_list
+" Manage the Quickfix and Loclist Automatically
+let g:LanguageClient_open_List=0
+augroup LanguageClientAutoList
+  autocmd!
+  autocmd User LanguageClientDiagnosticsChanged if g:LanguageClient_open_List
+        \ | call s:UpdateLists()
+        \ | endif
+augroup END
+
+fun! ToggleAutoLists()
+  " If the autofunctions are on turn off and close
+  if g:ale_open_list || g:LanguageClient_open_List
     let g:ale_open_list = 0
+    let g:LanguageClient_open_List = 0
     cclose
     lclose
+    echo 'Automatic Lists Off'
+  " Otherwise turn on and open if any content
   else
-    if len(getqflist()) != 0
-      copen
-      stopinsert
-    endif
-    if len(getloclist(0)) != 0
-      lopen
-    endif
     let g:ale_open_list = 1
+    let g:LanguageClient_open_List = 1
+    call s:UpdateLists()
+    echo 'Automatic Lists On'
+  endif
+endfun
+
+function! s:UpdateLists()
+  let l:winnr = winnr()
+  if len(getqflist()) != 0
+    copen
+  else
+    cclose
+  endif
+  if len(getloclist(0)) != 0
+    lopen
+  else
+    lclose
   endif
   if l:winnr !=# winnr()
-      wincmd p
+    wincmd p
   endif
 endfun
 
@@ -434,7 +466,6 @@ function! Buflist()
     return l:list
 endfunction
 
-
 function! Bdeleteonly()
     let l:list = filter(Buflist(), "v:val != bufname('%')")
     for l:buffer in l:list
@@ -443,9 +474,6 @@ function! Bdeleteonly()
 endfunction
 
 command! Ball :silent call Bdeleteonly()
-
-
-
 
 "}}}
 "  Mappings {{{
@@ -508,7 +536,7 @@ nnoremap <silent> <Leader>ll :call LanguageClient_textDocument_references()<CR>
 nnoremap <silent> <Leader>la :call LanguageClient_textDocument_codeAction()<CR>
 
 " Toggle the autoopening of lists
-nnoremap <silent><Leader>q :call ToggleAleAutoList()<CR>
+nnoremap <silent><Leader>q :call ToggleAutoLists()<CR>
 
 " Tagbar
 nnoremap <Leader>tb :TagbarToggle <CR>

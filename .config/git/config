@@ -1,0 +1,17 @@
+[user]
+	name = meck
+	email = johan@meck.se
+[credential]
+	helper = osxkeychain
+[merge]
+	tool = vimdiff
+[mergetool]
+	prompt = true
+[mergetool "vimdiff"]
+	cmd = "nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'"
+[difftool "nvimdiff"]
+	cmd = "nvim -d $LOCAL $REMOTE -c '$wincmd w' -c 'wincmd H'"
+[difftool]
+	prompt = false
+[diff]
+	tool = nvimdiff
