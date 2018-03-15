@@ -328,6 +328,8 @@ let g:LanguageClient_diagnosticsDisplay = {
     \    },
     \ }
 
+" Use the location list for errors
+let g:LanguageClient_diagnosticsList='location'
 
 " Airline
 let g:airline_powerline_fonts = 0
@@ -433,11 +435,13 @@ function! s:UpdateLists()
   let l:winnr = winnr()
   if len(getqflist()) != 0
     copen
+    call s:ShrinkWinToFit()
   else
     cclose
   endif
   if len(getloclist(0)) != 0
     lopen
+    call s:ShrinkWinToFit()
   else
     lclose
   endif
@@ -474,6 +478,27 @@ function! Bdeleteonly()
 endfunction
 
 command! Ball :silent call Bdeleteonly()
+
+" Shrink the current widow to fit smaller content
+fun! s:ShrinkWinToFit()
+    let l:initcursor = getpos('.')
+    call cursor(1,1)
+    let l:i = 0
+    let l:previouspos = [-1,-1,-1,-1]
+    " keep moving cursor down one visual line until it stops moving position
+    while l:previouspos != getpos('.')
+      let l:i += 1
+      " store current cursor position BEFORE moving cursor
+      let l:previouspos = getpos('.')
+      normal! gj
+    endwhile
+    " Resize
+    if l:i < winheight(0)
+      execute 'resize ' . l:i
+    endif
+    " restore cursor position
+    call setpos('.', l:initcursor)
+endfunction
 
 "}}}
 "  Mappings {{{
