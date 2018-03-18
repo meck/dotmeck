@@ -329,7 +329,7 @@ let g:LanguageClient_diagnosticsDisplay = {
     \ }
 
 " Use the location list for errors
-let g:LanguageClient_diagnosticsList='location'
+let g:LanguageClient_diagnosticsList='Location'
 
 " Airline
 let g:airline_powerline_fonts = 0
@@ -435,13 +435,11 @@ function! s:UpdateLists()
   let l:winnr = winnr()
   if len(getqflist()) != 0
     copen
-    call s:ShrinkWinToFit()
   else
     cclose
   endif
   if len(getloclist(0)) != 0
     lopen
-    call s:ShrinkWinToFit()
   else
     lclose
   endif
