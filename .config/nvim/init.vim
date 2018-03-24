@@ -433,27 +433,12 @@ endfun
 
 function! s:UpdateLists()
   let l:winnr = winnr()
-  if len(getqflist()) != 0
-    copen
-  else
-    cclose
-  endif
-  if len(getloclist(0)) != 0
-    lopen
-  else
-    lclose
-  endif
+  execute ':cwindow'
+  execute ':lwindow'
   if l:winnr !=# winnr()
     wincmd p
   endif
 endfun
-
-" Edit vimrc with f5 and source it automatically when saved
-nmap <silent> <leader><f5> :e $MYVIMRC<CR>
-augroup reload_vimrc
-    autocmd!
-    autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
-augroup END
 
 " Close all but the current buffer
 function! Buflist()
@@ -505,13 +490,10 @@ endfunction
 " Built in
 
 " Space as leader works with showcmd
-map <Space> <Leader>
+let g:mapleader = "\<Space>"
 
 " Clear search hightligt
 nnoremap <silent><esc> :noh<return><esc>
-
-" Change buffer
-nnoremap <Leader>b :ls<CR>:b<Space>
 
 " w!! expands to a sudo save
 cmap w!! w !sudo tee >/dev/null %
@@ -522,6 +504,13 @@ nnoremap <Leader>e :Lexplore<CR>
 " Navigate popup menu with tab
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Edit vimrc with f5 and source it automatically when saved
+nmap <silent> <leader><f5> :e $MYVIMRC<CR>
+augroup reload_vimrc
+    autocmd!
+    autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+augroup END
 
 " Neovim Stuff
 if has('nvim')
@@ -537,14 +526,23 @@ endif
 
 
 " Language Client
+" These mappings replace built in functions
+augroup LanguageClient_mappings
+  autocmd!
+  " Show type info (and short doc) of identifier under cursor.
+  autocmd User LanguageClientStarted nnoremap <buffer> <silent>K :call LanguageClient_textDocument_hover()<CR>
+  autocmd User LanguageClientStopped unmap <buffer>K
+  " Goto definition of identifier under cursor capital for a split.
+  autocmd User LanguageClientStarted nnoremap <buffer> <silent>gd :call LanguageClient_textDocument_definition()<CR>
+  autocmd User LanguageClientStopped unmap <buffer>gd
+  autocmd User LanguageClientStarted nnoremap <buffer> <silent>gD :call LanguageClient_textDocument_definition({'gotoCmd': 'split'})<CR>
+  autocmd User LanguageClientStopped unmap <buffer>gD
+augroup END
 
-" Show type info (and short doc) of identifier under cursor.
-nnoremap <silent> <Leader>lh :call LanguageClient_textDocument_hover()<CR>
-" Goto definition of identifier under cursor.
-nnoremap <silent> <Leader>ld :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <Leader>lD :call LanguageClient_textDocument_definition({'gotoCmd': 'split'})<CR>
+" Show code action
+nnoremap <silent> <Leader>a :call LanguageClient_textDocument_codeAction()<CR>
 " Rename identifier under cursor.
-nnoremap <silent> <Leader>lr :call LanguageClient_textDocument_rename()<CR>
+nnoremap <silent> <Leader>r :call LanguageClient_textDocument_rename()<CR>
 " Format current document.
 nnoremap <silent> <Leader>lf :call LanguageClient_textDocument_formatting()<CR>
 " Format selected lines.
@@ -555,8 +553,6 @@ nnoremap <silent> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<
 nnoremap <silent> <Leader>lS :call LanguageClient_workspace_symbol()<CR>
 " List all references of identifier under cursor.
 nnoremap <silent> <Leader>ll :call LanguageClient_textDocument_references()<CR>
-" Show code action
-nnoremap <silent> <Leader>la :call LanguageClient_textDocument_codeAction()<CR>
 
 " Toggle the autoopening of lists
 nnoremap <silent><Leader>q :call ToggleAutoLists()<CR>
@@ -569,9 +565,10 @@ nnoremap <silent><Leader>u :UndotreeToggle<CR>
 
 " FZF
 " Search for files
-nnoremap <Leader>zf :Files<CR>
+nnoremap <silent><Leader>f :Files<CR>
+
 " Search buffers
-nnoremap <Leader>zb :Buffers<CR>
+nnoremap <silent><Leader>b :Buffer<CR>
 
 " Terminals
 nnoremap <silent> <Leader>te :belowright split +resize\ 13 \| setlocal winfixheight \| terminal <CR>

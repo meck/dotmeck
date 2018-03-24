@@ -80,9 +80,9 @@ let g:hindent_on_save = 0
 let g:stylishask_on_save = 1
 
 " Mappings
-nnoremap <leader>fb :Brittany<CR>
-nnoremap <leader>fi :Hindent<CR>
-nnoremap <leader>fs :Stylishask<CR>
+nnoremap <leader>hfb :Brittany<CR>
+nnoremap <leader>hfi :Hindent<CR>
+nnoremap <leader>hfs :Stylishask<CR>
 
 " ----- Hoogle -----
 
