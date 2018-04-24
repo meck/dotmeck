@@ -77,15 +77,16 @@ if has('timers') && exists('*job_start') && exists('*ch_close_in') || has('nvim'
 endif
 
 " Completion engine
-Plug 'roxma/nvim-completion-manager'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 
 " Show completion signature in echo area
 Plug 'Shougo/echodoc.vim'
-
-" Needed for Completion in vim
-if !has('nvim')
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
 
 " Language server client
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
@@ -274,6 +275,8 @@ if has_key(g:plugs, 'ale')
   let g:ale_sign_column_always = 1
 endif
 
+"Completion
+let g:deoplete#enable_at_startup = 1
 
 " GitGutter
 let g:gitgutter_sign_added = '∙'
@@ -285,11 +288,19 @@ let g:gitgutter_sign_modified_removed = '∙'
 "Snippets
 
 " Expand snippets with enter in completion menu
-imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
-imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<plug>(ultisnips_expand)":"\<CR>")
-let g:UltiSnipsExpandTrigger = '<Plug>(ultisnips_expand)'
+let g:ulti_expand_or_jump_res = 0
+function! <SID>ExpandSnippetOrReturn()
+  let l:snippet = UltiSnips#ExpandSnippetOrJump()
+  if g:ulti_expand_or_jump_res > 0
+    return l:snippet
+  else
+    return "\<CR>"
+  endif
+endfunction
+inoremap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "\<CR>"
 
 " Navigate snippets
+let g:UltiSnipsExpandTrigger = '<NUL>'
 let g:UltiSnipsJumpForwardTrigger = '<tab>'
 let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
 let g:UltiSnipsRemoveSelectModeMappings = 0

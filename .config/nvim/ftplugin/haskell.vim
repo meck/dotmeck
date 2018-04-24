@@ -30,8 +30,8 @@ let g:intero_start_immediately = 0
 let g:intero_use_neomake = 0
 
 " Show type on hover
-let g:intero_type_on_hover = 0
-set updatetime=1000
+" let g:intero_type_on_hover = 0
+" set updatetime=1000
 
 augroup interoMappings
   autocmd!
