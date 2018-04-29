@@ -298,11 +298,26 @@ function! <SID>ExpandSnippetOrReturn()
   endif
 endfunction
 inoremap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "\<CR>"
-
-" Navigate snippets
 let g:UltiSnipsExpandTrigger = '<NUL>'
-let g:UltiSnipsJumpForwardTrigger = '<tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
+
+" Jump forward in snippet with tab if not in completion menu
+let g:ulti_jump_forwards_res = 0
+function! <SID>JumpForwardAndReturn()
+  call UltiSnips#JumpForwards()
+  return g:ulti_jump_forwards_res
+endfunction
+inoremap <expr><tab> pumvisible() ? "\<C-n>" : JumpForwardAndReturn ? "" : "\<tab>"
+let g:UltiSnipsJumpForwardTrigger = '<NUL>'
+
+" Jump backward in snippet with s-tab if not in completion menu
+let g:ulti_jump_backward_res = 0
+function! <SID>JumpBackwardAndReturn()
+  call UltiSnips#JumpBackwards()
+  return g:ulti_jump_backward_res
+endfunction
+inoremap <expr><s-tab> pumvisible() ? "\<C-b>" : JumpBackwardAndReturn ? "" : "\<s-tab>"
+let g:UltiSnipsJumpBackwardTrigger = '<NUL>'
+
 let g:UltiSnipsRemoveSelectModeMappings = 0
 
 
