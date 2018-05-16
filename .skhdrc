@@ -57,7 +57,7 @@
             chunkc border::color 0xff0f6288
 
 # A mode for window operations
-:: wmMode : $HOME/bin/darkmode true;\
+:: wmMode @ : $HOME/bin/darkmode true;\
             chunkc border::color 0xffbf616a
 
 # enter and exit wmmode

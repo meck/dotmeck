@@ -15,12 +15,6 @@ let b:ale_enabled = 0
 setlocal signcolumn=yes
 " let g:ale_linters.haskell = ['stack-ghc-mod', 'hlint']
 
-" ----- Language Client Server -----
-
-" Use for gq format and autoformat
-" Doesent Work with HIE currently
-setlocal formatexpr=LanguageClient_textDocument_rangeFormatting()
-
 " ----- parsonsmatt/intero-neovim -----
 
 " Wait with starting Intero
@@ -129,34 +123,45 @@ vnoremap <silent> <leader>h> :call Pointful()<CR>
 
 " Hasktags for tagbar
 let g:tagbar_type_haskell = {
-    \ 'ctagsbin'  : 'hasktags',
-    \ 'ctagsargs' : '-x -c -o-',
-    \ 'kinds'     : [
+    \ 'ctagsbin'    : 'hasktags',
+    \ 'ctagsargs'   : '-x -c -o-',
+    \ 'kinds'       : [
         \  'm:modules:0:1',
-        \  'd:data: 0:1',
-        \  'd_gadt: data gadt:0:1',
-        \  't:type names:0:1',
-        \  'nt:new types:0:1',
+        \  'd:data:0:1',
+        \  'd_gadt:data gadt:0:1',
+        \  'nt:newtype:0:1',
         \  'c:classes:0:1',
-        \  'cons:constructors:1:1',
-        \  'c_gadt:constructor gadt:1:1',
+        \  'i:instances:0:1',
+        \  'cons:constructors:0:1',
+        \  'c_gadt:constructor gadt:0:1',
         \  'c_a:constructor accessors:1:1',
-        \  'ft:function types:1:1',
+        \  't:type names:0:1',
+        \  'pt:pattern types:0:1',
+        \  'pi:pattern implementations:0:1',
+        \  'ft:function types:0:1',
         \  'fi:function implementations:0:1',
         \  'o:others:0:1'
     \ ],
-    \ 'sro'        : '.',
-    \ 'kind2scope' : {
-        \ 'm' : 'module',
-        \ 'c' : 'class',
-        \ 'd' : 'data',
-        \ 't' : 'type'
+    \ 'sro'          : '.',
+    \ 'kind2scope'   : {
+        \ 'm'        : 'module',
+        \ 'd'        : 'data',
+        \ 'd_gadt'   : 'd_gadt',
+        \ 'c_gadt'   : 'c_gadt',
+        \ 'nt'       : 'newtype',
+        \ 'cons'     : 'cons',
+        \ 'c_a'      : 'accessor',
+        \ 'c'        : 'class',
+        \ 'i'        : 'instance'
     \ },
-    \ 'scope2kind' : {
-        \ 'module' : 'm',
-        \ 'class'  : 'c',
-        \ 'data'   : 'd',
-        \ 'type'   : 't'
+    \ 'scope2kind'   : {
+        \ 'module'   : 'm',
+        \ 'data'     : 'd',
+        \ 'newtype'  : 'nt',
+        \ 'cons'     : 'c_a',
+        \ 'd_gadt'   : 'c_gadt',
+        \ 'class'    : 'ft',
+        \ 'instance' : 'ft'
     \ }
 \ }
 

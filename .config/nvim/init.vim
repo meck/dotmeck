@@ -556,29 +556,32 @@ endif
 augroup LanguageClient_mappings
   autocmd!
   " Show type info (and short doc) of identifier under cursor.
-  autocmd User LanguageClientStarted nnoremap <buffer> <silent>K :call LanguageClient_textDocument_hover()<CR>
+  autocmd User LanguageClientStarted nnoremap <buffer> <silent>K :call LanguageClient#textDocument_hover()<CR>
   autocmd User LanguageClientStopped unmap <buffer>K
   " Goto definition of identifier under cursor capital for a split.
-  autocmd User LanguageClientStarted nnoremap <buffer> <silent>gd :call LanguageClient_textDocument_definition()<CR>
+  autocmd User LanguageClientStarted nnoremap <buffer> <silent>gd :call LanguageClient#textDocument_definition()<CR>
   autocmd User LanguageClientStopped unmap <buffer>gd
-  autocmd User LanguageClientStarted nnoremap <buffer> <silent>gD :call LanguageClient_textDocument_definition({'gotoCmd': 'split'})<CR>
+  autocmd User LanguageClientStarted nnoremap <buffer> <silent>gD :call LanguageClient#textDocument_definition({'gotoCmd': 'split'})<CR>
   autocmd User LanguageClientStopped unmap <buffer>gD
+  " gq format
+  autocmd User LanguageClientStarted set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+  autocmd User LanguageClientStopped set formatexpr=
 augroup END
 
 " Show code action
-nnoremap <silent> <Leader>a :call LanguageClient_textDocument_codeAction()<CR>
+nnoremap <silent> <Leader>a :call LanguageClient#textDocument_codeAction()<CR>
 " Rename identifier under cursor.
-nnoremap <silent> <Leader>r :call LanguageClient_textDocument_rename()<CR>
+nnoremap <silent> <Leader>r :call LanguageClient#textDocument_rename()<CR>
 " Format current document.
-nnoremap <silent> <Leader>lf :call LanguageClient_textDocument_formatting()<CR>
+nnoremap <silent> <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
 " Format selected lines.
-vnoremap <silent> <Leader>lf :call LanguageClient_textDocument_rangeFormatting()<CR>
+vnoremap <silent> <Leader>lf :call LanguageClient#textDocument_rangeFormatting()<CR>
 " List of current buffer's symbols.
-nnoremap <silent> <Leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+nnoremap <silent> <Leader>ls :call LanguageClient#textDocument_documentSymbol()<CR>
 " List of project's symbols.
-nnoremap <silent> <Leader>lS :call LanguageClient_workspace_symbol()<CR>
+nnoremap <silent> <Leader>lS :call LanguageClient#workspace_symbol()<CR>
 " List all references of identifier under cursor.
-nnoremap <silent> <Leader>ll :call LanguageClient_textDocument_references()<CR>
+nnoremap <silent> <Leader>ll :call LanguageClient#textDocument_references()<CR>
 
 " Toggle the autoopening of lists
 nnoremap <silent><Leader>q :call ToggleAutoLists()<CR>
