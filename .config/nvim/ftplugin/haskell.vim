@@ -15,6 +15,9 @@ let b:ale_enabled = 0
 setlocal signcolumn=yes
 " let g:ale_linters.haskell = ['stack-ghc-mod', 'hlint']
 
+" ----- ndmitchell/ghcid -----
+nnoremap <silent> <leader>hg :Ghcid<CR>
+
 " ----- parsonsmatt/intero-neovim -----
 
 " Wait with starting Intero

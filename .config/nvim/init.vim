@@ -44,6 +44,9 @@ augroup END
 " Start the plugin manager
 call plug#begin(expand(s:vimDir . '/plugged'))
 
+" Testing
+Plug 'junegunn/vader.vim'
+
 " Smart stuff
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
@@ -113,11 +116,10 @@ Plug 'rizzatti/dash.vim'
 " Haskell
 if has('nvim')
   Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
-  " Plug '~/Drive/Programmering/intero-neovim', { 'for': 'haskell' }
 endif
 Plug 'neovimhaskell/haskell-vim'
-" Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
 
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
 Plug 'alx741/vim-hindent', { 'for': 'haskell' }
@@ -273,6 +275,8 @@ if has_key(g:plugs, 'ale')
   let g:ale_sign_warning = '▲'
   let g:ale_sign_error = 'X'
   let g:ale_sign_column_always = 1
+
+  let g:ale_open_list = 0
 endif
 
 "Completion
@@ -321,10 +325,11 @@ let g:UltiSnipsJumpBackwardTrigger = '<NUL>'
 let g:UltiSnipsRemoveSelectModeMappings = 0
 
 
+" \ 'haskell': ['hie', '--lsp', ],
 " Language server client
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '--lsp', ],
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'haskell': ['hie-wrapper.sh'],
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls']
     \ }
 
 let g:LanguageClient_diagnosticsDisplay = {
@@ -355,7 +360,7 @@ let g:LanguageClient_diagnosticsDisplay = {
     \ }
 
 " Use the location list for errors
-let g:LanguageClient_diagnosticsList='Location'
+" let g:LanguageClient_diagnosticsList='Location'
 
 " Airline
 let g:airline_powerline_fonts = 0

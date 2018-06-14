@@ -94,10 +94,10 @@ chunkc core::load tiling.so
 # NOTE: shell commands require escaped quotes
 #       to pass value containing a whitespace.
 #
-chunkc tiling::rule --owner 1Password --state float
-chunkc tiling::rule --owner Finder --name Copy --state float
+chunkc tiling::rule --owner 1Password --state float &
+chunkc tiling::rule --owner Finder --name Copy --state float &
 # chunkc tiling::rule --owner Finder --state float
-chunkc tiling::rule --owner \"App Store\" --state float
+chunkc tiling::rule --owner \"App Store\" --state float &
 # chuckc tiling::rule --owner \"VMware Fusion\" --name \"Virtual Machine Library\" --state tile
 # chuckc tiling::rule --owner \"VMware Fusion\" --state float
 
