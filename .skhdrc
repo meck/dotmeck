@@ -102,7 +102,8 @@ default, wmMode < shift + alt - j : chunkc tiling::window --focus prev
 default, wmMode < shift + alt - k : chunkc tiling::window --focus next
 
 # rotate tree
-wmMode < u : chunkc tiling::desktop --rotate 90
+wmMode < space : chunkc tiling::desktop --rotate 90
+wmMode < shift - space : chunkc tiling::desktop --rotate 270
 
 # mirror tree y-axis
 wmMode < i : chunkc tiling::desktop --mirror vertical

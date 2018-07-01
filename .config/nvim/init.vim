@@ -328,7 +328,7 @@ let g:UltiSnipsRemoveSelectModeMappings = 0
 " \ 'haskell': ['hie', '--lsp', ],
 " Language server client
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie-wrapper.sh'],
+    \ 'haskell': ['hie-wrapper', '--lsp'],
     \ 'rust': ['rustup', 'run', 'nightly', 'rls']
     \ }
 
@@ -409,10 +409,11 @@ if executable('rg')
 endif
 
 " Theme
-let g:nord_comment_brightness = 8
+let g:nord_comment_brightness = 12
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
+let g:nord_underline = 1
 colorscheme nord
 
 " Dash dont foreground
