@@ -73,6 +73,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegu
 " Statusline and theme
 Plug 'vim-airline/vim-airline'
 Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
+Plug 'morhetz/gruvbox'
 
 " ALE Linter
 if has('timers') && exists('*job_start') && exists('*ch_close_in') || has('nvim')
@@ -325,7 +326,6 @@ let g:UltiSnipsJumpBackwardTrigger = '<NUL>'
 let g:UltiSnipsRemoveSelectModeMappings = 0
 
 
-" \ 'haskell': ['hie', '--lsp', ],
 " Language server client
 let g:LanguageClient_serverCommands = {
     \ 'haskell': ['hie-wrapper', '--lsp'],
@@ -414,7 +414,14 @@ let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
 let g:nord_underline = 1
-colorscheme nord
+let g:gruvbox_italic=1
+if exists('daytheme')
+ set background=light 
+ colorscheme gruvbox
+else 
+ colorscheme nord
+endif
+
 
 " Dash dont foreground
 let g:dash_activate=0

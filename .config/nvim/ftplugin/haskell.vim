@@ -74,7 +74,7 @@ augroup END
 " Formating on save
 let g:brittany_on_save = 1
 let g:hindent_on_save = 0
-let g:stylishask_on_save = 1
+let g:stylishask_on_save = 0
 
 " Mappings
 nnoremap <leader>hfb :Brittany<CR>

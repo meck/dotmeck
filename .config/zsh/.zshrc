@@ -121,6 +121,8 @@ if [[ "$OSTYPE" == darwin* ]]; then
   alias brewme='brew update && brew upgrade && brew cleanup && brew doctor'
 fi
 
+# Start neovim with a light theme
+alias lvim='nvim --cmd "let daytheme=1"'
 
 #############################
 #  Machine Specific Extras  #
