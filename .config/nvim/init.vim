@@ -282,6 +282,12 @@ endif
 
 "Completion
 let g:deoplete#enable_at_startup = 1
+call deoplete#custom#source('_',  'max_menu_width', 0)
+call deoplete#custom#source('_',  'max_abbr_width', 0)
+call deoplete#custom#source('_',  'max_kind_width', 0)
+
+" EchoDoc
+" let g:echodoc#enable_at_startup	= 1  " Not working with hie lsp
 
 " GitGutter
 let g:gitgutter_sign_added = '∙'
@@ -421,7 +427,6 @@ if exists('daytheme')
 else 
  colorscheme nord
 endif
-
 
 " Dash dont foreground
 let g:dash_activate=0
