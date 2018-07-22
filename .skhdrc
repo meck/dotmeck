@@ -1,186 +1,123 @@
-#  NOTE(koekeishiya): A list of all built-in modifier and literal keywords can
-#                     be found at https://github.com/koekeishiya/skhd/issues/1
-#
-#                     A hotkey is written according to the following rules:
-#
-#                       hotkey   = <mode> '<' <action> | <action>
-#
-#                       mode     = 'name of mode' | <mode> ',' <mode>
-#
-#                       action   = <keysym> ':' <command> | <keysym> '->' ':' <command>
-#                                  <keysym> ';' <mode>    | <keysym> '->' ';' <mode>
-#
-#                       keysym   = <mod> '-' <key> | <key>
-#
-#                       mod      = 'built-in mod keyword' | <mod> '+' <mod>
-#
-#                       key      = <literal> | <keycode>
-#
-#                       literal  = 'single letter or built-in keyword'
-#
-#                       keycode  = 'apple keyboard kVK_<Key> values (0x3C)'
-#
-#                       ->       = keypress is not consumed by skhd
-#
-#                       command  = command is executed through '$SHELL -c' and
-#                                  follows valid shell syntax. if the $SHELL environment
-#                                  variable is not set, it will default to '/bin/bash'.
-#                                  when bash is used, the ';' delimeter can be specified
-#                                  to chain commands.
-#
-#                                  to allow a command to extend into multiple lines,
-#                                  prepend '\' at the end of the previous line.
-#
-#                                  an EOL character signifies the end of the bind.
-#
-#
-
-#  NOTE(koekeishiya): Modal operations
-#
-#                     defines a new mode 'switcher' with an on_enter command
-#                       :: switcher : chunkc border::color 0xff24ccaa
-#
-#                     defines a new mode named 'test'
-#                       :: test
-#
-#                     from 'default' mode, activate mode 'test'
-#                       cmd - x ; test
-#
-#                     from 'test' mode, activate mode 'default'
-#                       test < cmd - x ; default
-#
-#                     launch a new terminal instance when in either 'default' or 'test' mode
-#                       default, test < cmd - return : open -na /Applications/Terminal.app
-
-# The default mode
+# the default mode
 :: default : $HOME/bin/darkmode false;\
-            chunkc border::color 0xff0f6288
+             chunkc border::color 0xff0f6288;\
+             echo "" > $TMPDIR/current_skhd_mode
 
-# A mode for window operations
-:: wmMode @ : $HOME/bin/darkmode true;\
-            chunkc border::color 0xffbf616a
+# a mode for focus operations
+:: focus @ : $HOME/bin/darkmode true;\
+             chunkc border::color 0xffbf616a;\
+             echo "focus" > $TMPDIR/current_skhd_mode
 
-# enter and exit wmmode
-alt - space ; wmMode
-wmMode < escape ; default
+# a mode for warp operations
+:: warp @ : $HOME/bin/darkmode true;\
+            chunkc border::color 0xffbf616a;\
+            echo "warp" > $TMPDIR/current_skhd_mode
 
-# Open a new terminal window
-cmd - return : open -na /Applications/Alacritty.app
+# a mode for resizing operations
+:: resize @ : $HOME/bin/darkmode true;\
+              chunkc border::color 0xffbf616a;\
+              echo "resize" > $TMPDIR/current_skhd_mode
 
-# Open a new browser
-# cmd + shift - return : open -na "Google Chrome"
-# cmd + shift + alt - return : osascript -e 'tell application "Safari" to make new document'
+# enter and exit modes
+default                      < alt - space      ; focus
+focus, resize, warp          < alt - space      ; default
+focus, resize, warp          < escape           ; default
+focus, resize, warp          < w                ; warp
+focus, resize, warp          < r                ; resize
 
-# Open a new finder window
-# alt - f : open ~ ;\
-
-# Turn on and off FFM: .
-wmMode < 0x2F : chunkc core::load ffm.so
-wmMode < shift - 0x2F : chunkc core::unload ffm.so
-
-# Turn on and off border: /
-wmMode < 0x2C : chunkc core::load border.so
-wmMode < shift - 0x2C : chunkc core::unload border.so
-
-# change layout of desktop : n m ,
-wmMode < n : chunkc tiling::desktop --layout bsp
-wmMode < m : chunkc tiling::desktop --layout monocle
-wmMode < 0x2B : chunkc tiling::desktop --layout float
+# global commands
+# open a new terminal window
+cmd - return : $HOME/bin/iterm
 
 # focus window
-default, wmMode < alt - h : chunkc tiling::window --focus west
-default, wmMode < alt - j : chunkc tiling::window --focus south
-default, wmMode < alt - k : chunkc tiling::window --focus north
-default, wmMode < alt - l : chunkc tiling::window --focus east
+default, focus, resize, warp < alt - h          :  chunkc tiling::window --focus west
+default, focus, resize, warp < alt - j          :  chunkc tiling::window --focus south
+default, focus, resize, warp < alt - k          :  chunkc tiling::window --focus north
+default, focus, resize, warp < alt - l          :  chunkc tiling::window --focus east
+default, focus, resize, warp < alt - return     :  chunkc tiling::window --focus biggest
 
 # focus monitor
-default, wmMode < shift + alt - h  : chunkc tiling::monitor -f prev
-default, wmMode < shift + alt - l  : chunkc tiling::monitor -f next
+default, focus, resize, warp < shift + alt - h  :  chunkc tiling::monitor -f prev
+default, focus, resize, warp < shift + alt - l  :  chunkc tiling::monitor -f next
 
-# focus monitor
-default, wmMode < shift + alt - j : chunkc tiling::window --focus prev
-default, wmMode < shift + alt - k : chunkc tiling::window --focus next
+focus, resize, warp < space                 :  chunkc tiling::desktop --rotate 90               # rotate tree
+focus, resize, warp < shift - space         :  chunkc tiling::desktop --rotate 270              # rotate tree
+focus, resize, warp < i                     :  chunkc tiling::desktop --mirror vertical         # mirror alang oxis
+focus, resize, warp < o                     :  chunkc tiling::desktop --mirror horizontal       # mirror alang oxis
+focus, resize, warp < f                     :  chunkc tiling::window --toggle native-fullscreen # toggle window native fullscreen
+focus, resize, warp < p                     :  chunkc tiling::window --toggle parent            # toggle window parent zoom
+focus, resize, warp < s                     :  chunkc tiling::window --toggle split             # toggle window split type
+focus, resize, warp < g                     :  chunkc tiling::window --toggle float;\
+                                               chunkc tiling::window --grid-layout 6:6:1:1:4:4  # Float a centered window
+focus, resize, warp < q                     :  chunkc tiling::desktop --equalize                # equalize size of windows
 
-# rotate tree
-wmMode < space : chunkc tiling::desktop --rotate 90
-wmMode < shift - space : chunkc tiling::desktop --rotate 270
+# change layout of desktop: n m ,
+focus, resize, warp < n                     :  chunkc tiling::desktop --layout bsp
+focus, resize, warp < m                     :  chunkc tiling::desktop --layout monocle
+focus, resize, warp < 0x2B                  :  chunkc tiling::desktop --layout float
 
-# mirror tree y-axis
-wmMode < i : chunkc tiling::desktop --mirror vertical
+# Turn on and off FFM: .
+focus, resize, warp < 0x2F                  :  chunkc core::load ffm.so
+focus, resize, warp < shift - 0x2F          :  chunkc core::unload ffm.so
 
-# mirror tree x-axis
-wmMode < o : chunkc tiling::desktop --mirror horizontal
+# Turn on and off border: /
+focus, resize, warp < 0x2C                  :  chunkc core::load border.so
+focus, resize, warp < shift - 0x2C          :  chunkc core::unload border.so
 
-# Adjust Gaps uses Minus/Plus key
-wmMode < 0x18 : chunkc tiling::desktop --gap inc
-wmMode < 0x1B : chunkc tiling::desktop --gap dec
-
-# Adjust Padding uses shift Minus/Plus key
-wmMode < shift - 0x18 : chunkc tiling::desktop --padding inc
-wmMode < shift - 0x1B : chunkc tiling::desktop --padding dec
-
-# Adjust both of the abow uses alt Minus/Plus key
-wmMode < alt - 0x18 : chunkc tiling::desktop --padding inc;\
-                      chunkc tiling::desktop --gap inc
-wmMode < alt - 0x1B : chunkc tiling::desktop --padding dec;\
-                      chunkc tiling::desktop --gap dec
-
-# toggle window native fullscreen
-wmMode < f : chunkc tiling::window --toggle native-fullscreen
-
-# toggle window parent zoom
-wmMode < r : chunkc tiling::window --toggle parent
-
-# toggle window split type
-wmMode < t : chunkc tiling::window --toggle split
-
-# float / unfloat window and center on screen
-wmMode < g : chunkc tiling::window --toggle float;\
-             chunkc tiling::window --grid-layout 6:6:1:1:4:4
-
-# equalize size of windows
-wmMode < q : chunkc tiling::desktop --equalize
+# Adjust Gaps and Paddning: Minus/Plus key
+focus, resize, warp < 0x18                  :  chunkc tiling::desktop --padding inc; chunkc tiling::desktop --gap inc
+focus, resize, warp < 0x1B                  :  chunkc tiling::desktop --padding dec; chunkc tiling::desktop --gap dec
+focus, resize, warp < alt - 0x18            :  chunkc tiling::desktop --gap inc
+focus, resize, warp < alt - 0x1B            :  chunkc tiling::desktop --gap dec
+focus, resize, warp < shift - 0x18          :  chunkc tiling::desktop --padding inc
+focus, resize, warp < shift - 0x1B          :  chunkc tiling::desktop --padding dec
 
 # swap window
-wmMode < h : chunkc tiling::window --swap west
-wmMode < j : chunkc tiling::window --swap south
-wmMode < k : chunkc tiling::window --swap north
-wmMode < l : chunkc tiling::window --swap east
-
-# move window
-wmMode < shift - h : chunkc tiling::window --warp west
-wmMode < shift - j : chunkc tiling::window --warp south
-wmMode < shift - k : chunkc tiling::window --warp north
-wmMode < shift - l : chunkc tiling::window --warp east
-
-# send window to desktop
-wmMode < c : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
-# wmMode < z : chunkc tiling::window --send-to-desktop prev
-# wmMode < x : chunkc tiling::window --send-to-desktop next
-wmMode < 1 : chunkc tiling::window --send-to-desktop 1
-wmMode < 2 : chunkc tiling::window --send-to-desktop 2
-wmMode < 3 : chunkc tiling::window --send-to-desktop 3
-wmMode < 4 : chunkc tiling::window --send-to-desktop 4
-wmMode < 5 : chunkc tiling::window --send-to-desktop 5
-wmMode < 6 : chunkc tiling::window --send-to-desktop 6
+focus < h                                   :  chunkc tiling::window --swap west
+focus < j                                   :  chunkc tiling::window --swap south
+focus < k                                   :  chunkc tiling::window --swap north
+focus < l                                   :  chunkc tiling::window --swap east
+focus < return                              :  chunkc tiling::window --swap biggest
 
 # send window to monitor and follow focus
-wmMode < shift - z  : chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
-wmMode < shift - x  : chunkc tiling::window --send-to-monitor next; chunkc tiling::monitor -f next
-wmMode < shift - 1  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
-wmMode < shift - 2  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
-wmMode < shift - 3  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
+focus < tab                                 :  chunkc tiling::window --send-to-monitor next; chunkc tiling::monitor -f next
+focus < shift - tab                         :  chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
+focus < 1                                   :  chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
+focus < 2                                   :  chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
+focus < 3                                   :  chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
+
+# send window to monitor and dont follow focus
+focus < alt - tab                           :  chunkc tiling::window --send-to-monitor next
+focus < alt + shift - tab                   :  chunkc tiling::window --send-to-monitor prev
+focus < alt - 1                             :  chunkc tiling::window --send-to-monitor 1
+focus < alt - 2                             :  chunkc tiling::window --send-to-monitor 2
+focus < alt - 3                             :  chunkc tiling::window --send-to-monitor 3
+
+# move window
+warp < h                                    :  chunkc tiling::window --warp west
+warp < j                                    :  chunkc tiling::window --warp south
+warp < k                                    :  chunkc tiling::window --warp north
+warp < l                                    :  chunkc tiling::window --warp east
+warp < return                               :  chunkc tiling::window --warp biggest
+
+# send window to desktop
+warp < tab                                  :  chunkc tiling::window --send-to-desktop next
+warp < shift - tab                          :  chunkc tiling::window --send-to-desktop prev
+warp < 1                                    :  chunkc tiling::window --send-to-desktop 1
+warp < 2                                    :  chunkc tiling::window --send-to-desktop 2
+warp < 3                                    :  chunkc tiling::window --send-to-desktop 3
+warp < 4                                    :  chunkc tiling::window --send-to-desktop 4
+warp < 5                                    :  chunkc tiling::window --send-to-desktop 5
+warp < 6                                    :  chunkc tiling::window --send-to-desktop 6
 
 # increase region size
-wmMode < a : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
-wmMode < s : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south
-wmMode < w : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north
-wmMode < d : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
+resize < h                                  :  chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
+resize < j                                  :  chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south
+resize < k                                  :  chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north
+resize < l                                  :  chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
 
 # decrease region size
-wmMode < shift - d : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
-wmMode < shift - w : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south
-wmMode < shift - s : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
-wmMode < shift - a : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
-
-# ctrl + alt - w : chunkc tiling::desktop --deserialize ~/.chunkwm_layouts/dev_3
+resize < shift - l                          :  chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
+resize < shift - k                          :  chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south
+resize < shift - j                          :  chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
+resize < shift - h                          :  chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
