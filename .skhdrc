@@ -71,6 +71,7 @@ focus, resize, warp < alt - 0x18            :  chunkc tiling::desktop --gap inc
 focus, resize, warp < alt - 0x1B            :  chunkc tiling::desktop --gap dec
 focus, resize, warp < shift - 0x18          :  chunkc tiling::desktop --padding inc
 focus, resize, warp < shift - 0x1B          :  chunkc tiling::desktop --padding dec
+focus, resize, warp < 0                     :  chunkc tiling::desktop --toggle offset
 
 # swap window
 focus < h                                   :  chunkc tiling::window --swap west
