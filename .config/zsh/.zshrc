@@ -103,10 +103,13 @@ fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+export FZF_DEFAULT_OPTS='--color 16'
+
 (( $+commands[fd] )) && export FZF_DEFAULT_COMMAND='fd --type file'
 (( $+commands[fd] )) && export FZF_CTRL_T_COMMAND='fd --follow --hidden . $home'
 (( $+commands[fd] )) && export FZF_ALT_C_COMMAND='fd --follow -t d . $HOME'
 
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 
 #############
 #  Aliases  #
