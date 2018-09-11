@@ -8,6 +8,9 @@ let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
 let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
 
+" ----- language server -----
+let g:LanguageClient_changeThrottle = 1
+
 " ----- w0rp/ale -----
 
 " Testing Language Server For Linting instead of ale

@@ -72,7 +72,9 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegu
 
 " Statusline and theme
 Plug 'vim-airline/vim-airline'
-Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
+" Wating for PR
+" Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
+Plug 'meck/nord-vim', { 'branch': 'testing' }
 Plug 'morhetz/gruvbox'
 
 " ALE Linter
@@ -88,6 +90,9 @@ else
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
+
+" Languge Files
+Plug 'sheerun/vim-polyglot'
 
 " Show completion signature in echo area
 Plug 'Shougo/echodoc.vim'
@@ -118,7 +123,6 @@ Plug 'rizzatti/dash.vim'
 if has('nvim')
   Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
 endif
-Plug 'neovimhaskell/haskell-vim'
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
 
@@ -365,12 +369,41 @@ let g:LanguageClient_diagnosticsDisplay = {
     \    },
     \ }
 
-" Use the location list for errors
-" let g:LanguageClient_diagnosticsList='Location'
+
+" Report LSP errors in Airline
+" https://github.com/autozimu/LanguageClient-neovim/issues/374#issuecomment-386910607
+function! AirlineInit()
+  let g:airline_section_warning = airline#section#create(['LC_warning_count'])
+  let g:airline_section_error = airline#section#create(['LC_error_count'])
+endfunction
+
+call airline#parts#define_function('LC_warning_count', 'LC_warning_count')
+call airline#parts#define_function('LC_error_count', 'LC_error_count')
+
+function! LC_warning_count()
+  let current_buf_number = bufnr('%')
+  let qflist = getqflist()
+  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'W'})
+  let l:count = len(current_buf_diagnostics)
+  return l:count > 0 && g:LanguageClient_loaded ? 'W: ' . l:count : ''
+endfunction
+
+function! LC_error_count()
+  let current_buf_number = bufnr('%')
+  let qflist = getqflist()
+  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'E'})
+  let l:count = len(current_buf_diagnostics)
+  return l:count > 0 && g:LanguageClient_loaded ? 'E: ' . l:count : ''
+endfunction
+
+augroup LC_Airline_Error
+  autocmd!
+  autocmd User AirlineAfterInit call AirlineInit()
+augroup END
 
 " Airline
-let g:airline_powerline_fonts = 0
-let g:airline#extensions#hunks#enabled=0
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#hunks#enabled=1
 let g:airline_section_z = '%3p%% %4l:%-2c'
 let g:airline_skip_empty_sections = 1
 let g:airline#extensions#obsession#enabled = 1
@@ -422,9 +455,9 @@ let g:nord_uniform_diff_background = 1
 let g:nord_underline = 1
 let g:gruvbox_italic=1
 if exists('daytheme')
- set background=light 
+ set background=light
  colorscheme gruvbox
-else 
+else
  colorscheme nord
 endif
 
@@ -574,7 +607,7 @@ endif
 augroup LanguageClient_mappings
   autocmd!
   " Show type info (and short doc) of identifier under cursor.
-  autocmd User LanguageClientStarted nnoremap <buffer> <silent>K :call LanguageClient#textDocument_hover()<CR>
+  autocmd User LanguageClientStarted noremap <buffer> <silent>K :call LanguageClient#textDocument_hover()<CR>
   autocmd User LanguageClientStopped unmap <buffer>K
   " Goto definition of identifier under cursor capital for a split.
   autocmd User LanguageClientStarted nnoremap <buffer> <silent>gd :call LanguageClient#textDocument_definition()<CR>
