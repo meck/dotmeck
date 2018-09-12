@@ -134,16 +134,13 @@ Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
 Plug 'plasticboy/vim-markdown'
 
 " Python
-Plug 'zchee/deoplete-jedi' , { 'for': 'python' }
 Plug 'jmcantrell/vim-virtualenv' , { 'for': 'python' }
 
 " Go
 Plug 'fatih/vim-go' , { 'for': 'go' }
-Plug 'zchee/deoplete-go', { 'for': 'go', 'do': 'make'}
 
 " Rust
 Plug 'rust-lang/rust.vim' , { 'for': 'rust' }
-" Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
 
 call plug#end()
 
@@ -290,9 +287,6 @@ call deoplete#custom#source('_',  'max_menu_width', 0)
 call deoplete#custom#source('_',  'max_abbr_width', 0)
 call deoplete#custom#source('_',  'max_kind_width', 0)
 
-" EchoDoc
-" let g:echodoc#enable_at_startup	= 1  " Not working with hie lsp
-
 " GitGutter
 let g:gitgutter_sign_added = '∙'
 let g:gitgutter_sign_modified = '∙'
@@ -300,40 +294,42 @@ let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
 
-"Snippets
+" Snippets
+let g:UltiSnipsExpandTrigger='<NUL>'
+let g:UltiSnipsListSnippets='<NUL>'
+let g:UltiSnipsJumpForwardTrigger='<tab>'
+let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
-" Expand snippets with enter in completion menu
-let g:ulti_expand_or_jump_res = 0
-function! <SID>ExpandSnippetOrReturn()
-  let l:snippet = UltiSnips#ExpandSnippetOrJump()
-  if g:ulti_expand_or_jump_res > 0
-    return l:snippet
-  else
-    return "\<CR>"
+" Expands Snippets from LSP and Ultisnips
+function! CompleteSnippet()
+  if empty(v:completed_item)
+    return
   endif
-endfunction
-inoremap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "\<CR>"
-let g:UltiSnipsExpandTrigger = '<NUL>'
 
-" Jump forward in snippet with tab if not in completion menu
-let g:ulti_jump_forwards_res = 0
-function! <SID>JumpForwardAndReturn()
-  call UltiSnips#JumpForwards()
-  return g:ulti_jump_forwards_res
-endfunction
-inoremap <expr><tab> pumvisible() ? "\<C-n>" : JumpForwardAndReturn ? "" : "\<tab>"
-let g:UltiSnipsJumpForwardTrigger = '<NUL>'
+  call UltiSnips#ExpandSnippet()
+  if g:ulti_expand_res > 0
+    return
+  endif
 
-" Jump backward in snippet with s-tab if not in completion menu
-let g:ulti_jump_backward_res = 0
-function! <SID>JumpBackwardAndReturn()
-  call UltiSnips#JumpBackwards()
-  return g:ulti_jump_backward_res
-endfunction
-inoremap <expr><s-tab> pumvisible() ? "\<C-b>" : JumpBackwardAndReturn ? "" : "\<s-tab>"
-let g:UltiSnipsJumpBackwardTrigger = '<NUL>'
+  let l:complete = type(v:completed_item) == v:t_dict ? v:completed_item.word : v:completed_item
+  let l:comp_len = len(l:complete)
 
-let g:UltiSnipsRemoveSelectModeMappings = 0
+  let l:cur_col = mode() ==# 'i' ? col('.') - 2 : col('.') - 1
+  let l:cur_line = getline('.')
+
+  let l:start = l:comp_len <= l:cur_col ? l:cur_line[:l:cur_col - l:comp_len] : ''
+  let l:end = l:cur_col < len(l:cur_line) ? l:cur_line[l:cur_col + 1 :] : ''
+
+  call setline('.', l:start . l:end)
+  call cursor('.', l:cur_col - l:comp_len + 2)
+
+  call UltiSnips#Anon(l:complete)
+endfunction
+
+augroup Completion_Done
+  autocmd!
+  autocmd CompleteDone * call CompleteSnippet()
+augroup END
 
 
 " Language server client
@@ -579,8 +575,10 @@ cmap w!! w !sudo tee >/dev/null %
 nnoremap <Leader>e :Lexplore<CR>
 
 " Navigate popup menu with tab
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : "\<CR>"
+inoremap <expr> <esc> pumvisible() ? "\<C-E>" : "\<esc>"
+inoremap <expr> <Tab> pumvisible() ? "\<Down>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<Up>" : "\<S-Tab>"
 
 " Edit vimrc with f5 and source it automatically when saved
 nmap <silent> <leader><f5> :e $MYVIMRC<CR>

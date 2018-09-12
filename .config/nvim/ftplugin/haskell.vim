@@ -1,5 +1,4 @@
 " ----- haskell-vim -----
-
 let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
 let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
 let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
@@ -8,31 +7,24 @@ let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
 let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
 
+
 " ----- language server -----
-let g:LanguageClient_changeThrottle = 1
-let g:LanguageClient_settingsPath = '$HOME/.config/hie/vim_setting.json'
-
-" ----- w0rp/ale -----
-
-" Testing Language Server For Linting instead of ale
-let b:ale_enabled = 0
 setlocal signcolumn=yes
-" let g:ale_linters.haskell = ['stack-ghc-mod', 'hlint']
+let b:ale_enabled = 0
+" let g:LanguageClient_changeThrottle = 1
+" let g:LanguageClient_settingsPath = '$HOME/.config/hie/vim_setting.json'
+
 
 " ----- ndmitchell/ghcid -----
 nnoremap <silent> <leader>hg :Ghcid<CR>
 
-" ----- parsonsmatt/intero-neovim -----
 
+" ----- parsonsmatt/intero-neovim -----
 " Wait with starting Intero
 let g:intero_start_immediately = 0
 
 " Use ALE (works even when not using Intero)
 let g:intero_use_neomake = 0
-
-" Show type on hover
-" let g:intero_type_on_hover = 0
-" set updatetime=1000
 
 augroup interoMappings
   autocmd!
@@ -67,11 +59,6 @@ augroup interoMappings
   autocmd BufWinEnter,WinEnter Intero startinsert | setlocal winfixheight
 
 augroup END
-
-" ---- eagletmt/neco-ghc -----
-
-"  Show type in autocomplete
-" let g:necoghc_enable_detailed_browse = 1
 
 " ----- Code formating -----
 
