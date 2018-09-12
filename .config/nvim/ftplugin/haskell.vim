@@ -10,6 +10,7 @@ let g:haskell_backpack = 1                " to enable highlighting of backpack k
 
 " ----- language server -----
 let g:LanguageClient_changeThrottle = 1
+let g:LanguageClient_settingsPath = '$HOME/.config/hie/vim_setting.json'
 
 " ----- w0rp/ale -----
 
