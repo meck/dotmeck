@@ -7,13 +7,10 @@ let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
 let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
 
-
 " ----- language server -----
 setlocal signcolumn=yes
 let b:ale_enabled = 0
-" let g:LanguageClient_changeThrottle = 1
-" let g:LanguageClient_settingsPath = '$HOME/.config/hie/vim_setting.json'
-
+let g:LanguageClient_changeThrottle = 1
 
 " ----- ndmitchell/ghcid -----
 nnoremap <silent> <leader>hg :Ghcid<CR>

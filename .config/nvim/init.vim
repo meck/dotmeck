@@ -4,7 +4,7 @@
 " Encoding of this script
 scriptencoding utf-8
 
-" A variable to use in diffrent places in this file
+" The current vim directory
 if has('nvim')
   let s:vimDir = '$HOME/.config/nvim'
 else
@@ -112,9 +112,6 @@ Plug 'majutsushi/tagbar'
 " UndoTree
 Plug 'mbbill/undotree'
 
-" Dash for macOS
-Plug 'rizzatti/dash.vim'
-
 "}}}
 "  Language Specific Plugins {{{
 """"""""""""""""""""""""""""""""
@@ -123,7 +120,8 @@ Plug 'rizzatti/dash.vim'
 if has('nvim')
   Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
 endif
-Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+" Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug '~/Drive/Programmering/vim-hoogle', { 'for': 'haskell' }
 Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
 
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
@@ -197,7 +195,7 @@ if has('persistent_undo')
 endif
 
 " Completion
-set completeopt=menuone,longest,preview,noselect
+set completeopt=menuone,longest,preview
 
 " Command line completion
 set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox
@@ -265,7 +263,6 @@ augroup obsssions_autoload
             \ endif
 augroup END
 
-
 " Ale
 if has_key(g:plugs, 'ale')
   let g:ale_echo_msg_error_str = 'E'
@@ -293,50 +290,31 @@ let g:gitgutter_sign_modified = '∙'
 let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
-
 " Snippets
 let g:UltiSnipsExpandTrigger='<NUL>'
 let g:UltiSnipsListSnippets='<NUL>'
 let g:UltiSnipsJumpForwardTrigger='<tab>'
-let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
+let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
 
-" Expands Snippets from LSP and Ultisnips
-function! CompleteSnippet()
-  if empty(v:completed_item)
-    return
+" Expand snippets with enter in completion menu
+let g:ulti_expand_or_jump_res = 0
+function! <SID>ExpandSnippetOrReturn()
+  let l:snippet = UltiSnips#ExpandSnippetOrJump()
+  if g:ulti_expand_or_jump_res > 0
+    return l:snippet
+  else
+    return "\<CR>"
   endif
-
-  call UltiSnips#ExpandSnippet()
-  if g:ulti_expand_res > 0
-    return
-  endif
-
-  let l:complete = type(v:completed_item) == v:t_dict ? v:completed_item.word : v:completed_item
-  let l:comp_len = len(l:complete)
-
-  let l:cur_col = mode() ==# 'i' ? col('.') - 2 : col('.') - 1
-  let l:cur_line = getline('.')
-
-  let l:start = l:comp_len <= l:cur_col ? l:cur_line[:l:cur_col - l:comp_len] : ''
-  let l:end = l:cur_col < len(l:cur_line) ? l:cur_line[l:cur_col + 1 :] : ''
-
-  call setline('.', l:start . l:end)
-  call cursor('.', l:cur_col - l:comp_len + 2)
-
-  call UltiSnips#Anon(l:complete)
 endfunction
-
-augroup Completion_Done
-  autocmd!
-  autocmd CompleteDone * call CompleteSnippet()
-augroup END
-
+inoremap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "\<CR>"
 
 " Language server client
 let g:LanguageClient_serverCommands = {
     \ 'haskell': ['hie-wrapper', '--lsp'],
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls']
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ }
+
+let g:LanguageClient_hasSnippetSupport = 0
 
 let g:LanguageClient_diagnosticsDisplay = {
     \    1: {
@@ -365,38 +343,6 @@ let g:LanguageClient_diagnosticsDisplay = {
     \    },
     \ }
 
-
-" Report LSP errors in Airline
-" https://github.com/autozimu/LanguageClient-neovim/issues/374#issuecomment-386910607
-function! AirlineInit()
-  let g:airline_section_warning = airline#section#create(['LC_warning_count'])
-  let g:airline_section_error = airline#section#create(['LC_error_count'])
-endfunction
-
-call airline#parts#define_function('LC_warning_count', 'LC_warning_count')
-call airline#parts#define_function('LC_error_count', 'LC_error_count')
-
-function! LC_warning_count()
-  let current_buf_number = bufnr('%')
-  let qflist = getqflist()
-  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'W'})
-  let l:count = len(current_buf_diagnostics)
-  return l:count > 0 && g:LanguageClient_loaded ? 'W: ' . l:count : ''
-endfunction
-
-function! LC_error_count()
-  let current_buf_number = bufnr('%')
-  let qflist = getqflist()
-  let current_buf_diagnostics = filter(qflist, {index, dict -> dict['bufnr'] == current_buf_number && dict['type'] == 'E'})
-  let l:count = len(current_buf_diagnostics)
-  return l:count > 0 && g:LanguageClient_loaded ? 'E: ' . l:count : ''
-endfunction
-
-augroup LC_Airline_Error
-  autocmd!
-  autocmd User AirlineAfterInit call AirlineInit()
-augroup END
-
 " Airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#hunks#enabled=1
@@ -405,7 +351,14 @@ let g:airline_skip_empty_sections = 1
 let g:airline#extensions#obsession#enabled = 1
 let g:airline#extensions#obsession#indicator_text = '$'
 
-" Fzf-vim plugin
+let g:airline#extensions#languageclient#enabled = 1
+let airline#extensions#languageclient#error_symbol = 'E:'
+let airline#extensions#languageclient#warning_symbol = 'W:'
+let airline#extensions#languageclient#show_line_numbers = 0
+let airline#extensions#languageclient#open_lnum_symbol = '(L'
+let airline#extensions#languageclient#close_lnum_symbol = ')'
+
+" Fzf-vim
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -454,11 +407,9 @@ if exists('daytheme')
  set background=light
  colorscheme gruvbox
 else
- colorscheme nord
+ set background=dark
+ colorscheme gruvbox
 endif
-
-" Dash dont foreground
-let g:dash_activate=0
 
 "}}}
 "  Functions {{{
@@ -575,10 +526,8 @@ cmap w!! w !sudo tee >/dev/null %
 nnoremap <Leader>e :Lexplore<CR>
 
 " Navigate popup menu with tab
-inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : "\<CR>"
-inoremap <expr> <esc> pumvisible() ? "\<C-E>" : "\<esc>"
-inoremap <expr> <Tab> pumvisible() ? "\<Down>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<Up>" : "\<S-Tab>"
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Edit vimrc with f5 and source it automatically when saved
 nmap <silent> <leader><f5> :e $MYVIMRC<CR>
@@ -587,18 +536,14 @@ augroup reload_vimrc
     autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
 augroup END
 
-" Neovim Stuff
+" Navigate Neovim terminal window
 if has('nvim')
-
-  "Navigate terminal window
   tnoremap <C-h> <C-\><C-n><C-w>h
   tnoremap <C-j> <C-\><C-n><C-w>j
   tnoremap <C-k> <C-\><C-n><C-w>k
   tnoremap <C-l> <C-\><C-n><C-w>l
   tnoremap <Esc> <C-\><C-n>
-
 endif
-
 
 " Language Client
 " These mappings replace built in functions
@@ -616,7 +561,7 @@ augroup LanguageClient_mappings
   autocmd User LanguageClientStarted set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
   autocmd User LanguageClientStopped set formatexpr=
 augroup END
-
+nnoremap <silent> <Leader>ll :call LanguageClient_contextMenu()<CR>
 " Show code action
 nnoremap <silent> <Leader>a :call LanguageClient#textDocument_codeAction()<CR>
 " Rename identifier under cursor.
@@ -630,7 +575,7 @@ nnoremap <silent> <Leader>ls :call LanguageClient#textDocument_documentSymbol()<
 " List of project's symbols.
 nnoremap <silent> <Leader>lS :call LanguageClient#workspace_symbol()<CR>
 " List all references of identifier under cursor.
-nnoremap <silent> <Leader>ll :call LanguageClient#textDocument_references()<CR>
+nnoremap <silent> <Leader>lr :call LanguageClient#textDocument_references()<CR>
 
 " Toggle the autoopening of lists
 nnoremap <silent><Leader>q :call ToggleAutoLists()<CR>
@@ -644,7 +589,6 @@ nnoremap <silent><Leader>u :UndotreeToggle<CR>
 " FZF
 " Search for files
 nnoremap <silent><Leader>f :Files<CR>
-
 " Search buffers
 nnoremap <silent><Leader>b :Buffer<CR>
 
@@ -663,9 +607,5 @@ nnoremap <Leader>tj  :tablast<CR>
 nnoremap <Leader>tt  :tabedit<Space>
 nnoremap <Leader>tm  :tabm<Space>
 nnoremap <Leader>td  :tabclose<CR>
-
-"Dash search
-nmap <silent> <leader>d <Plug>DashSearch
-nmap <silent> <leader>D <Plug>DashGlobalSearch
 
 " }}}
