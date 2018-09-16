@@ -1,0 +1,50 @@
+#! /bin/bash
+
+# This is used to normalize files for use with QLab with FFMpeg skips files where it can't use linear normalization
+
+# Integrated loudness target. Range is -70.0 - -5.0
+TARGET_I="-20.0"
+
+# Loudness range target. Range is 1.0 - 20.0.
+TARGET_LRA="20.0"
+
+# Maximum true peak. Range is -9.0 - +0.0.
+TARGET_TP="-0.1"
+
+# Outputfile is wav with SR
+OUTPUT_SR="48000"
+
+set -e
+
+TARGET_SETINGS="I=$TARGET_I:LRA=$TARGET_LRA:TP=$TARGET_TP"
+
+if ! [ -x "$(command -v ffmpeg)" ] ; then
+  ( >&2 echo "ERROR: ffmpeg not available on path" )
+  exit 1
+fi
+
+for FILE in "$@"
+do
+  echo "Analyzing $FILE"
+  SCAN_OUTPUT=$(ffmpeg -hide_banner -i "$FILE" -af loudnorm="$TARGET_SETINGS":print_format=summary -f null - 2>&1)
+  INPUT_I=$( echo "$SCAN_OUTPUT" | grep "Input Integrated:" | awk '{print $3'})
+  INPUT_LRA=$( echo "$SCAN_OUTPUT" | grep "Input LRA:" | awk '{print $3'})
+  INPUT_TP=$( echo "$SCAN_OUTPUT" | grep "Input True Peak:" | awk '{print $4'})
+  INPUT_THRE=$( echo "$SCAN_OUTPUT" | grep "Input Threshold:" | awk '{print $3'})
+  # printf "Input Integrated: \\t %s LUFS\\n" "$INPUT_I"
+  # printf "Input LRA: \\t\\t %s LU\\n" "$INPUT_LRA"
+  # printf "Input True Peak: \\t %s dBTP\\n" "$INPUT_TP"
+  # printf "Input Threshold: \\t %s LUFS\\n" "$INPUT_THRE"
+  MEASURED="measured_I=$INPUT_I:measured_LRA=$INPUT_LRA:measured_TP=$INPUT_TP:measured_thresh=$INPUT_THRE"
+  
+  # If the integrated loudness is higher then the target the normalization will likly use a dynamic process
+  # i.e. compression which is not wanted
+  if (( $(echo "$INPUT_I < $TARGET_I" | bc -l) )) ; then
+    ( >&2 echo "ERROR: Input level on $FILE to high for linear normalization, skipping")
+  else
+    OUTPUT_FILE="Normalized_${FILE%.*}.wav"
+    ffmpeg -y -hide_banner -i "$FILE" -af loudnorm="$TARGET_SETINGS":"$MEASURED":linear=true:dual_mono=true:print_format=summary -ar "$OUTPUT_SR" "$OUTPUT_FILE"
+  fi
+done
+
+exit 0
