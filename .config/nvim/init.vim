@@ -120,8 +120,7 @@ Plug 'mbbill/undotree'
 if has('nvim')
   Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
 endif
-" Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plug '~/Drive/Programmering/vim-hoogle', { 'for': 'haskell' }
+Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
 
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
@@ -354,7 +353,7 @@ let g:airline#extensions#obsession#indicator_text = '$'
 let g:airline#extensions#languageclient#enabled = 1
 let airline#extensions#languageclient#error_symbol = 'E:'
 let airline#extensions#languageclient#warning_symbol = 'W:'
-let airline#extensions#languageclient#show_line_numbers = 0
+let airline#extensions#languageclient#show_line_numbers = 1
 let airline#extensions#languageclient#open_lnum_symbol = '(L'
 let airline#extensions#languageclient#close_lnum_symbol = ')'
 
@@ -402,13 +401,16 @@ let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
 let g:nord_underline = 1
+
 let g:gruvbox_italic=1
+let g:gruvbox_invert_selection=0
+
 if exists('daytheme')
  set background=light
  colorscheme gruvbox
 else
  set background=dark
- colorscheme gruvbox
+ colorscheme nord
 endif
 
 "}}}

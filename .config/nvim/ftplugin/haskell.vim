@@ -10,7 +10,7 @@ let g:haskell_backpack = 1                " to enable highlighting of backpack k
 " ----- language server -----
 setlocal signcolumn=yes
 let b:ale_enabled = 0
-let g:LanguageClient_changeThrottle = 1
+" let g:LanguageClient_changeThrottle = 1
 
 " ----- ndmitchell/ghcid -----
 nnoremap <silent> <leader>hg :Ghcid<CR>
