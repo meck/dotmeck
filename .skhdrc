@@ -1,22 +1,22 @@
 # the default mode
-:: default : $HOME/bin/darkmode false;\
-             chunkc border::color 0xff0f6288;\
-             echo "" > $TMPDIR/current_skhd_mode
+:: default : chunkc border::color 0xff0f6288;\
+             echo "" > $TMPDIR/current_skhd_mode;\
+             open -g "bitbar://refreshPlugin?name=chunkwm_mode.*?.sh"
 
 # a mode for focus operations
-:: focus @ : $HOME/bin/darkmode true;\
-             chunkc border::color 0xffbf616a;\
-             echo "focus" > $TMPDIR/current_skhd_mode
+:: focus @ : chunkc border::color 0xffbf616a;\
+             echo "focus" > $TMPDIR/current_skhd_mode;\
+             open -g "bitbar://refreshPlugin?name=chunkwm_mode.*?.sh"
 
 # a mode for warp operations
-:: warp @ : $HOME/bin/darkmode true;\
-            chunkc border::color 0xffbf616a;\
-            echo "warp" > $TMPDIR/current_skhd_mode
+:: warp @ : chunkc border::color 0xffbf616a;\
+            echo "warp" > $TMPDIR/current_skhd_mode;\
+            open -g "bitbar://refreshPlugin?name=chunkwm_mode.*?.sh"
 
 # a mode for resizing operations
-:: resize @ : $HOME/bin/darkmode true;\
-              chunkc border::color 0xffbf616a;\
-              echo "resize" > $TMPDIR/current_skhd_mode
+:: resize @ : chunkc border::color 0xffbf616a;\
+              echo "resize" > $TMPDIR/current_skhd_mode;\
+              open -g "bitbar://refreshPlugin?name=chunkwm_mode.*?.sh"
 
 # enter and exit modes
 default                      < alt - space      ; focus
@@ -52,9 +52,12 @@ focus, resize, warp < g                     :  chunkc tiling::window --toggle fl
 focus, resize, warp < q                     :  chunkc tiling::desktop --equalize                # equalize size of windows
 
 # change layout of desktop: n m ,
-focus, resize, warp < n                     :  chunkc tiling::desktop --layout bsp
-focus, resize, warp < m                     :  chunkc tiling::desktop --layout monocle
-focus, resize, warp < 0x2B                  :  chunkc tiling::desktop --layout float
+focus, resize, warp < n                     :  chunkc tiling::desktop --layout bsp;\
+                                               open -g "bitbar://refreshPlugin?name=chunkwm_layout.*?.sh"
+focus, resize, warp < m                     :  chunkc tiling::desktop --layout monocle;\
+                                               open -g "bitbar://refreshPlugin?name=chunkwm_layout.*?.sh"
+focus, resize, warp < 0x2B                  :  chunkc tiling::desktop --layout float;\
+                                               open -g "bitbar://refreshPlugin?name=chunkwm_layout.*?.sh"
 
 # Turn on and off FFM: .
 focus, resize, warp < 0x2F                  :  chunkc core::load ffm.so

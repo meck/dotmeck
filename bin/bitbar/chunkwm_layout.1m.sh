@@ -49,16 +49,6 @@ case $1 in
 
 esac
 
-# skhd saves the current keyboard mode to this file
-modefile=$TMPDIR/current_skhd_mode
-if [[ -r $modefile ]]
-  then
-    mod="$(cat "$modefile")"
-    if [[ -n $mod ]]
-      then 
-        skhd_mode="--- $mod ---  "
-      fi
-fi
 
 # Is the server running
 chunkc tiling::query > /dev/null 2>&1
@@ -67,7 +57,7 @@ state=$?
 if [ $state != 0 ] ; then
   echo "🖥"
 else
-  echo "$skhd_mode $(chunkc tiling::query --desktop id) ▸ $(chunkc tiling::query --desktop mode  | awk '{print toupper(substr($0,1,1)) substr($0,2) }')"
+  echo -e "$(chunkc tiling::query --desktop mode  | awk '{print toupper(substr($0,1,1)) substr($0,2) }')"
   echo "---"
   echo "BSP | bash='$0' param1=layout param2=bsp terminal=false"
   echo "Monocle | bash='$0' param1=layout param2=monocle terminal=false"
