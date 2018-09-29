@@ -129,6 +129,7 @@ Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
 
 " Markdown
 Plug 'plasticboy/vim-markdown'
+Plug 'JamshedVesuna/vim-markdown-preview'
 
 " Python
 Plug 'jmcantrell/vim-virtualenv' , { 'for': 'python' }

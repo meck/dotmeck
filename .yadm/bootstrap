@@ -20,14 +20,15 @@ if [ "$system_type" = "Darwin" ]; then
       y|Y )
           echo "Installing homebrew"
           /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
+          brew update
           # Check if we brewfile exists then install it
           if [ -f "$HOME/.config/Brewfile" ]; then
             read -p "Install brewfile apps (y/n)?" answer
             case ${answer:0:1} in
                 y|Y )
-                    echo "Updating homebrew bundle"
+                    echo "Installing homebrew bundle"
                     brew bundle --file="$HOME/.config/Brewfile"
+                    brew cleanup
                 ;;
                 * )
                 ;;
@@ -40,7 +41,6 @@ if [ "$system_type" = "Darwin" ]; then
     esac
   fi
 fi
-
 
 # Default shell to zsh
 read -p "Change default shell to zsh (y/n)?" answer
