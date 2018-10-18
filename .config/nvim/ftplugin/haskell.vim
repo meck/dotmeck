@@ -60,14 +60,14 @@ augroup END
 " ----- Code formating -----
 
 " Formating on save
-let g:brittany_on_save = 1
+let g:brittany_on_save = 0
 let g:hindent_on_save = 0
 let g:stylishask_on_save = 0
 
 " Mappings
-nnoremap <leader>hfb :Brittany<CR>
-nnoremap <leader>hfi :Hindent<CR>
-nnoremap <leader>hfs :Stylishask<CR>
+noremap <leader>hfb :Brittany<CR>
+noremap <leader>hfi :Hindent<CR>
+noremap <leader>hfs :Stylishask<CR>
 
 " ----- Hoogle -----
 

@@ -6,8 +6,6 @@
 
 cd "$HOME" || exit
 
-echo "Init submodules"
-yadm submodule update --recursive --init
 
 system_type=$(uname -s)
 
@@ -41,6 +39,9 @@ if [ "$system_type" = "Darwin" ]; then
     esac
   fi
 fi
+
+echo "Init submodules"
+yadm submodule update --recursive --init
 
 # Default shell to zsh
 read -p "Change default shell to zsh (y/n)?" answer

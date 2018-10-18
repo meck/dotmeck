@@ -164,6 +164,8 @@ set laststatus=2                        " Always show statusline
 set nolist                              " Start without list symbols
 set autoread                            " Read when a file is changed from the outside
 set hidden                              " Allow hidden buffers
+set exrc                                " Source .nvimrc or .vimrc in current directory
+set secure                              " Limit autocmds and shell cmds from above
 
 " Scrolling
 set scrolloff=4                         " Start scrolling before we hit the buffer
@@ -315,6 +317,7 @@ let g:LanguageClient_serverCommands = {
     \ }
 
 let g:LanguageClient_hasSnippetSupport = 0
+let g:LanguageClient_hoverPreview = 'Always'
 
 let g:LanguageClient_diagnosticsDisplay = {
     \    1: {
@@ -412,6 +415,7 @@ if exists('daytheme')
 else
  set background=dark
  colorscheme nord
+ " hi Normal guibg=NONE
 endif
 
 "}}}
@@ -561,7 +565,7 @@ augroup LanguageClient_mappings
   autocmd User LanguageClientStarted nnoremap <buffer> <silent>gD :call LanguageClient#textDocument_definition({'gotoCmd': 'split'})<CR>
   autocmd User LanguageClientStopped unmap <buffer>gD
   " gq format
-  autocmd User LanguageClientStarted set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+  autocmd User LanguageClientStarted set formatexpr=LanguageClient#textDocument_rangeFormatting()
   autocmd User LanguageClientStopped set formatexpr=
 augroup END
 nnoremap <silent> <Leader>ll :call LanguageClient_contextMenu()<CR>
