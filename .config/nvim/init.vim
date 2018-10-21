@@ -356,13 +356,14 @@ augroup END
 " Airline
 
 " Shows if there is a Language server running
+let g:airline_skip_empty_sections = 1
+let g:airline_powerline_fonts = 1
+
 call airline#parts#define_text('lspstatus','LS')
 call airline#parts#define_condition('lspstatus', 'exists("b:LanguageClientRunning") && b:LanguageClientRunning')
 
 let g:airline_section_x = airline#section#create_right(['tagbar', 'gutentags', 'grepper', 'lspstatus', 'filetype'])
 let g:airline_section_z = '%3p%% %4l:%-2c'
-let g:airline_skip_empty_sections = 1
-let g:airline_powerline_fonts = 1
 
 let g:airline#extensions#hunks#enabled=1
 
