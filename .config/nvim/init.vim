@@ -312,7 +312,7 @@ inoremap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()
 
 " Language server client
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie-wrapper', '--lsp'],
+    \ 'haskell': ['hie-wrapper'],
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ }
 
@@ -422,7 +422,14 @@ endif
 "  Functions {{{
 """"""""""""""""
 
-"Switch line numbers
+" Use fzf to cd starting from home directory
+function! Fzf_Cd()
+  call fzf#run({'source': 'fd --follow -t d . $HOME', 'sink': 'cd', 'down': '30%'})
+endfunction
+
+command -nargs=0 Cd :call Fzf_Cd()
+
+" Switch line numbers
 function! Relativize(v)
   if &number
     let &relativenumber = a:v
