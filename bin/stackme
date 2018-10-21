@@ -1,0 +1,26 @@
+#!/bin/bash
+
+case "$1" in
+  "new" )
+  # Make sure tools are installed
+  stack build --copy-compiler-tool hoogle weeder
+
+  # Build docs for deps and make hoogle database
+  stack haddock --fast --haddock-deps && stack hoogle -- generate --local
+  ;;
+  
+  "watch" )
+  stack test --fast --haddock-deps --file-watch
+  ;;
+
+  "serve" )
+  stack hoogle -- server --local --port=8080
+  ;;
+
+  "hoogle" )
+  open -g "http://localhost:8080"
+  ;;
+
+  * )
+    echo "Usage: $(basename "$0") [ new | watch | serve | hoogle ]"
+esac
