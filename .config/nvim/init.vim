@@ -346,18 +346,33 @@ let g:LanguageClient_diagnosticsDisplay = {
     \    },
     \ }
 
+augroup auLanguageClientStartedVar
+  autocmd!
+  autocmd User LanguageClientStarted let b:LanguageClientRunning=1
+  autocmd User LanguageClientStopped let b:LanguageClientRunning=0
+augroup END
+
+
 " Airline
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#hunks#enabled=1
+
+" Shows if there is a Language server running
+call airline#parts#define_text('lspstatus','LS')
+call airline#parts#define_condition('lspstatus', 'exists("b:LanguageClientRunning") && b:LanguageClientRunning')
+
+let g:airline_section_x = airline#section#create_right(['tagbar', 'gutentags', 'grepper', 'lspstatus', 'filetype'])
 let g:airline_section_z = '%3p%% %4l:%-2c'
 let g:airline_skip_empty_sections = 1
+let g:airline_powerline_fonts = 1
+
+let g:airline#extensions#hunks#enabled=1
+
 let g:airline#extensions#obsession#enabled = 1
 let g:airline#extensions#obsession#indicator_text = '$'
 
 let g:airline#extensions#languageclient#enabled = 1
 let airline#extensions#languageclient#error_symbol = 'E:'
 let airline#extensions#languageclient#warning_symbol = 'W:'
-let airline#extensions#languageclient#show_line_numbers = 1
+let airline#extensions#languageclient#show_line_numbers = 0
 let airline#extensions#languageclient#open_lnum_symbol = '(L'
 let airline#extensions#languageclient#close_lnum_symbol = ')'
 
