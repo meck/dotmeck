@@ -389,15 +389,23 @@ if has('nvim')
   aug END
 end
 
-" Use Ripgrep for Fzf grep
-" ? opens preview and :Find! is big preview
-if executable('rg')
-  command! -bang -nargs=* Find call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1,
+" :Rg  - Start fzf with hidden preview window that can be enabled with "?" key
+" :Rg! - Start fzf in fullscreen and display the preview window above
+" Ignores the filename and the l:c when filtering the results
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \  <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%' )
+  \          : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
+  \  <bang>0)
+
+" :Files  - Start fzf with hidden preview window that can be enabled with "?" key
+" :Files! - Start fzf in fullscreen and display the preview window above
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>,
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
-endif
 
 " Theme
 let g:nord_comment_brightness = 12
@@ -427,7 +435,7 @@ function! Fzf_Cd()
   call fzf#run({'source': 'fd --follow -t d . $HOME', 'sink': 'cd', 'down': '30%'})
 endfunction
 
-command -nargs=0 Cd :call Fzf_Cd()
+command! -nargs=0 Cd :call Fzf_Cd()
 
 " Switch line numbers
 function! Relativize(v)
@@ -441,6 +449,7 @@ fun! TrimWhitespace()
     let l:save = winsaveview()
     %s/\s\+$//e
     call winrestview(l:save)
+    echo 'Stripped any trailing whitespaccs'
 endfun
 
 " Manage the Quickfix and Loclist Automatically
