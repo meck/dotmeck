@@ -355,10 +355,10 @@ augroup END
 
 " Airline
 
-" Shows if there is a Language server running
 let g:airline_skip_empty_sections = 1
 let g:airline_powerline_fonts = 1
 
+" Shows if there is a Language server running
 call airline#parts#define_text('lspstatus','LS')
 call airline#parts#define_condition('lspstatus', 'exists("b:LanguageClientRunning") && b:LanguageClientRunning')
 
