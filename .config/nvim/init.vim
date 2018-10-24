@@ -361,7 +361,7 @@ let g:airline_powerline_fonts = 1
 " Shows if there is a Language server running
 call airline#parts#define_text('lspstatus','LS')
 call airline#parts#define_condition('lspstatus', 'exists("b:LanguageClientRunning") && b:LanguageClientRunning')
-
+" call airline#parts#define_condition('lspstatus', 'LanguageClient_runSync("LanguageClient#isAlive") ==# "true"')
 let g:airline_section_x = airline#section#create_right(['tagbar', 'gutentags', 'grepper', 'lspstatus', 'filetype'])
 let g:airline_section_z = '%3p%% %4l:%-2c'
 
@@ -600,6 +600,7 @@ augroup LanguageClient_mappings
   autocmd User LanguageClientStarted set formatexpr=LanguageClient#textDocument_rangeFormatting()
   autocmd User LanguageClientStopped set formatexpr=
 augroup END
+
 nnoremap <silent> <Leader>ll :call LanguageClient_contextMenu()<CR>
 " Show code action
 nnoremap <silent> <Leader>a :call LanguageClient#textDocument_codeAction()<CR>
@@ -615,6 +616,34 @@ nnoremap <silent> <Leader>ls :call LanguageClient#textDocument_documentSymbol()<
 nnoremap <silent> <Leader>lS :call LanguageClient#workspace_symbol()<CR>
 " List all references of identifier under cursor.
 nnoremap <silent> <Leader>lr :call LanguageClient#textDocument_references()<CR>
+
+" Toggles Underlining of all ocurrences of the item under the cursor
+nnoremap <silent> <Leader>lh :call <SID>ToggleLspHlUnderCursor()<CR>
+
+function s:ToggleLspHlUnderCursor()
+  if exists('b:lspHlUnderCursor') && b:lspHlUnderCursor
+    call LanguageClient#clearDocumentHighlight()
+    let b:lspHlUnderCursor = 0
+  else
+    call LanguageClient#textDocument_documentHighlight()
+    let b:lspHlUnderCursor = 1
+  endif
+endfunction
+
+if has('nvim')
+  " This makes scrolling slow even if run async...
+  function! s:LspHlUnderCursorHelper()
+    if LanguageClient_runSync('LanguageClient#isAlive') ==# 'true'
+      call LanguageClient#textDocument_documentHighlight()
+    endif
+  endfunction
+
+  augroup LspHlAUGroup
+    autocmd!
+    autocmd CursorMoved * if exists('b:lspHlUnderCursor') && b:lspHlUnderCursor | call jobstart([s:LspHlUnderCursorHelper()]) | endif
+  augroup END
+endif
+
 
 " Toggle the autoopening of lists
 nnoremap <silent><Leader>q :call ToggleAutoLists()<CR>

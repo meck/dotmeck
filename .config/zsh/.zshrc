@@ -34,7 +34,10 @@ export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 # For my own scripts
 export PATH=$HOME/bin:$PATH
 
-# For haskell stack: ghc-mod hlint etc.
+# For haskell cabal install
+export PATH=$HOME/.cabal/bin:$PATH
+
+# For haskell stack install
 export PATH=$HOME/.local/bin:$PATH
 
 
