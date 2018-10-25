@@ -84,7 +84,7 @@ font:
   normal:
     family: Iosevka
     # The `style` can be specified to pick a specific face.
-    style: Light
+    style: Extralight
 
   # Italic font face
   bold:

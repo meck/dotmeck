@@ -447,11 +447,15 @@ endif
 """"""""""""""""
 
 " Use fzf to cd starting from home directory
-function! Fzf_Cd()
-  call fzf#run({'source': 'fd --follow -t d . $HOME', 'sink': 'cd', 'down': '30%'})
+function! Fzf_Cd(...)
+  let l:o = {'source': 'fd --follow -t d . $HOME', 'sink': 'cd', 'down': '30%'}
+  if len(a:000) > 0
+    let l:o.options = shellescape('-q' . join(a:000, ' '))
+  endif
+  call fzf#run(l:o)
 endfunction
 
-command! -nargs=0 Cd :call Fzf_Cd()
+command! -nargs=* Cd :call Fzf_Cd(<f-args>)
 
 " Switch line numbers
 function! Relativize(v)
@@ -620,7 +624,7 @@ nnoremap <silent> <Leader>lr :call LanguageClient#textDocument_references()<CR>
 " Toggles Underlining of all ocurrences of the item under the cursor
 nnoremap <silent> <Leader>lh :call <SID>ToggleLspHlUnderCursor()<CR>
 
-function s:ToggleLspHlUnderCursor()
+function! s:ToggleLspHlUnderCursor()
   if exists('b:lspHlUnderCursor') && b:lspHlUnderCursor
     call LanguageClient#clearDocumentHighlight()
     let b:lspHlUnderCursor = 0
@@ -659,6 +663,8 @@ nnoremap <silent><Leader>u :UndotreeToggle<CR>
 nnoremap <silent><Leader>f :Files<CR>
 " Search buffers
 nnoremap <silent><Leader>b :Buffer<CR>
+" cwd from ~
+nnoremap <silent><Leader>d :Cd<CR>
 
 " Terminals
 nnoremap <silent> <Leader>te :belowright split +resize\ 13 \| setlocal winfixheight \| terminal <CR>
