@@ -7,10 +7,14 @@ let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
 let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
 
+" ----- ALE -----
+let b:ale_enabled = 0
+let b:ale_linters = ['hie']
+let g:ale_haskell_hie_executable = 'hie-wrapper'
+
 " ----- language server -----
 setlocal signcolumn=yes
-let b:ale_enabled = 0
-let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
+" let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
 " let g:LanguageClient_changeThrottle = 1
 
 " ----- ndmitchell/ghcid -----

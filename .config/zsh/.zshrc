@@ -34,6 +34,9 @@ export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 # For my own scripts
 export PATH=$HOME/bin:$PATH
 
+# Ghcup
+export PATH=$HOME/.ghcup/bin:$PATH
+
 # For haskell cabal install
 export PATH=$HOME/.cabal/bin:$PATH
 

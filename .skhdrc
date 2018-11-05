@@ -27,7 +27,7 @@ focus, resize, warp          < r                ; resize
 
 # global commands
 # open a new terminal window
-cmd - return : $HOME/bin/iterm
+# cmd - return : $HOME/bin/iterm
 
 # focus window
 default, focus, resize, warp < alt - h          :  chunkc tiling::window --focus west

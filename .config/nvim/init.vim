@@ -11,22 +11,6 @@ else
   let s:vimDir = '$HOME/.vim'
 endif
 
-" Architecture of the current system
-let s:uname = substitute(system('uname -ms'), '\n', '', '')
-if match(s:uname, 'Darwin.*64$') !=# '-1'
-  let s:arch = 'MacOs'
-elseif match(s:uname, 'Linux.*86$') !=# '-1'
-  let s:arch = 'LinuxI32'
-elseif match(s:uname, 'Linux.*64$') !=# '-1'
-  let s:arch = 'LinuxI64'
-elseif match(s:uname, 'armv6.*') !=# '-1'
-  let s:arch = 'Arm32'
-elseif match(s:uname, 'armv7.*') !=# '-1'
-  let s:arch = 'Arm64'
-else
-  let s:arch = 'Unknown'
-endif
-
 " }}}
 "  Plugins {{{
 "
@@ -58,6 +42,12 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
 Plug 'airblade/vim-gitgutter'
 
+" Kicking some bad habbits
+Plug 'takac/vim-hardtime'
+
+" Preview targets for f/F/t/T
+Plug 'unblevable/quick-scope'
+
 " Surround editing and objects
 Plug 'machakann/vim-sandwich'
 
@@ -72,6 +62,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegu
 
 " Statusline and theme
 Plug 'vim-airline/vim-airline'
+
 " Wating for PR
 " Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
 Plug 'meck/nord-vim', { 'branch': 'testing' }
@@ -112,6 +103,7 @@ Plug 'majutsushi/tagbar'
 " UndoTree
 Plug 'mbbill/undotree'
 
+
 "}}}
 "  Language Specific Plugins {{{
 """"""""""""""""""""""""""""""""
@@ -129,6 +121,7 @@ Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
 
 " Markdown
 Plug 'plasticboy/vim-markdown'
+Plug 'rhysd/vim-gfm-syntax'
 Plug 'JamshedVesuna/vim-markdown-preview'
 
 " Python
@@ -166,6 +159,7 @@ set autoread                            " Read when a file is changed from the o
 set hidden                              " Allow hidden buffers
 set exrc                                " Source .nvimrc or .vimrc in current directory
 set secure                              " Limit autocmds and shell cmds from above
+set foldlevelstart=99                   " Open new files with no folds closed
 
 " Scrolling
 set scrolloff=4                         " Start scrolling before we hit the buffer
@@ -208,6 +202,7 @@ set wildmenu
 set incsearch
 set smartcase
 set ignorecase
+set nohlsearch
 
 " Line numbers
 set numberwidth=5
@@ -254,7 +249,9 @@ endif
 "}}}
 "  Plugin Settings {{{
 """"""""""""""""""""""
-
+" Hardtime
+let g:hardtime_default_on = 1
+let g:hardtime_maxcount = 2
 
 " Vim Obsession
 augroup obsssions_autoload
@@ -314,11 +311,11 @@ inoremap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()
 let g:LanguageClient_serverCommands = {
     \ 'haskell': ['hie-wrapper'],
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'sh': ['bash-language-server', 'start']
     \ }
 
 let g:LanguageClient_hasSnippetSupport = 0
 let g:LanguageClient_hoverPreview = 'Always'
-
 let g:LanguageClient_diagnosticsDisplay = {
     \    1: {
     \      'name': 'Error',
@@ -354,14 +351,12 @@ augroup END
 
 
 " Airline
-
 let g:airline_skip_empty_sections = 1
 let g:airline_powerline_fonts = 1
 
 " Shows if there is a Language server running
 call airline#parts#define_text('lspstatus','LS')
 call airline#parts#define_condition('lspstatus', 'exists("b:LanguageClientRunning") && b:LanguageClientRunning')
-" call airline#parts#define_condition('lspstatus', 'LanguageClient_runSync("LanguageClient#isAlive") ==# "true"')
 let g:airline_section_x = airline#section#create_right(['tagbar', 'gutentags', 'grepper', 'lspstatus', 'filetype'])
 let g:airline_section_z = '%3p%% %4l:%-2c'
 
@@ -439,7 +434,6 @@ if exists('daytheme')
 else
  set background=dark
  colorscheme nord
- " hi Normal guibg=NONE
 endif
 
 "}}}
@@ -553,11 +547,14 @@ endfunction
 "}}}
 "  Mappings {{{
 """"""""""""""
-
-" Built in
+" Built in mappings {{{
 
 " Space as leader works with showcmd
 let g:mapleader = "\<Space>"
+
+" Move across wrapped lines like regular lines
+noremap 0 ^
+noremap ^ 0
 
 " Clear search hightligt
 nnoremap <silent><esc> :noh<return><esc>
@@ -579,14 +576,28 @@ augroup reload_vimrc
     autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
 augroup END
 
-" Navigate Neovim terminal window
-if has('nvim')
-  tnoremap <C-h> <C-\><C-n><C-w>h
-  tnoremap <C-j> <C-\><C-n><C-w>j
-  tnoremap <C-k> <C-\><C-n><C-w>k
-  tnoremap <C-l> <C-\><C-n><C-w>l
-  tnoremap <Esc> <C-\><C-n>
-endif
+" Terminal
+nnoremap <silent> <Leader>te :belowright split +resize\ 13 \| setlocal winfixheight \| terminal <CR>
+nnoremap <silent> <Leader>vte :belowright vsplit \| terminal <CR>
+
+" Navigate terminal window
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-l> <C-\><C-n><C-w>l
+tnoremap <Esc> <C-\><C-n>
+
+" Tab Navigation hjkl
+nnoremap <Leader>tk  :tabfirst<CR>
+nnoremap <Leader>tl  :tabnext<CR>
+nnoremap <Leader>th  :tabprev<CR>
+nnoremap <Leader>tj  :tablast<CR>
+nnoremap <Leader>tt  :tabedit<Space>
+nnoremap <Leader>tm  :tabm<Space>
+nnoremap <Leader>td  :tabclose<CR>
+
+"}}}
+" Plugin mappings {{{
 
 " Language Client
 " These mappings replace built in functions
@@ -648,7 +659,6 @@ if has('nvim')
   augroup END
 endif
 
-
 " Toggle the autoopening of lists
 nnoremap <silent><Leader>q :call ToggleAutoLists()<CR>
 
@@ -666,20 +676,7 @@ nnoremap <silent><Leader>b :Buffer<CR>
 " cwd from ~
 nnoremap <silent><Leader>d :Cd<CR>
 
-" Terminals
-nnoremap <silent> <Leader>te :belowright split +resize\ 13 \| setlocal winfixheight \| terminal <CR>
-nnoremap <silent> <Leader>vte :belowright vsplit \| terminal <CR>
-
 " Whitespace Clean
 noremap <silent> <Leader>ws :call TrimWhitespace()<CR>
-
-" Tab Navigation hjkl
-nnoremap <Leader>tk  :tabfirst<CR>
-nnoremap <Leader>tl  :tabnext<CR>
-nnoremap <Leader>th  :tabprev<CR>
-nnoremap <Leader>tj  :tablast<CR>
-nnoremap <Leader>tt  :tabedit<Space>
-nnoremap <Leader>tm  :tabm<Space>
-nnoremap <Leader>td  :tabclose<CR>
-
+" }}}
 " }}}
