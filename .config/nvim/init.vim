@@ -114,7 +114,6 @@ if has('nvim')
 endif
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
-
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
 Plug 'alx741/vim-hindent', { 'for': 'haskell' }
 Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
@@ -134,6 +133,15 @@ Plug 'fatih/vim-go' , { 'for': 'go' }
 Plug 'rust-lang/rust.vim' , { 'for': 'rust' }
 
 call plug#end()
+
+" Nvim-hs https://github.com/neovimhaskell/nvim-hs
+if has('nvim') && executable('stack') && filereadable(expand('$HOME') . '/.config/nvim/meck-nvim-hs.cabal')
+	function! s:RequireHaskellHost(name)
+		return jobstart(['stack', 'exec', 'meck-nvim-hs', a:name.name], {'rpc': v:true, 'cwd': expand('$HOME') . '/.config/nvim'})
+	endfunction
+	call remote#host#Register('haskell', '', function('s:RequireHaskellHost'))
+	let hc=remote#host#Require('haskell')
+endif
 
 "}}}
 "  Built in settings {{{
@@ -521,7 +529,7 @@ function! Bdeleteonly()
     endfor
 endfunction
 
-command! Ball :silent call Bdeleteonly()
+command! Bonly :silent call Bdeleteonly()
 
 " Shrink the current widow to fit smaller content
 fun! s:ShrinkWinToFit()

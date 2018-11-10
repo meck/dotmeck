@@ -4,4 +4,4 @@ _nvimrc
 Session.vim
 vim-markdown-preview.html
 .DS_Store
-ignorethisdir
+meck_local

@@ -34,7 +34,7 @@ default, focus, resize, warp < alt - h          :  chunkc tiling::window --focus
 default, focus, resize, warp < alt - j          :  chunkc tiling::window --focus south
 default, focus, resize, warp < alt - k          :  chunkc tiling::window --focus north
 default, focus, resize, warp < alt - l          :  chunkc tiling::window --focus east
-default, focus, resize, warp < alt - return     :  chunkc tiling::window --focus biggest
+# default, focus, resize, warp < alt - return     :  chunkc tiling::window --focus biggest
 
 # focus monitor
 default, focus, resize, warp < shift + alt - h  :  chunkc tiling::monitor -f prev
