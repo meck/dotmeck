@@ -24,11 +24,14 @@ window:
 
   # Window padding (changes require restart)
   #
-  # Blank space added around the window in pixels. This padding is not scaled
+  # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
   padding:
     x: 20
-    y: 35
+    y: 20
+
+  # Spread additional padding evenly around the terminal content.
+  dynamic_padding: true
 
   # Window decorations
   #
@@ -112,11 +115,7 @@ font:
   # increasing `y` moves the glyph upwards.
   glyph_offset:
     x: 0
-    y: 3
-
-  # Scale the font size based on the monitor's DPI. This will lead to bigger text on HiDPI
-  # screens and make reading text a little easier.
-  scale_with_dpi: true
+    y: 2
 
   # Thin stroke font rendering (OS X only)
   #

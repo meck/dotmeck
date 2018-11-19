@@ -152,4 +152,7 @@ nnoremap <Leader>tt  :tabedit<Space>
 nnoremap <Leader>tm  :tabm<Space>
 nnoremap <Leader>td  :tabclose<CR>
 
+" Whitespace Clean
+noremap <silent> <Leader>wc :call TrimWhitespace()<CR>
+
 "}}}

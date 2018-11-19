@@ -103,6 +103,8 @@ Plug 'majutsushi/tagbar'
 " UndoTree
 Plug 'mbbill/undotree'
 
+" Wiki
+Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 
 "}}}
 "  Language Specific Plugins {{{
@@ -117,6 +119,9 @@ Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
 Plug 'alx741/vim-hindent', { 'for': 'haskell' }
 Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
+
+" Purescript
+Plug 'purescript-contrib/purescript-vim'
 
 " Markdown
 Plug 'plasticboy/vim-markdown'
@@ -136,11 +141,11 @@ call plug#end()
 
 " Nvim-hs https://github.com/neovimhaskell/nvim-hs
 if has('nvim') && executable('stack') && filereadable(expand('$HOME') . '/.config/nvim/meck-nvim-hs.cabal')
-	function! s:RequireHaskellHost(name)
-		return jobstart(['stack', 'exec', 'meck-nvim-hs', a:name.name], {'rpc': v:true, 'cwd': expand('$HOME') . '/.config/nvim'})
-	endfunction
-	call remote#host#Register('haskell', '', function('s:RequireHaskellHost'))
-	let hc=remote#host#Require('haskell')
+  function! s:RequireHaskellHost(name)
+    return jobstart(['stack', 'exec', 'meck-nvim-hs', a:name.name], {'rpc': v:true, 'cwd': expand('$HOME') . '/.config/nvim'})
+  endfunction
+  call remote#host#Register('haskell', '', function('s:RequireHaskellHost'))
+  let hc=remote#host#Require('haskell')
 endif
 
 "}}}
@@ -260,6 +265,7 @@ endif
 " Hardtime
 let g:hardtime_default_on = 1
 let g:hardtime_maxcount = 2
+let g:hardtime_allow_different_key = 1
 
 " Vim Obsession
 augroup obsssions_autoload
@@ -319,7 +325,8 @@ inoremap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()
 let g:LanguageClient_serverCommands = {
     \ 'haskell': ['hie-wrapper'],
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'sh': ['bash-language-server', 'start']
+    \ 'sh': ['bash-language-server', 'start'],
+    \ 'purescript': ['purescript-language-server', '--stdio']
     \ }
 
 let g:LanguageClient_hasSnippetSupport = 0
@@ -425,6 +432,10 @@ command! -bang -nargs=? -complete=dir Files
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
+
+" VimWiki
+let g:vimwiki_list = [{'path': '~/Drive/vimwiki/',
+                     \ 'auto_export': 1}]
 
 " Theme
 let g:nord_comment_brightness = 12
@@ -604,6 +615,9 @@ nnoremap <Leader>tt  :tabedit<Space>
 nnoremap <Leader>tm  :tabm<Space>
 nnoremap <Leader>td  :tabclose<CR>
 
+" Whitespace Clean
+noremap <silent> <Leader>wc :call TrimWhitespace()<CR>
+
 "}}}
 " Plugin mappings {{{
 
@@ -684,7 +698,5 @@ nnoremap <silent><Leader>b :Buffer<CR>
 " cwd from ~
 nnoremap <silent><Leader>d :Cd<CR>
 
-" Whitespace Clean
-noremap <silent> <Leader>ws :call TrimWhitespace()<CR>
 " }}}
 " }}}
