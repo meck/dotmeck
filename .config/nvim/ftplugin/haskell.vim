@@ -105,6 +105,11 @@ nnoremap <leader>hI :HoogleInfo<space>
 " Hoogle, close the Hoogle window
 nnoremap <silent> <leader>hz :HoogleClose<CR>
 
+" ----- alfred-hoogle -----
+nnoremap <silent><Leader>ho :silent execute ':!/usr/bin/osascript -e '
+  \ . shellescape('tell application "Alfred 3" to run trigger "ext_trig"
+  \ in workflow "se.meck.alfred-hoogle"
+  \ with argument "' . expand('<cword>') . '"') <CR>
 
 " ----- Pointfree convertion -----
 

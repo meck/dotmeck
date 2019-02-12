@@ -42,9 +42,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
 Plug 'airblade/vim-gitgutter'
 
-" Kicking some bad habbits
-Plug 'takac/vim-hardtime'
-
 " Preview targets for f/F/t/T
 Plug 'unblevable/quick-scope'
 
@@ -331,32 +328,7 @@ let g:LanguageClient_serverCommands = {
 
 let g:LanguageClient_hasSnippetSupport = 0
 let g:LanguageClient_hoverPreview = 'Always'
-let g:LanguageClient_diagnosticsDisplay = {
-    \    1: {
-    \      'name': 'Error',
-    \      'texthl': 'ALEError',
-    \      'signText': 'X',
-    \      'signTexthl': 'ALEErrorSign',
-    \    },
-    \    2: {
-    \      'name': 'Warning',
-    \      'texthl': 'ALEWarning',
-    \      'signText': '▲',
-    \      'signTexthl': 'ALEWarningSign',
-    \    },
-    \    3: {
-    \      'name': 'Information',
-    \      'texthl': 'ALEInfo',
-    \      'signText': 'ⓘ',
-    \      'signTexthl': 'ALEWarningSign',
-    \    },
-    \    4: {
-    \      'name': 'Hint',
-    \      'texthl': 'ALEInfo',
-    \      'signText': '▶',
-    \      'signTexthl': 'ALEInfoSign',
-    \    },
-    \ }
+let g:LanguageClient_useVirtualText = 0
 
 augroup auLanguageClientStartedVar
   autocmd!
@@ -634,7 +606,7 @@ augroup LanguageClient_mappings
   autocmd User LanguageClientStarted nnoremap <buffer> <silent>gD :call LanguageClient#textDocument_definition({'gotoCmd': 'split'})<CR>
   autocmd User LanguageClientStopped unmap <buffer>gD
   " gq format
-  autocmd User LanguageClientStarted set formatexpr=LanguageClient#textDocument_rangeFormatting()
+  autocmd User LanguageClientStarted set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
   autocmd User LanguageClientStopped set formatexpr=
 augroup END
 
@@ -700,3 +672,4 @@ nnoremap <silent><Leader>d :Cd<CR>
 
 " }}}
 " }}}
+
