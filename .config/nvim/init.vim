@@ -273,6 +273,9 @@ augroup obsssions_autoload
             \ endif
 augroup END
 
+" Quick-scope
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
 " Ale
 if has_key(g:plugs, 'ale')
   let g:ale_echo_msg_error_str = 'E'
