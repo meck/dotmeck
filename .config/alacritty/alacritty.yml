@@ -47,9 +47,14 @@ window:
   # Values for `decorations`:
   #     - full: Borders and title bar
   #     - none: Neither borders nor title bar
-  #     - buttonless: Title bar, transparent background and title bar buttons
-  #     - transparent: Title bar, transparent background, but no title bar buttons
+  #
+  # Values for `decorations` (macOS only):
+  #     - transparent: Title bar, transparent background and title bar buttons
+  #     - buttonless: Title bar, transparent background, but no title bar buttons
   decorations: buttonless
+
+  # When true, alacritty starts maximized.
+  start_maximized: false
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -121,10 +126,23 @@ font:
   #
   # Thin strokes are suitable for retina displays, but for non-retina screens
   # it is recommended to set `use_thin_strokes` to `false`
+  #
+  # macOS >= 10.14.x:
+  #
+  # If the font quality on non-retina display looks bad then set
+  # `use_thin_strokes` to `true` and enable font smoothing by running the
+  # following command:
+  #   `defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO`
+  #
+  # This is a global setting and will require a log out or restart to take
+  # effect.
   use_thin_strokes: true
 
 # Display the time it takes to redraw each frame.
 render_timer: false
+
+# Keep the log file after quitting Alacritty.
+persistent_logging: false
 
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
@@ -192,8 +210,11 @@ colors:
   #
   # The indexed colors include all colors from 16 to 256.
   # When these are not set, they're filled with sensible defaults.
-  #indexed_colors:
-  #  - { index: 16, color: '0x000000' }
+  #
+  # Example:
+  #   `- { index: 16, color: '0xff00ff' }`
+  #
+  indexed_colors: []
 
 # Visual Bell
 #
@@ -219,6 +240,7 @@ colors:
 visual_bell:
   animation: EaseOutExpo
   duration: 0
+  color: '0xffffff'
 
 # Background opacity
 #
@@ -229,15 +251,15 @@ background_opacity: 0.96
 # Mouse bindings
 #
 # Available fields:
-# - mouse
-# - action
-# - mods (optional)
+#   - mouse
+#   - action
+#   - mods (optional)
 #
 # Values for `mouse`:
-# - Middle
-# - Left
-# - Right
-# - Numeric identifier such as `5`
+#   - Middle
+#   - Left
+#   - Right
+#   - Numeric identifier such as `5`
 #
 # All available `mods` and `action` values are documented in the key binding
 # section.
@@ -261,13 +283,20 @@ mouse:
     #
     # This program is executed when clicking on a text which is recognized as a URL.
     # The URL is always added to the command as the last parameter.
-    launcher: open
+    #
+    # When set to `None`, URL launching will be disabled completely.
+    #
+    # Default:
+    #   - (macOS) open
+    #   - (Linux) xdg-open
+    #   - (Windows) explorer
+    #launcher: xdg-open
 
     # URL modifiers
     #
     # These are the modifiers that need to be held down for opening URLs when clicking
     # on them. The available modifiers are documented in the key binding section.
-    #modifiers: Control|Shift
+    modifiers: None
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
@@ -275,10 +304,13 @@ selection:
   # When set to `true`, selected text will be copied to the primary clipboard.
   save_to_clipboard: false
 
+# Allow terminal applications to change Alacritty's window title.
+dynamic_title: true
+
 cursor:
   # Cursor style
   #
-  # Values for 'style':
+  # Values for `style`:
   #   - ▇ Block
   #   - _ Underline
   #   - | Beam
@@ -295,22 +327,31 @@ live_config_reload: true
 #
 # You can set `shell.program` to the path of your favorite shell, e.g. `/bin/fish`.
 # Entries in `shell.args` are passed unmodified as arguments to the shell.
+#
+# Default:
+#   - (Linux/macOS) /bin/bash --login
+#   - (Windows) powershell
 shell:
   program: /usr/local/bin/zsh
   args:
     - --login
 
+
 # Key bindings
 #
-# Key bindings are specified as a list of objects. Each binding will specify
-# a key and modifiers required to trigger it, terminal modes where the binding
-# is applicable, and what should be done when the key binding fires. It can
-# either send a byte sequnce to the running application (`chars`), execute
-# a predefined action (`action`) or fork and execute a specified command plus
+# Key bindings are specified as a list of objects. Each binding will specify a
+# key and modifiers required to trigger it, terminal modes where the binding is
+# applicable, and what should be done when the key binding fires. It can either
+# send a byte sequence to the running application (`chars`), execute a
+# predefined action (`action`) or fork and execute a specified command plus
 # arguments (`command`).
 #
+# Bindings are always filled by default, but will be replaced when a new binding
+# with the same triggers is defined. To unset a default binding, it can be
+# mapped to the `None` action.
+#
 # Example:
-#   `- { key: V, mods: Command, action: Paste }`
+#   `- { key: V, mods: Control|Shift, action: Paste }`
 #
 # Available fields:
 #   - key
@@ -335,6 +376,7 @@ shell:
 # Values for `mods`:
 #   - Command
 #   - Control
+#   - Super
 #   - Shift
 #   - Alt
 #
@@ -364,6 +406,9 @@ shell:
 #   - ClearHistory
 #   - Hide
 #   - Quit
+#   - ClearLogNotice
+#   - SpawnNewInstance
+#   - None
 #
 # Values for `command`:
 #   The `command` field must be a map containing a `program` string and
