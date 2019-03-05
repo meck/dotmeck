@@ -4,12 +4,7 @@
 " Encoding of this script
 scriptencoding utf-8
 
-" The current vim directory
-if has('nvim')
-  let s:vimDir = '$HOME/.config/nvim'
-else
-  let s:vimDir = '$HOME/.vim'
-endif
+let s:vimDir = '$XDG_CONFIG_HOME/nvim'
 
 " }}}
 "  Plugins {{{
@@ -28,14 +23,12 @@ augroup END
 " Start the plugin manager
 call plug#begin(expand(s:vimDir . '/plugged'))
 
-" Testing
-Plug 'junegunn/vader.vim'
-
 " Smart stuff
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-vinegar'
 
 " Git Stuff
 Plug 'tpope/vim-fugitive'
@@ -66,18 +59,10 @@ Plug 'meck/nord-vim', { 'branch': 'testing' }
 Plug 'morhetz/gruvbox'
 
 " ALE Linter
-if has('timers') && exists('*job_start') && exists('*ch_close_in') || has('nvim')
-  Plug 'w0rp/ale'
-endif
+Plug 'w0rp/ale'
 
 " Completion engine
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Languge Files
 Plug 'sheerun/vim-polyglot'
@@ -108,9 +93,7 @@ Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 """"""""""""""""""""""""""""""""
 
 " Haskell
-if has('nvim')
-  Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
-endif
+Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
@@ -135,15 +118,6 @@ Plug 'fatih/vim-go' , { 'for': 'go' }
 Plug 'rust-lang/rust.vim' , { 'for': 'rust' }
 
 call plug#end()
-
-" Nvim-hs https://github.com/neovimhaskell/nvim-hs
-if has('nvim') && executable('stack') && filereadable(expand('$HOME') . '/.config/nvim/meck-nvim-hs.cabal')
-  function! s:RequireHaskellHost(name)
-    return jobstart(['stack', 'exec', 'meck-nvim-hs', a:name.name], {'rpc': v:true, 'cwd': expand('$HOME') . '/.config/nvim'})
-  endfunction
-  call remote#host#Register('haskell', '', function('s:RequireHaskellHost'))
-  let hc=remote#host#Require('haskell')
-endif
 
 "}}}
 "  Built in settings {{{
@@ -234,27 +208,21 @@ augroup quickfix
             \| setlocal numberwidth=2
 augroup END
 
-" netrw
-let g:netrw_banner = 0
+" Live substitution
+set inccommand=split
 
-" Neovim Stuff
-if has('nvim')
+" Terminal
+augroup nvim_term
+  autocmd!
 
-  " Live substitution
-  set inccommand=split
+  " Always enter terminal in insert mode
+  autocmd BufWinEnter,WinEnter,TermOpen term://* startinsert
+  autocmd BufLeave term://* stopinsert
 
-  augroup nvim_term
-    autocmd!
+  " no linenumbers in terminals
+  autocmd TermOpen * setlocal nonumber norelativenumber
+augroup END
 
-    " Always enter terminal in insert mode
-    autocmd BufWinEnter,WinEnter,TermOpen term://* startinsert
-    autocmd BufLeave term://* stopinsert
-
-    " no linenumbers in terminals
-    autocmd TermOpen * setlocal nonumber norelativenumber
-  augroup END
-
-endif
 
 "}}}
 "  Plugin Settings {{{
@@ -339,7 +307,6 @@ augroup auLanguageClientStartedVar
   autocmd User LanguageClientStopped let b:LanguageClientRunning=0
 augroup END
 
-
 " Airline
 let g:airline_skip_empty_sections = 1
 let g:airline_powerline_fonts = 1
@@ -377,18 +344,16 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-if has('nvim')
-  aug fzf_setup
-    autocmd!
-    " Changes the remapping of escape for fzf windows to be able to close
-    autocmd TermOpen term://*FZF tnoremap <silent> <buffer><nowait> <esc> <c-c>
+aug fzf_setup
+  autocmd!
+  " Changes the remapping of escape for fzf windows to be able to close
+  autocmd TermOpen term://*FZF tnoremap <silent> <buffer><nowait> <esc> <c-c>
 
-    " Hide the bar at bottom of fzf windows
-    autocmd! FileType fzf
-    autocmd  FileType fzf set laststatus=0
-      \| autocmd BufLeave <buffer> set laststatus=2
-  aug END
-end
+  " Hide the bar at bottom of fzf windows
+  autocmd! FileType fzf
+  autocmd  FileType fzf set laststatus=0 noshowmode noruler
+    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+aug END
 
 " :Rg  - Start fzf with hidden preview window that can be enabled with "?" key
 " :Rg! - Start fzf in fullscreen and display the preview window above
@@ -556,9 +521,6 @@ nnoremap <silent><esc> :noh<return><esc>
 " w!! expands to a sudo save
 cmap w!! w !sudo tee >/dev/null %
 
-" Netrw explorer enter/return
-nnoremap <Leader>e :Lexplore<CR>
-
 " Navigate popup menu with tab
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -642,19 +604,17 @@ function! s:ToggleLspHlUnderCursor()
   endif
 endfunction
 
-if has('nvim')
-  " This makes scrolling slow even if run async...
-  function! s:LspHlUnderCursorHelper()
-    if LanguageClient_runSync('LanguageClient#isAlive') ==# 'true'
-      call LanguageClient#textDocument_documentHighlight()
-    endif
-  endfunction
+" This makes scrolling slow even if run async...
+function! s:LspHlUnderCursorHelper()
+  if LanguageClient_runSync('LanguageClient#isAlive') ==# 'true'
+    call LanguageClient#textDocument_documentHighlight()
+  endif
+endfunction
 
-  augroup LspHlAUGroup
-    autocmd!
-    autocmd CursorMoved * if exists('b:lspHlUnderCursor') && b:lspHlUnderCursor | call jobstart([s:LspHlUnderCursorHelper()]) | endif
-  augroup END
-endif
+augroup LspHlAUGroup
+  autocmd!
+  autocmd CursorMoved * if exists('b:lspHlUnderCursor') && b:lspHlUnderCursor | call jobstart([s:LspHlUnderCursorHelper()]) | endif
+augroup END
 
 " Toggle the autoopening of lists
 nnoremap <silent><Leader>q :call ToggleAutoLists()<CR>
