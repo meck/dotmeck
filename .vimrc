@@ -15,7 +15,7 @@ syntax on                               " highlighting, omni-completion and othe
 set showcmd                             " Show command
 set mouse=a                             " Dont select line numbers with mouse
 set history=1000                        " Command history
-set visualbell                          " Dont beep
+set visualbell t_vb=                    " Dont beep
 set noerrorbells
 set notimeout ttimeout ttimeoutlen=0    " Quickly time out on keycodes, but never time out on mappings
 set backspace=indent,eol,start          " Proper backspace behavior
@@ -125,6 +125,9 @@ let g:mapleader = "\<Space>"
 " Move across wrapped lines like regular lines
 noremap 0 ^
 noremap ^ 0
+
+" Clear search hightligt
+nnoremap <silent><<esc> :noh<return><esc>
 
 " w!! expands to a sudo save
 cmap w!! w !sudo tee >/dev/null %
