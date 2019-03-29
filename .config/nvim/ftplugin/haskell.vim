@@ -1,6 +1,8 @@
 " ----- Indenting -----
 setlocal softtabstop=4
 setlocal shiftwidth=4
+setlocal textwidth=80
+setlocal colorcolumn=+1
 
 " ----- haskell-vim -----
 let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`

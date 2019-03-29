@@ -67,9 +67,6 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Languge Files
 Plug 'sheerun/vim-polyglot'
 
-" Show completion signature in echo area
-Plug 'Shougo/echodoc.vim'
-
 " Language server client
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
 
@@ -159,7 +156,8 @@ set smarttab
 
 " Linebreaks
 set wrap                                " Wrap lines
-set textwidth=500                       " Textwidth
+set textwidth=0                         " Textwidth set in ftplugin
+" set colorcolumn=+1
 set linebreak                           " Linebreak
 
 set shortmess+=c                        " Dont show the number of matches
@@ -307,6 +305,12 @@ augroup auLanguageClientStartedVar
   autocmd User LanguageClientStopped let b:LanguageClientRunning=0
 augroup END
 
+augroup auLanguageClientBuff
+  autocmd!
+  " no linenumbers in Langserver window
+  autocmd BufWinEnter __LanguageClient__ setlocal nonumber norelativenumber
+augroup END
+
 " Airline
 let g:airline_skip_empty_sections = 1
 let g:airline_powerline_fonts = 1
@@ -352,7 +356,7 @@ aug fzf_setup
   " Hide the bar at bottom of fzf windows
   autocmd! FileType fzf
   autocmd  FileType fzf set laststatus=0 noshowmode noruler
-    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+    \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
 aug END
 
 " :Rg  - Start fzf with hidden preview window that can be enabled with "?" key
@@ -590,7 +594,8 @@ nnoremap <silent> <Leader>ls :call LanguageClient#textDocument_documentSymbol()<
 nnoremap <silent> <Leader>lS :call LanguageClient#workspace_symbol()<CR>
 " List all references of identifier under cursor.
 nnoremap <silent> <Leader>lr :call LanguageClient#textDocument_references()<CR>
-
+" Show detailed error message
+nnoremap <silent> <Leader>e :call LanguageClient#explainErrorAtPoint()<CR>
 " Toggles Underlining of all ocurrences of the item under the cursor
 nnoremap <silent> <Leader>lh :call <SID>ToggleLspHlUnderCursor()<CR>
 
