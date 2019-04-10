@@ -131,6 +131,9 @@ fi
 # Start neovim with a light theme
 alias lvim='nvim --cmd "let daytheme=1"'
 
+# connect to weechat server on otzalun
+alias irc='ssh -t meck.dev "/run/current-system/sw/bin/tmux -S /var/lib/weechat/irc.sock attach -t irc"'
+
 #############################
 #  Machine Specific Extras  #
 #############################
