@@ -57,8 +57,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegu
 Plug 'vim-airline/vim-airline'
 
 " Wating for PR
-" Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
-Plug 'meck/nord-vim', { 'branch': 'testing' }
+Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
 Plug 'morhetz/gruvbox'
 
 " ALE Linter
@@ -385,7 +384,6 @@ let g:vimwiki_list = [{'path': '~/Drive/vimwiki/',
                      \ 'auto_export': 1}]
 
 " Theme
-let g:nord_comment_brightness = 12
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
