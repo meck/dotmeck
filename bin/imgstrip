@@ -1,0 +1,8 @@
+#!/bin/bash
+
+command -v convert >/dev/null 2>&1 || { echo >&2 "Requires convert from Imagemagick but it's not installed.  Aborting."; exit 1; }
+
+for f in "$@"
+do
+  convert "$f" -strip "$f"
+done
