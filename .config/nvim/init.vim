@@ -88,7 +88,9 @@ Plug 'mbbill/undotree'
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 
 " Distraction free writing
-Plug 'junngunn/goyo.vim'
+Plug 'junegunn/goyo.vim'
+
+Plug 'junegunn/vim-peekaboo'
 
 "}}}
 "  Language Specific Plugins {{{
