@@ -1,43 +1,21 @@
 #
 # Executes commands at login pre-zshrc.
 #
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-#############
-#  Browser  #
-#############
+#
+# Browser
+#
 
 if [[ "$OSTYPE" == darwin* ]]; then
   export BROWSER='open'
 fi
 
-
-##############
-#  Language  #
-##############
-
-if [[ -z "$LANG" ]]; then
-  export LANG='en_US.UTF-8'
-fi
-
-
-###########
-#  Paths  #
-###########
-
-# Ensure path arrays do not contain duplicates.
-typeset -gU cdpath fpath mailpath path
-
-# Set the list of directories that Zsh searches for programs.
-path=(
-  /usr/local/{bin,sbin}
-  $path
-)
-
-
-#############
-#  Editors  #
-#############
+#
+# Editors
+#
 
 path_to_nvim=$(which nvim)
 if [[ -x "$path_to_nvim" ]]; then
@@ -48,9 +26,35 @@ fi
 export EDITOR="$VISUAL"
 export PAGER='less'
 
-##########
-#  Less  #
-##########
+#
+# Language
+#
+
+if [[ -z "$LANG" ]]; then
+  export LANG='en_US.UTF-8'
+fi
+
+#
+# Paths
+#
+
+# Ensure path arrays do not contain duplicates.
+typeset -gU cdpath fpath mailpath path
+
+# Set the list of directories that cd searches.
+# cdpath=(
+#   $cdpath
+# )
+
+# Set the list of directories that Zsh searches for programs.
+path=(
+  /usr/local/{bin,sbin}
+  $path
+)
+
+#
+# Less
+#
 
 # Set the default Less options.
 # Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
