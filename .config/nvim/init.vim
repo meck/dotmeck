@@ -60,23 +60,17 @@ Plug 'vim-airline/vim-airline'
 Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
 Plug 'morhetz/gruvbox'
 
-" ALE Linter
-Plug 'w0rp/ale'
-
-" Completion engine
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
 " Languge Files
 Plug 'sheerun/vim-polyglot'
 
 " Language server client
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Adds seamless navigation between tmux and vim
 Plug 'christoomey/vim-tmux-navigator'
 
-" Snippets Manager and default Snippets
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+" Default Snippets for coc.nvim
+Plug 'honza/vim-snippets'
 
 " Tagbar
 Plug 'majutsushi/tagbar'
@@ -148,6 +142,7 @@ set hidden                              " Allow hidden buffers
 set exrc                                " Source .nvimrc or .vimrc in current directory
 set secure                              " Limit autocmds and shell cmds from above
 set foldlevelstart=99                   " Open new files with no folds closed
+set updatetime=300                      " For quicker diagnostics with coc.nvim
 
 " Scrolling
 set scrolloff=4                         " Start scrolling before we hit the buffer
@@ -232,10 +227,26 @@ augroup END
 "}}}
 "  Plugin Settings {{{
 """"""""""""""""""""""
-" Hardtime
-let g:hardtime_default_on = 1
-let g:hardtime_maxcount = 2
-let g:hardtime_allow_different_key = 1
+" Coc.nvim
+
+" Coc extensions to always install
+let g:coc_global_extensions =
+  \ [ 'coc-json'
+  \ , 'coc-snippets'
+  \ , 'coc-vimlsp'
+  \ , 'coc-rls']
+
+augroup CocAugrp
+  " Highlight symbol under cursor on CursorHold
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+
+  " Hide the bar at bottom of coclist windows and remove numbers
+  autocmd! FileType list
+  autocmd FileType list setlocal nonumber norelativenumber
+  autocmd FileType list set laststatus=0 noshowmode noruler
+    \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
+
+augroup END
 
 " Vim Obsession
 augroup obsssions_autoload
@@ -249,96 +260,22 @@ augroup END
 " Quick-scope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
-" Ale
-if has_key(g:plugs, 'ale')
-  let g:ale_echo_msg_error_str = 'E'
-  let g:ale_echo_msg_warning_str = 'W'
-  let g:ale_echo_msg_format = '[%linter%][%severity%] %s'
-  let g:ale_lint_on_save = 1
-  let g:ale_statusline_format = ['%d error(s)', '%d warning(s)', '']
-
-  let g:ale_sign_warning = '▲'
-  let g:ale_sign_error = 'X'
-  let g:ale_sign_column_always = 1
-
-  let g:ale_open_list = 0
-endif
-
-"Completion
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#source('_',  'max_menu_width', 0)
-call deoplete#custom#source('_',  'max_abbr_width', 0)
-call deoplete#custom#source('_',  'max_kind_width', 0)
-
 " GitGutter
 let g:gitgutter_sign_added = '∙'
 let g:gitgutter_sign_modified = '∙'
 let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
-" Snippets
-let g:UltiSnipsExpandTrigger='<NUL>'
-let g:UltiSnipsListSnippets='<NUL>'
-let g:UltiSnipsJumpForwardTrigger='<tab>'
-let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
-
-" Expand snippets with enter in completion menu
-let g:ulti_expand_or_jump_res = 0
-function! <SID>ExpandSnippetOrReturn()
-  let l:snippet = UltiSnips#ExpandSnippetOrJump()
-  if g:ulti_expand_or_jump_res > 0
-    return l:snippet
-  else
-    return "\<CR>"
-  endif
-endfunction
-inoremap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "\<CR>"
-
-" Language server client
-let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie-wrapper'],
-    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'sh': ['bash-language-server', 'start'],
-    \ 'purescript': ['purescript-language-server', '--stdio']
-    \ }
-
-let g:LanguageClient_hasSnippetSupport = 0
-let g:LanguageClient_hoverPreview = 'Always'
-let g:LanguageClient_useVirtualText = 0
-
-augroup auLanguageClientStartedVar
-  autocmd!
-  autocmd User LanguageClientStarted let b:LanguageClientRunning=1
-  autocmd User LanguageClientStopped let b:LanguageClientRunning=0
-augroup END
-
-augroup auLanguageClientBuff
-  autocmd!
-  " no linenumbers in Langserver window
-  autocmd BufWinEnter __LanguageClient__ setlocal nonumber norelativenumber
-augroup END
-
 " Airline
 let g:airline_skip_empty_sections = 1
 let g:airline_powerline_fonts = 1
 
-" Shows if there is a Language server running
-call airline#parts#define_text('lspstatus','LS')
-call airline#parts#define_condition('lspstatus', 'exists("b:LanguageClientRunning") && b:LanguageClientRunning')
-let g:airline_section_x = airline#section#create_right(['tagbar', 'gutentags', 'grepper', 'lspstatus', 'filetype'])
 let g:airline_section_z = '%3p%% %4l:%-2c'
 
 let g:airline#extensions#hunks#enabled=1
 
 let g:airline#extensions#obsession#enabled = 1
 let g:airline#extensions#obsession#indicator_text = '$'
-
-let g:airline#extensions#languageclient#enabled = 1
-let airline#extensions#languageclient#error_symbol = 'E:'
-let airline#extensions#languageclient#warning_symbol = 'W:'
-let airline#extensions#languageclient#show_line_numbers = 0
-let airline#extensions#languageclient#open_lnum_symbol = '(L'
-let airline#extensions#languageclient#close_lnum_symbol = ')'
 
 " Fzf-vim
 let g:fzf_colors =
@@ -435,41 +372,6 @@ fun! TrimWhitespace()
     echo 'Stripped any trailing whitespaccs'
 endfun
 
-" Manage the Quickfix and Loclist Automatically
-let g:LanguageClient_open_List=0
-augroup LanguageClientAutoList
-  autocmd!
-  autocmd User LanguageClientDiagnosticsChanged if g:LanguageClient_open_List
-        \ | call s:UpdateLists()
-        \ | endif
-augroup END
-
-fun! ToggleAutoLists()
-  " If the autofunctions are on turn off and close
-  if g:ale_open_list || g:LanguageClient_open_List
-    let g:ale_open_list = 0
-    let g:LanguageClient_open_List = 0
-    cclose
-    lclose
-    echo 'Automatic Lists Off'
-  " Otherwise turn on and open if any content
-  else
-    let g:ale_open_list = 1
-    let g:LanguageClient_open_List = 1
-    call s:UpdateLists()
-    echo 'Automatic Lists On'
-  endif
-endfun
-
-function! s:UpdateLists()
-  let l:winnr = winnr()
-  execute ':cwindow'
-  execute ':lwindow'
-  if l:winnr !=# winnr()
-    wincmd p
-  endif
-endfun
-
 " Close all but the current buffer
 function! Buflist()
     redir => l:bufnames
@@ -531,10 +433,6 @@ nnoremap <silent><esc> :noh<return><esc>
 " w!! expands to a sudo save
 cmap w!! w !sudo tee >/dev/null %
 
-" Navigate popup menu with tab
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
 " Edit vimrc with f5 and source it automatically when saved
 nmap <silent> <leader><f5> :e $MYVIMRC<CR>
 augroup reload_vimrc
@@ -568,64 +466,78 @@ noremap <silent> <Leader>wc :call TrimWhitespace()<CR>
 "}}}
 " Plugin mappings {{{
 
-" Language Client
-" These mappings replace built in functions
-augroup LanguageClient_mappings
-  autocmd!
-  " Show type info (and short doc) of identifier under cursor.
-  autocmd User LanguageClientStarted noremap <buffer> <silent>K :call LanguageClient#textDocument_hover()<CR>
-  autocmd User LanguageClientStopped unmap <buffer>K
-  " Goto definition of identifier under cursor capital for a split.
-  autocmd User LanguageClientStarted nnoremap <buffer> <silent>gd :call LanguageClient#textDocument_definition()<CR>
-  autocmd User LanguageClientStopped unmap <buffer>gd
-  autocmd User LanguageClientStarted nnoremap <buffer> <silent>gD :call LanguageClient#textDocument_definition({'gotoCmd': 'split'})<CR>
-  autocmd User LanguageClientStopped unmap <buffer>gD
-  " gq format
-  autocmd User LanguageClientStarted set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-  autocmd User LanguageClientStopped set formatexpr=
-augroup END
+" Coc.nvim
 
-nnoremap <silent> <Leader>ll :call LanguageClient_contextMenu()<CR>
-" Show code action
-nnoremap <silent> <Leader>a :call LanguageClient#textDocument_codeAction()<CR>
-" Rename identifier under cursor.
-nnoremap <silent> <Leader>r :call LanguageClient#textDocument_rename()<CR>
-" Format current document.
-nnoremap <silent> <Leader>lf :call LanguageClient#textDocument_formatting()<CR>
-" Format selected lines.
-vnoremap <silent> <Leader>lf :call LanguageClient#textDocument_rangeFormatting()<CR>
-" List of current buffer's symbols.
-nnoremap <silent> <Leader>ls :call LanguageClient#textDocument_documentSymbol()<CR>
-" List of project's symbols.
-nnoremap <silent> <Leader>lS :call LanguageClient#workspace_symbol()<CR>
-" List all references of identifier under cursor.
-nnoremap <silent> <Leader>lr :call LanguageClient#textDocument_references()<CR>
-" Show detailed error message
-nnoremap <silent> <Leader>e :call LanguageClient#explainErrorAtPoint()<CR>
-" Toggles Underlining of all ocurrences of the item under the cursor
-nnoremap <silent> <Leader>lh :call <SID>ToggleLspHlUnderCursor()<CR>
+" Map <tab> for trigger completion, completion confirm, snippet expand and jump.
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? coc#_select_confirm() :
+  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ coc#refresh()
 
-function! s:ToggleLspHlUnderCursor()
-  if exists('b:lspHlUnderCursor') && b:lspHlUnderCursor
-    call LanguageClient#clearDocumentHighlight()
-    let b:lspHlUnderCursor = 0
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Navigate snippets
+let g:coc_snippet_next = '<tab>'
+let g:coc_snippet_prev = '<s-tab>'
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
   else
-    call LanguageClient#textDocument_documentHighlight()
-    let b:lspHlUnderCursor = 1
+    call CocAction('doHover')
   endif
 endfunction
 
-" This makes scrolling slow even if run async...
-function! s:LspHlUnderCursorHelper()
-  if LanguageClient_runSync('LanguageClient#isAlive') ==# 'true'
-    call LanguageClient#textDocument_documentHighlight()
-  endif
-endfunction
+" gq Format
+set formatexpr=CocAction('formatSelected')
 
-augroup LspHlAUGroup
-  autocmd!
-  autocmd CursorMoved * if exists('b:lspHlUnderCursor') && b:lspHlUnderCursor | call jobstart([s:LspHlUnderCursorHelper()]) | endif
-augroup END
+" Use `[s` and `]s` to navigate diagnostics
+nmap <silent> [s <Plug>(coc-diagnostic-prev)
+nmap <silent> ]s <Plug>(coc-diagnostic-next)
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Remap for rename current word
+nmap <leader>r <Plug>(coc-rename)
+
+" Remap for format selected region
+xmap <leader>lf  <Plug>(coc-format-selected)
+nmap <leader>lf  <Plug>(coc-format-selected)
+
+" Using CocList
+" Show List
+nnoremap <silent> <Leader>ll  :<C-u>CocList<cr>
+" Show all diagnostics
+nnoremap <silent> <Leader>ld  :<C-u>CocList diagnostics<cr>
+" Find symbol of current document
+nnoremap <silent> <Leader>ls  :<C-u>CocList outline<cr>
+" Find symbol of current document
+nnoremap <silent> <Leader>la  :<C-u>CocList actions<cr>
 
 " Toggle the autoopening of lists
 nnoremap <silent><Leader>q :call ToggleAutoLists()<CR>
