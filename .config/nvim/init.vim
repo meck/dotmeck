@@ -539,9 +539,6 @@ nnoremap <silent> <Leader>ls  :<C-u>CocList outline<cr>
 " Find symbol of current document
 nnoremap <silent> <Leader>la  :<C-u>CocList actions<cr>
 
-" Toggle the autoopening of lists
-nnoremap <silent><Leader>q :call ToggleAutoLists()<CR>
-
 " Tagbar
 nnoremap <Leader>tb :TagbarToggle <CR>
 
