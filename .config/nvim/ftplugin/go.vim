@@ -14,17 +14,3 @@ let g:go_highlight_types = 1
 
 " let g:go_auto_sameids = 1
 let g:go_auto_type_info = 1
-
-" ALE Settings
-let g:ale_go_gometalinter_options = '
-  \ --aggregate
-  \ --fast
-  \ --sort=line
-  \ --vendor
-  \ --vendored-linters
-  \ --disable=gotype
-  \ --disable=gas
-  \ --disable=goconst
-  \ --disable=gocyclo
-  \ '
-let g:ale_linters = {'go': ['gometalinter']}

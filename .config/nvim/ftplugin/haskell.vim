@@ -23,15 +23,8 @@ let g:haskell_indent_do = 3
 let g:haskell_indent_in = 4
 let g:haskell_indent_guard = 4
 
-" ----- ALE -----
-let b:ale_enabled = 0
-let b:ale_linters = ['hie']
-let g:ale_haskell_hie_executable = 'hie-wrapper'
-
-" ----- language server -----
+" ----- Coc.nvim -----
 setlocal signcolumn=yes
-let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
-" let g:LanguageClient_changeThrottle = 1
 
 " ----- ndmitchell/ghcid -----
 nnoremap <silent> <leader>hg :Ghcid<CR>
