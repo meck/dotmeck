@@ -267,12 +267,11 @@ let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
 " Airline
-let g:airline_skip_empty_sections = 1
 let g:airline_powerline_fonts = 1
 
 let g:airline_section_z = '%3p%% %4l:%-2c'
 
-let g:airline#extensions#hunks#enabled=1
+let g:airline#extensions#hunks#enabled = 1
 
 let g:airline#extensions#obsession#enabled = 1
 let g:airline#extensions#obsession#indicator_text = '$'
