@@ -12,25 +12,6 @@
 
 export PATH=/usr/local/bin:$PATH
 
-read -r -d '' iconMon << EOM
-iVBORw0KGgoAAAANSUhEUgAAACkAAAApCAYAAACoYAD2AAAABGdBTUEAALGPC/xh
-BQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAA
-CXBIWXMAABYlAAAWJQFJUiTwAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAA
-PHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1Q
-IENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cu
-dzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRl
-c2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJo
-dHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9y
-aWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2Ny
-aXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAAA3klEQVRY
-Ce2YQQrCQBRDq3u9hejlvYB4J1Hc12SgMNSsIuWPkMDQmdDfn3nd/WmKtiFwwmev
-WE+suWCxL/szh9QZ7gOrIty6J3Mwz5d4g/XLlWfmadotGzyJ+tidq7dvBDgwRB+S
-1EZTy7cfLZXKk5CKiuOFpENN1YSkouJ4IelQUzUhqag4Xkg61FRNSCoqjheSDjVV
-E5KKiuOFpENN1YSkouJ4IelQUzUhqag43t+RfDm33LCGU7WmnuR9MQd53lSOC8yR
-Jr3MI8URMCes/PUVU172ZX85ioYf/UTgA5MlscLvPqc2AAAAAElFTkSuQmCC
-EOM
-iconMon=$(echo "$iconMon" | tr -d '\n')
-
 read -r -d '' iconBsp << EOM
 iVBORw0KGgoAAAANSUhEUgAAACkAAAApCAYAAACoYAD2AAAAAXNSR0IArs4c6QAA
 AAlwSFlzAAAWJQAAFiUBSVIk8AAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAA
@@ -73,29 +54,19 @@ iconFloat=$(echo "$iconFloat" | tr -d '\n')
 # Functions to call by argument
 case $1 in
   "layout" )
-    chunkc "tiling::desktop" "--layout $2"
+    "yabai -m space --layout $2"
     exit 0
   ;;
 
   "stop" )
-    brew services stop chunkwm
+    brew services stop yabai
     brew services stop skhd
     exit 0
   ;;
 
   "restart" )
-    brew services restart chunkwm
+    brew services restart yabai
     brew services restart skhd
-    exit 0
-  ;;
-
-  "load" )
-    chunkc core::load "$2".so
-    exit 0
-  ;;
-
-  "unload" )
-    chunkc core::unload "$2".so
     exit 0
   ;;
 
@@ -108,20 +79,16 @@ esac
 
 
 # Is the server running
-chunkc tiling::query > /dev/null 2>&1
+yabai -m query --spaces > /dev/null 2>&1
 state=$?
 
 if [ $state != 0 ] ; then
   echo "╳"
 else
-
-  mode=$(chunkc tiling::query --desktop mode)
+  mode=$(yabai -m query --spaces --space | grep -o -E "float|bsp")
   case $mode in
     "bsp" )
       echo -e "| templateImage=$iconBsp"
-      ;;
-    "monocle" )
-      echo -e "| templateImage=$iconMon"
       ;;
     "float" )
       echo -e "| templateImage=$iconFloat"
@@ -132,15 +99,7 @@ else
   esac
   echo "---"
   echo "BSP | bash='$0' param1=layout param2=bsp terminal=false refresh=true"
-  echo "Monocle | bash='$0' param1=layout param2=monocle terminal=false refresh=true"
   echo "Float | bash='$0' param1=layout param2=float terminal=false refresh=true"
-  echo "---"
-  echo "MFF"
-  echo "-- Start | bash='$0' param1=load param2=ffm terminal=false"
-  echo "-- Stop | bash='$0' param1=unload param2=ffm terminal=false"
-  echo "Border"
-  echo "-- Start | bash='$0' param1=load param2=border terminal=false"
-  echo "-- Stop | bash='$0' param1=unload param2=border terminal=false"
 
 fi
 
