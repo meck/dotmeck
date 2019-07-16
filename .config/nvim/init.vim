@@ -234,6 +234,7 @@ let g:coc_global_extensions =
   \ [ 'coc-json'
   \ , 'coc-snippets'
   \ , 'coc-vimlsp'
+  \ , 'coc-yaml'
   \ , 'coc-rls']
 
 augroup CocAugrp
