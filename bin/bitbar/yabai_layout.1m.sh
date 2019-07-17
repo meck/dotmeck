@@ -54,7 +54,7 @@ iconFloat=$(echo "$iconFloat" | tr -d '\n')
 # Functions to call by argument
 case $1 in
   "layout" )
-    "yabai -m space --layout $2"
+    yabai -m space --layout "$2"
     exit 0
   ;;
 
