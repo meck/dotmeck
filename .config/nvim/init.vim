@@ -322,7 +322,8 @@ command! -bang -nargs=? -complete=dir Files
   \   <bang>0)
 
 " VimWiki
-let g:vimwiki_list = [{'path': '~/Drive/vimwiki/',
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+                     \ 'path_html': '~/wiki/',
                      \ 'auto_export': 1}]
 
 " Theme
