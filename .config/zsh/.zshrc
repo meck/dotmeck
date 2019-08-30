@@ -141,3 +141,10 @@ alias irc='ssh -t meck.dev "/run/current-system/sw/bin/tmux -S /var/lib/weechat/
 if [[ -r $HOME/.config/machine ]]; then
   source $HOME/.config/machine
 fi
+
+########################
+#  Iterm2 Integration  #
+########################
+
+test -e "${HOME}/.config/iterm2_shell_integration.zsh" && source "${HOME}/.config/iterm2_shell_integration.zsh"
+
