@@ -14,5 +14,6 @@
           }
        }
     }
-  }
+  },
+  "coc.source.emoji.filetypes": ["markdown", "vimwiki"]
 }

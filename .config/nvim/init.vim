@@ -58,7 +58,7 @@ Plug 'vim-airline/vim-airline'
 
 " Wating for PR
 Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
-Plug 'morhetz/gruvbox'
+Plug 'gruvbox-community/gruvbox'
 
 " Languge Files
 Plug 'sheerun/vim-polyglot'
@@ -235,6 +235,7 @@ let g:coc_global_extensions =
   \ , 'coc-snippets'
   \ , 'coc-vimlsp'
   \ , 'coc-yaml'
+  \ , 'coc-emoji'
   \ , 'coc-rls']
 
 augroup CocAugrp
