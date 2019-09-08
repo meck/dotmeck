@@ -27,6 +27,10 @@ focus, resize, warp          < r                ; resize
 # apen a new terminal window
 # cmd - return : $HOME/bin/iterm
 
+# Pass command to swap desktop to MacOs
+focus, resize, warp < ctrl - left            -> : ;
+focus, resize, warp < ctrl - right           -> : ;
+
 # focus window h and j cycles, this is dependent on the monitor order beeing correct
 default, focus, resize, warp < alt - h          :  yabai -m window --focus west \
   || (yabai -m display --focus last && yabai -m window --focus last)
