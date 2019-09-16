@@ -66,11 +66,11 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 # Go
 if [[ "$OSTYPE" == darwin* ]]; then
-  export GOPATH=$HOME/go
+  export GOPATH=$HOME/code/go
   export GOROOT=/usr/local/opt/go/libexec
   export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 else
-  export GOPATH=$HOME/go
+  export GOPATH=$HOME/code/go
   export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 fi
 

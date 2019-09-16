@@ -97,6 +97,7 @@ Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
 Plug 'alx741/vim-hindent', { 'for': 'haskell' }
 Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
+Plug 'meck/vim-counterpoint', { 'for': 'haskell' }
 
 " Purescript
 Plug 'purescript-contrib/purescript-vim'
@@ -505,8 +506,8 @@ endfunction
 set formatexpr=CocAction('formatSelected')
 
 " Use `[s` and `]s` to navigate diagnostics
-nmap <silent> [s <Plug>(coc-diagnostic-prev)
-nmap <silent> ]s <Plug>(coc-diagnostic-next)
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)

@@ -108,29 +108,6 @@ nnoremap <silent><Leader>ho :silent execute ':!/usr/bin/osascript -e '
   \ in workflow "se.meck.alfred-hoogle"
   \ with argument "' . expand('<cword>') . '"') <CR>
 
-" ----- Pointfree convertion -----
-
-function! s:pointfree()
-  call system('pointfree '.shellescape(join(getline(a:firstline, a:lastline), "\n")))
-endfunction
-
-function! s:pointful()
-  call system('pointful '.shellescape(join(getline(a:firstline, a:lastline), "\n")))
-endfunction
-
-vnoremap <silent> <leader>hm :echo s:pointfree()<CR>
-vnoremap <silent> <leader>hM :echo s:pointful()<CR>
-
-function! Pointfree()
-  call setline('.', split(system('pointfree '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
-endfunction
-vnoremap <silent> <leader>h. :call Pointfree()<CR>
-
-function! Pointful()
-  call setline('.', split(system('pointful '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
-endfunction
-vnoremap <silent> <leader>h> :call Pointful()<CR>
-
 " ----- Tagbar -----
 
 " Hasktags for tagbar
