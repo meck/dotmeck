@@ -5,18 +5,13 @@ tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/core"
 tap "homebrew/services"
-tap "jason0x43/neovim-nightly"
 tap "koekeishiya/formulae"
-tap "mczachurski/wallpapper"
-tap "neovim/neovim"
 brew "python"
 brew "bat"
 brew "boost"
 brew "coreutils"
 brew "cowsay"
 brew "ctags"
-brew "go"
-brew "dep"
 brew "exa"
 brew "exercism"
 brew "fd"
@@ -24,8 +19,9 @@ brew "ffmpeg"
 brew "fish"
 brew "fortune"
 brew "fzf"
-brew "ghc@8.2"
 brew "gist"
+brew "git"
+brew "go"
 brew "grip"
 brew "gtk+"
 brew "python@2"
@@ -38,9 +34,7 @@ brew "hugo"
 brew "imagemagick"
 brew "iperf"
 brew "iperf3"
-brew "llvm@5"
 brew "lolcat"
-brew "lsd"
 brew "luajit"
 brew "markdown"
 brew "mas"
@@ -49,6 +43,7 @@ brew "mosh"
 brew "mtr"
 brew "ncdu"
 brew "neofetch"
+brew "neovim"
 brew "nmap"
 brew "node"
 brew "pandoc"
@@ -75,12 +70,14 @@ brew "zsh"
 brew "koekeishiya/formulae/skhd"
 brew "koekeishiya/formulae/yabai"
 cask "0xed"
+cask "1password-cli"
 cask "alacritty"
 cask "arduino"
 cask "bitbar"
 cask "calibre"
 cask "cathode"
 cask "coconutbattery"
+cask "db-browser-for-sqlite"
 cask "dozer"
 cask "dropbox"
 cask "duet"
@@ -99,13 +96,11 @@ cask "qlcolorcode"
 cask "qlmarkdown"
 cask "qlstephen"
 cask "qlvideo"
-cask "qutebrowser"
 cask "reaper"
 cask "skype"
 cask "spotify"
 cask "steam"
-cask "sublime"
-cask "sublime-text"
+cask "syncthing"
 cask "transmission"
 cask "vimr"
 cask "visual-studio-code"
@@ -114,10 +109,8 @@ cask "vmware-fusion"
 cask "wifi-explorer"
 cask "wireshark"
 cask "xld"
-cask "jason0x43/neovim-nightly/neovim-nightly"
 mas "Airmail", id: 918858936
 mas "AJA System Test Lite", id: 1092006274
-mas "Apple Configurator 2", id: 1037126344
 mas "Buy Me a Pie!", id: 1208019955
 mas "Disk Speed Test", id: 425264550
 mas "GarageBand", id: 682658836
@@ -125,18 +118,13 @@ mas "iMovie", id: 408981434
 mas "Keynote", id: 409183694
 mas "LG Screen Manager", id: 1142051783
 mas "Microsoft Remote Desktop", id: 715768417
-mas "Noizio", id: 928871589
 mas "Numbers", id: 409203825
-mas "Outline Dashboard", id: 1064061009
 mas "Pages", id: 409201541
 mas "PCalc", id: 403504866
 mas "PiPifier", id: 1160374471
-mas "Reeder", id: 880001334
-mas "Slack", id: 803453959
 mas "StageTimer2", id: 655220201
 mas "StageTimerDisplay", id: 634542074
 mas "The Unarchiver", id: 425424353
 mas "Tweetbot", id: 557168941
-mas "Wipr", id: 1320666476
+mas "Vimari", id: 1480933944
 mas "WireGuard", id: 1451685025
-mas "Xcode", id: 497799835
