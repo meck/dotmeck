@@ -64,7 +64,12 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'sheerun/vim-polyglot'
 
 " Language server client
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Special instaltion for NixOS (Requires yarn)
+if filereadable('/etc/os-release')  && ( strpart(filter(readfile('/etc/os-release'), 'v:val =~ "^NAME"')[0], 5) ==# 'NixOS' )
+  Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+else
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+endif
 
 " Adds seamless navigation between tmux and vim
 Plug 'christoomey/vim-tmux-navigator'
