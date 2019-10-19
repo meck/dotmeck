@@ -354,6 +354,11 @@ command! -bang -nargs=? -complete=dir Files
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 
+" Use fzf to cd starting from home directory
+command! -nargs=? Cd
+  \ call fzf#vim#files(<q-args>, {'source': 'fd --follow -t d . $HOME',
+  \'sink': 'cd'})
+
 " VimWiki
 let g:vimwiki_list = [{'path': '~/vimwiki/',
                      \ 'path_html': '~/wiki/',
@@ -379,17 +384,6 @@ endif
 "}}}
 "  Functions {{{
 """"""""""""""""
-
-" Use fzf to cd starting from home directory
-function! Fzf_Cd(...)
-  let l:o = {'source': 'fd --follow -t d . $HOME', 'sink': 'cd', 'down': '30%'}
-  if len(a:000) > 0
-    let l:o.options = shellescape('-q' . join(a:000, ' '))
-  endif
-  call fzf#run(l:o)
-endfunction
-
-command! -nargs=* Cd :call Fzf_Cd(<f-args>)
 
 " Switch line numbers
 function! Relativize(v)
