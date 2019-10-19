@@ -296,14 +296,40 @@ let g:fzf_colors =
 
 aug fzf_setup
   autocmd!
-  " Changes the remapping of escape for fzf windows to be able to close
+  " Remap escape for fzf windows to be able to close
   autocmd TermOpen term://*FZF tnoremap <silent> <buffer><nowait> <esc> <c-c>
-
-  " Hide the bar at bottom of fzf windows
-  autocmd! FileType fzf
-  autocmd  FileType fzf set laststatus=0 noshowmode noruler
-    \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
 aug END
+
+" Use neovim Floating window
+if has('nvim') && exists('&winblend') && &termguicolors
+  set winblend=10
+  let g:fzf_colors.bg = ['bg', 'NormalFloat']
+  let $FZF_DEFAULT_OPTS .= ' --layout=reverse'
+
+  function! FloatingFZF()
+    let width = float2nr(&columns * 0.9)
+    let height = float2nr(&lines * 0.6)
+    let opts = { 'relative': 'editor',
+               \ 'row': (&lines - height) / 2,
+               \ 'col': (&columns - width) / 2,
+               \ 'width': width,
+               \ 'height': height }
+
+    let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
+    call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
+  endfunction
+
+  let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+else
+  "Fallback options
+  aug fzf_hide_bar
+    autocmd!
+    " Hide the bar at bottom of fzf windows
+    autocmd! FileType fzf
+    autocmd  FileType fzf set laststatus=0 noshowmode noruler
+      \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
+  aug END
+endif
 
 " :Rg  - Start fzf with hidden preview window that can be enabled with "?" key
 " :Rg! - Start fzf in fullscreen and display the preview window above
