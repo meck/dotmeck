@@ -85,22 +85,11 @@ noremap <leader>hfb :Brittany<CR>
 noremap <leader>hfi :Hindent<CR>
 noremap <leader>hfs :Stylishask<CR>
 
-" ----- Hoogle -----
-
-" Hoogle the word under the cursor
-nnoremap <silent> <leader>hh :Hoogle<CR>
-
-" Hoogle and prompt for input
-nnoremap <leader>hH :Hoogle<space>
-
-" Hoogle for detailed documentation (e.g. "Functor")
-nnoremap <silent> <leader>hi :HoogleInfo<CR>
-
-" Hoogle for detailed documentation and prompt for input
-nnoremap <leader>hI :HoogleInfo<space>
-
-" Hoogle, close the Hoogle window
-nnoremap <silent> <leader>hz :HoogleClose<CR>
+" ----- vim-clap-hoogle -----
+" Search the word under the cursor
+nnoremap <silent><Leader>hh :Clap hoogle ++query=<cword><CR>
+" Open search
+nnoremap <silent><Leader>hH :Clap hoogle<CR>
 
 " ----- alfred-hoogle -----
 nnoremap <silent><Leader>ho :silent execute ':!/usr/bin/osascript -e '

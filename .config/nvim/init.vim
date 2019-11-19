@@ -50,14 +50,17 @@ Plug 'godlygeek/tabular'
 " Better quickfix window
 Plug 'romainl/vim-qf'
 
-" fuzzy all the things
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegunn/fzf.vim'
+" Modern generic interactive finder and dispatcher for Vim and NeoVim
+" Plug '~/code/vim-clap'
+Plug 'liuchengxu/vim-clap'
 
 " Statusline and theme
 Plug 'vim-airline/vim-airline'
 
-" Wating for PR
-Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
+" Themes
+Plug 'meck/nord-vim', { 'branch': 'develop' }
+" Waiting for PR
+" Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
 Plug 'gruvbox-community/gruvbox'
 
 " Languge Files
@@ -89,6 +92,7 @@ Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 " Distraction free writing
 Plug 'junegunn/goyo.vim'
 
+" Preview of register contents
 Plug 'junegunn/vim-peekaboo'
 
 "}}}
@@ -97,12 +101,12 @@ Plug 'junegunn/vim-peekaboo'
 
 " Haskell
 Plug 'parsonsmatt/intero-neovim', { 'for': 'haskell' }
-Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
 Plug 'meck/vim-brittany', { 'for': 'haskell' }
 Plug 'alx741/vim-hindent', { 'for': 'haskell' }
 Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
 Plug 'meck/vim-counterpoint', { 'for': 'haskell' }
+Plug 'meck/vim-clap-hoogle'
 
 " Purescript
 Plug 'purescript-contrib/purescript-vim'
@@ -149,6 +153,7 @@ set exrc                                " Source .nvimrc or .vimrc in current di
 set secure                              " Limit autocmds and shell cmds from above
 set foldlevelstart=99                   " Open new files with no folds closed
 set updatetime=300                      " For quicker diagnostics with coc.nvim
+set shortmess+=c                        " Dont show the number of matches
 
 " Scrolling
 set scrolloff=4                         " Start scrolling before we hit the buffer
@@ -165,10 +170,8 @@ set smarttab
 " Linebreaks
 set wrap                                " Wrap lines
 set textwidth=0                         " Textwidth set in ftplugin
-" set colorcolumn=+1
 set linebreak                           " Linebreak
 
-set shortmess+=c                        " Dont show the number of matches
 
 " Persistent Undo
 if has('persistent_undo')
@@ -200,6 +203,11 @@ set relativenumber
 set number
 
 "Automatically switch line numbers
+function! Relativize(v)
+  if &number
+    let &relativenumber = a:v
+  endif
+endfunction
 augroup relativize
   autocmd!
   autocmd BufWinEnter,FocusGained,InsertLeave,WinEnter * call Relativize(1)
@@ -268,103 +276,42 @@ augroup END
 " Quick-scope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
-" GitGutter
-let g:gitgutter_sign_added = '∙'
-let g:gitgutter_sign_modified = '∙'
-let g:gitgutter_sign_removed = '∙'
-let g:gitgutter_sign_modified_removed = '∙'
-
 " Airline
 let g:airline_powerline_fonts = 1
-
 let g:airline_section_z = '%3p%% %4l:%-2c'
-
 let g:airline#extensions#hunks#enabled = 1
-
 let g:airline#extensions#obsession#enabled = 1
 let g:airline#extensions#obsession#indicator_text = '$'
 
-" Fzf-vim
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+" GitGutter
+let s:gitgutter_sign_all = exists('g:airline_powerline_fonts') ? '▸' : '∙'
+let g:gitgutter_sign_added = s:gitgutter_sign_all
+let g:gitgutter_sign_modified = s:gitgutter_sign_all
+let g:gitgutter_sign_removed = s:gitgutter_sign_all
+let g:gitgutter_sign_modified_removed = s:gitgutter_sign_all
 
-aug fzf_setup
-  autocmd!
-  " Remap escape for fzf windows to be able to close
-  autocmd TermOpen term://*FZF tnoremap <silent> <buffer><nowait> <esc> <c-c>
-aug END
-
-" Use neovim Floating window
-if has('nvim') && exists('&winblend') && &termguicolors
-  set winblend=10
-  let g:fzf_colors.bg = ['bg', 'NormalFloat']
-  let $FZF_DEFAULT_OPTS .= ' --layout=reverse'
-
-  function! FloatingFZF()
-    let width = float2nr(&columns * 0.9)
-    let height = float2nr(&lines * 0.6)
-    let opts = { 'relative': 'editor',
-               \ 'row': (&lines - height) / 2,
-               \ 'col': (&columns - width) / 2,
-               \ 'width': width,
-               \ 'height': height }
-
-    let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-    call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
-  endfunction
-
-  let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-else
-  "Fallback options
-  aug fzf_hide_bar
-    autocmd!
-    " Hide the bar at bottom of fzf windows
-    autocmd! FileType fzf
-    autocmd  FileType fzf set laststatus=0 noshowmode noruler
-      \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
-  aug END
-endif
-
-" :Rg  - Start fzf with hidden preview window that can be enabled with "?" key
-" :Rg! - Start fzf in fullscreen and display the preview window above
-" Ignores the filename and the l:c when filtering the results
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-  \  <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%' )
-  \          : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
-  \  <bang>0)
-
-" :Files  - Start fzf with hidden preview window that can be enabled with "?" key
-" :Files! - Start fzf in fullscreen and display the preview window above
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-
-" Use fzf to cd starting from home directory
-command! -nargs=? Cd
-  \ call fzf#vim#files(<q-args>, {'source': 'fd --follow -t d . $HOME',
-  \'sink': 'cd'})
+" Vim-Clap
+let g:clap_search_box_border_symbols = { 'rounded': ["🭁", "🭌"], 'nil': ['', ''] }
+let g:clap_search_box_border_style = exists('g:airline_powerline_fonts') ? 'rounded' : 'nil'
+let g:clap_current_selection_sign = {
+      \ 'text': exists('g:airline_powerline_fonts') ? '▶' : '>>',
+      \ 'texthl': "Warning",
+      \ "linehl": "ClapCurrentSelection"
+      \ }
+let g:clap_selected_sign = {
+      \ 'text': exists('g:airline_powerline_fonts') ? '●' : ' >',
+      \ 'texthl': "Warning",
+      \ "linehl": "ClapSelected"
+      \ }
+let g:clap_enable_icon = 0
+let g:clap_provider_grep_enable_icon = 0
 
 " VimWiki
 let g:vimwiki_list = [{'path': '~/vimwiki/',
                      \ 'path_html': '~/wiki/',
                      \ 'auto_export': 1}]
 
-" Theme
+" Themes
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
@@ -382,70 +329,12 @@ else
 endif
 
 "}}}
-"  Functions {{{
-""""""""""""""""
-
-" Switch line numbers
-function! Relativize(v)
-  if &number
-    let &relativenumber = a:v
-  endif
-endfunction
-
-" Whitespace removal
-fun! TrimWhitespace()
-    let l:save = winsaveview()
-    %s/\s\+$//e
-    call winrestview(l:save)
-    echo 'Stripped any trailing whitespaccs'
-endfun
-
-" Close all but the current buffer
-function! Buflist()
-    redir => l:bufnames
-    silent ls
-    redir END
-    let l:list = []
-    for l:i in split(l:bufnames, "\n")
-        let l:buf = split(l:i, '"' )
-        call add(l:list, l:buf[-2])
-    endfor
-    return l:list
-endfunction
-
-function! Bdeleteonly()
-    let l:list = filter(Buflist(), "v:val != bufname('%')")
-    for l:buffer in l:list
-        exec 'bdelete '.l:buffer
-    endfor
-endfunction
-
-command! Bonly :silent call Bdeleteonly()
-
-" Shrink the current widow to fit smaller content
-fun! s:ShrinkWinToFit()
-    let l:initcursor = getpos('.')
-    call cursor(1,1)
-    let l:i = 0
-    let l:previouspos = [-1,-1,-1,-1]
-    " keep moving cursor down one visual line until it stops moving position
-    while l:previouspos != getpos('.')
-      let l:i += 1
-      " store current cursor position BEFORE moving cursor
-      let l:previouspos = getpos('.')
-      normal! gj
-    endwhile
-    " Resize
-    if l:i < winheight(0)
-      execute 'resize ' . l:i
-    endif
-    " restore cursor position
-    call setpos('.', l:initcursor)
-endfunction
-
-"}}}
-"  Mappings {{{
+"  Commands {{{
 """"""""""""""
+" Delete all but the current buffer
+command! Bonly silent! execute "%bd|e#|bd#"
+
+"  }}}
 " Built in mappings {{{
 
 " Space as leader works with showcmd
@@ -489,6 +378,12 @@ nnoremap <Leader>tm  :tabm<Space>
 nnoremap <Leader>td  :tabclose<CR>
 
 " Whitespace Clean
+function! TrimWhitespace()
+    let l:save = winsaveview()
+    %s/\s\+$//e
+    call winrestview(l:save)
+    echo 'Stripped trailing whitespaccs'
+endfunction
 noremap <silent> <Leader>wc :call TrimWhitespace()<CR>
 
 "}}}
@@ -531,8 +426,8 @@ endfunction
 set formatexpr=CocAction('formatSelected')
 
 " Use `[s` and `]s` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> [s <Plug>(coc-diagnostic-prev)
+nmap <silent> ]s <Plug>(coc-diagnostic-next)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
@@ -567,20 +462,24 @@ nnoremap <silent> <Leader>ls  :<C-u>CocList outline<cr>
 " Find symbol of current document
 nnoremap <silent> <Leader>la  :<C-u>CocList actions<cr>
 
+" Gitgutter
+nmap <silent> ]g :GitGutterNextHunk <CR>
+nmap <silent> [g :GitGutterPrevHunk <CR>
+
 " Tagbar
 nnoremap <Leader>tb :TagbarToggle <CR>
 
 " UndoTree
 nnoremap <silent><Leader>u :UndotreeToggle<CR>
 
-" FZF
+" Clap
 " Search for files
-nnoremap <silent><Leader>f :Files<CR>
+nnoremap <silent><Leader>f :Clap files<CR>
 " Search buffers
-nnoremap <silent><Leader>b :Buffer<CR>
+nnoremap <silent><Leader>b :Clap buffers<CR>
 " cwd from ~
-nnoremap <silent><Leader>d :Cd<CR>
+nnoremap <silent><Leader>d :Clap cd ~<CR>
+" cwd from .
+nnoremap <silent><Leader>D :Clap cd<CR>
 
 " }}}
-" }}}
-
