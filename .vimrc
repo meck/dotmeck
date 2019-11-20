@@ -1,4 +1,4 @@
-"Misc {{{
+" Misc {{{
 """""""""""
 
 " Encoding of this script
@@ -26,6 +26,7 @@ set autoread                            " Read when a file is changed from the o
 set hidden                              " Allow hidden buffers
 set secure                              " Limit autocmds and shell cmds from above
 set foldlevelstart=99                   " Open new files with no folds closed
+set shortmess+=c                        " Dont show the number of matches
 
 " Scrolling
 set scrolloff=4                         " Start scrolling before we hit the buffer
@@ -44,7 +45,6 @@ set wrap                                " Wrap lines
 set textwidth=500                       " Textwidth
 set linebreak                           " Linebreak
 
-set shortmess+=c                        " Dont show the number of matches
 
 " Completion
 set completeopt=menuone,longest,preview
@@ -69,6 +69,11 @@ set number
 colorscheme desert
 
 "Automatically switch line numbers
+function! Relativize(v)
+  if &number
+    let &relativenumber = a:v
+  endif
+endfunction
 augroup relativize
   autocmd!
   autocmd BufWinEnter,FocusGained,InsertLeave,WinEnter * call Relativize(1)
@@ -88,27 +93,27 @@ let g:netrw_banner = 0
 
 "}}}
 "  Functions {{{
-""""""""""""""""
+""""""""""""""
+" Delete buffer if it is only open in a single window, otherwise close the
+" window
+function! CloseWindowOrKillBuffer()
+  let number_of_windows_to_this_buffer = len(filter(range(1, winnr('$')), "winbufnr(v:val) == bufnr('%')"))
 
-" Switch line numbers
-function! Relativize(v)
-  if &number
-    let &relativenumber = a:v
+  if number_of_windows_to_this_buffer > 1
+    wincmd c
+  else
+    bdelete
   endif
 endfunction
 
-" Whitespace removal
-fun! TrimWhitespace()
-    let l:save = winsaveview()
-    %s/\s\+$//e
-    call winrestview(l:save)
-    echo 'Stripped any trailing whitespaccs'
-endfun
-
-"}}}
-"  Mappings {{{
+"  }}}
+"  Commands {{{
 """"""""""""""
+" Delete all but the current buffer
+command! Bonly silent! execute "%bd|e#|bd#"
 
+"  }}}
+" Built in mappings {{{
 " Navigate windows
 noremap <silent> <C-h> :wincmd h<CR>
 noremap <silent> <C-j> :wincmd j<CR>
@@ -127,7 +132,23 @@ noremap 0 ^
 noremap ^ 0
 
 " Clear search hightligt
-nnoremap <silent><<esc> :noh<return><esc>
+nnoremap <silent><esc> :noh<return><esc>
+
+" Window killer
+nnoremap <silent> Q :call CloseWindowOrKillBuffer()<cr>
+
+" Reselect visual block after indent
+vnoremap < <gv
+vnoremap > >gv
+
+" foldlevel
+nnoremap zr zr:echo 'Foldlevel = ' . &foldlevel<cr>
+nnoremap zm zm:echo 'Foldlevel = ' . &foldlevel<cr>
+nnoremap zR zR:echo 'Foldlevel = ' . &foldlevel<cr>
+nnoremap zM zM:echo 'Foldlevel = ' . &foldlevel<cr>
+
+" make Y consistent with C and D. See :help Y.
+nnoremap Y y$
 
 " w!! expands to a sudo save
 cmap w!! w !sudo tee >/dev/null %
@@ -140,7 +161,7 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Edit vimrc with f5 and source it automatically when saved
-nmap <silent> <leader><f5> :e $MYVIMRC<CR>
+nmap <silent><f5> :e $MYVIMRC<CR>
 augroup reload_vimrc
     autocmd!
     autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
@@ -156,6 +177,12 @@ nnoremap <Leader>tm  :tabm<Space>
 nnoremap <Leader>td  :tabclose<CR>
 
 " Whitespace Clean
+function! TrimWhitespace()
+    let l:save = winsaveview()
+    %s/\s\+$//e
+    call winrestview(l:save)
+    echo 'Stripped trailing whitespaccs'
+endfunction
 noremap <silent> <Leader>wc :call TrimWhitespace()<CR>
 
 "}}}
