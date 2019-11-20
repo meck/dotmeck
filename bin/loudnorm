@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Normalize files for use with QLab with FFMpeg skips files where it can't use linear normalization
 # Adapted from https://gist.github.com/mkasberg/0183c2df474bbbb2d75cac94ea0a20a2
@@ -8,48 +8,64 @@ import os
 from subprocess import check_call, check_output, STDOUT
 import sys
 
-if len(sys.argv) < 1:
-    print "Usage: %s input1.mp3 input2.wav" % __file__
+if len(sys.argv) <= 1:
+    print('Usage: {0} input1.mp3 input2.wav'.format(sys.argv[0]))
     sys.exit(1)
 
 infiles = sys.argv[1:]
 
 # Integrated loudness target. Range is -70.0 - -5.0
-TARGET_I = "-20"
+TARGET_I = '-20'
 
 # Maximum true peak. Range is -9.0 - +0.0.
-TARGET_TP = "-1"
+TARGET_TP = '-1'
 
 # Loudness range target. Range is 1.0 - 20.0.
-TARGET_LRA = "20"
+TARGET_LRA = '20'
 
 # Outputfile is wav with SR
-SAMPLE_RATE = "48000"
+SAMPLE_RATE = '48000'
 
 for infile in infiles:
 
     ffArgs = [
-        "ffmpeg",
-        "-hide_banner",
-        "-i",
+        'ffmpeg',
+        '-hide_banner',
+        '-i',
         infile,
-        "-af",
-        "loudnorm=I=%s:TP=%s:LRA=%s:print_format=json" % (TARGET_I, TARGET_TP, TARGET_LRA),
-        "-f",
-        "null",
-        "-"
+        '-af',
+        'loudnorm=I={0}:TP={1}:LRA={2}:print_format=json'.format(TARGET_I, TARGET_TP, TARGET_LRA),
+        '-f',
+        'null',
+        '-'
     ]
 
-    print("Analyzing \"%s\" ...") % infile
+    print('Analyzing \"{0}\" ...'.format(infile))
 
     output = check_output(ffArgs, stderr=STDOUT)
-    outputJson = ''.join(output.splitlines()[-12:])
+    outputJson = b''.join(output.splitlines()[-12:])
     measured = json.loads(outputJson)
 
     loudnormString = (
-        "loudnorm=I=%s:TP=%s:LRA=%s:measured_I=%s:measured_TP=%s:measured_LRA=%s:measured_thresh=%s:offset=%s:linear=true:print_format=summary" %
-        (TARGET_I, TARGET_TP, TARGET_LRA, measured['input_i'], measured['input_tp'], measured['input_lra'], measured['input_thresh'], measured['target_offset'])
-    )
+        'loudnorm=I={0}:'
+        'TP={1}:'
+        'LRA={2}:'
+        'measured_I={3}:'
+        'measured_TP={4}:'
+        'measured_LRA={5}:'
+        'measured_thresh={6}:'
+        'offset={7}:'
+        'linear=true:'
+        'print_format=summary').format(TARGET_I,
+                                       TARGET_TP,
+                                       TARGET_LRA,
+                                       measured['input_i'],
+                                       measured['input_tp'],
+                                       measured['input_lra'],
+                                       measured['input_thresh'],
+                                       measured['target_offset'])
+    
+    
 
     pathArray = os.path.split(infile)
 
@@ -59,22 +75,22 @@ for infile in infiles:
     # If the integrated loudness is higher then the target the normalization will likly use a dynamic process
     # i.e. compression which is not wanted
     if deltaI - tpHeadroom >= 0:
-        print >> sys.stderr, "\x1b[1;31;40mERROR: Input level on %s is to high for linear normalization, skipping\x1b[0m" % pathArray[1]
+        print('\x1b[1;31;40mERROR: Input level on %s is to high for linear normalization, skipping\x1b[0m'.format(pathArray[1]), file=sys.stderr)
         continue
 
-    print("Processing \"%s\" ...") % infile
+    print('Processing \"{0}\" ...'.format(infile))
 
     outfile = pathArray[0] + "Normalized " + os.path.splitext(pathArray[1])[0] + ".wav"
 
     ffArgs = [
-        "ffmpeg",
-        "-y",
-        "-hide_banner",
-        "-i",
+        'ffmpeg',
+        '-y',
+        '-hide_banner',
+        '-i',
         infile,
-        "-af",
+        '-af',
         loudnormString,
-        "-ar",
+        '-ar',
         SAMPLE_RATE,
         outfile
     ]
