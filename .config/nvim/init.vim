@@ -29,6 +29,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-scriptease'
 
 " Git Stuff
 Plug 'tpope/vim-fugitive'
@@ -329,6 +330,21 @@ else
 endif
 
 "}}}
+"  Functions {{{
+""""""""""""""
+" Delete buffer if it is only open in a single window, otherwise close the
+" window
+function! CloseWindowOrKillBuffer()
+  let number_of_windows_to_this_buffer = len(filter(range(1, winnr('$')), "winbufnr(v:val) == bufnr('%')"))
+
+  if number_of_windows_to_this_buffer > 1
+    wincmd c
+  else
+    bdelete
+  endif
+endfunction
+
+"  }}}
 "  Commands {{{
 """"""""""""""
 " Delete all but the current buffer
@@ -347,11 +363,27 @@ noremap ^ 0
 " Clear search hightligt
 nnoremap <silent><esc> :noh<return><esc>
 
+" Window killer
+nnoremap <silent> Q :call CloseWindowOrKillBuffer()<cr>
+
+" Reselect visual block after indent
+vnoremap < <gv
+vnoremap > >gv
+
+" foldlevel
+nnoremap zr zr:echo 'Foldlevel = ' . &foldlevel<cr>
+nnoremap zm zm:echo 'Foldlevel = ' . &foldlevel<cr>
+nnoremap zR zR:echo 'Foldlevel = ' . &foldlevel<cr>
+nnoremap zM zM:echo 'Foldlevel = ' . &foldlevel<cr>
+
+" make Y consistent with C and D. See :help Y.
+nnoremap Y y$
+
 " w!! expands to a sudo save
 cmap w!! w !sudo tee >/dev/null %
 
 " Edit vimrc with f5 and source it automatically when saved
-nmap <silent> <leader><f5> :e $MYVIMRC<CR>
+nmap <silent><f5> :e $MYVIMRC<CR>
 augroup reload_vimrc
     autocmd!
     autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
@@ -473,6 +505,8 @@ nnoremap <Leader>tb :TagbarToggle <CR>
 nnoremap <silent><Leader>u :UndotreeToggle<CR>
 
 " Clap
+" Open Clap
+nnoremap <silent><Leader>c :Clap<CR>
 " Search for files
 nnoremap <silent><Leader>f :Clap files<CR>
 " Search buffers

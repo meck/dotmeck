@@ -92,10 +92,14 @@ nnoremap <silent><Leader>hh :Clap hoogle ++query=<cword><CR>
 nnoremap <silent><Leader>hH :Clap hoogle<CR>
 
 " ----- alfred-hoogle -----
-nnoremap <silent><Leader>ho :silent execute ':!/usr/bin/osascript -e '
-  \ . shellescape('tell application "Alfred 3" to run trigger "ext_trig"
-  \ in workflow "se.meck.alfred-hoogle"
-  \ with argument "' . expand('<cword>') . '"') <CR>
+nnoremap <silent><Leader>ho :silent execute 
+    \ ':!/usr/bin/osascript -e '
+    \ . shellescape(
+    \ 'tell application id "com.runningwithcrayons.Alfred"
+    \ to run trigger "ext_trig"
+    \ in workflow "se.meck.alfred-hoogle"
+    \ with argument "' . expand('<cword>') . '"'
+    \ )<CR>
 
 " ----- Tagbar -----
 
