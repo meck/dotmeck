@@ -1,19 +1,26 @@
 {
-  "codeLens.enable": true,
-  "languageserver": {
+    "languageserver": {
     "haskell": {
       "command": "hie-wrapper",
-      "rootPatterns": [".stack.yaml", "cabal.config", "package.yaml"],
-      "filetypes": ["hs", "lhs", "haskell"],
-      "initializationOptions": {},
-      "settings": {
-          "languageServerHaskell": {
-                  "hlintOn": true,
-                  "maxNumberOfProblems": 10,
-                  "completionSnippetsOn": true
-          }
-       }
+      "rootPatterns": [
+        ".stack.yaml",
+        "cabal.config",
+        "package.yaml"
+      ],
+      "filetypes": [
+        "hs",
+        "lhs",
+        "haskell"
+      ],
+      "initializationOptions": {
+        "languageServerHaskell": {
+          "hlintOn": true,
+          "completionSnippetsOn": false,
+          "formattingProvider": "brittany"
+        }
+      }
     }
   },
-  "coc.source.emoji.filetypes": ["markdown", "vimwiki"]
+  "coc.source.emoji.filetypes": ["markdown", "vimwiki"],
+  "suggest.enablePreview":true
 }
