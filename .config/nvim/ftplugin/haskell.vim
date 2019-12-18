@@ -29,7 +29,6 @@ setlocal signcolumn=yes
 " ----- ndmitchell/ghcid -----
 nnoremap <silent> <leader>hg :Ghcid<CR>
 
-
 " ----- parsonsmatt/intero-neovim -----
 " Wait with starting Intero
 let g:intero_start_immediately = 0
@@ -61,12 +60,6 @@ augroup interoMappings
   nnoremap <silent> <leader>il :execute 'InteroLoadCurrentModule' <Bar> :call <SID>win_by_bufname('Intero')<CR>
   nnoremap <silent> <leader>if :execute 'InteroLoadCurrentFile' <Bar> :call <SID>win_by_bufname('Intero')<CR>
 
-  nnoremap <silent> <leader>it :InteroTypeInsert<CR>
-  nnoremap <silent> <leader>iT :InteroToggleTypeOnHover<CR>
-
-  nnoremap <silent> <leader>id :InteroGoToDef<CR>
-  nnoremap <silent> <leader>iu :InteroUses<CR>
-  nnoremap <leader>ist :InteroSetTargets<SPACE>
 
   " Enter insertmode when going to the REPL
   autocmd BufWinEnter,WinEnter Intero startinsert | setlocal winfixheight

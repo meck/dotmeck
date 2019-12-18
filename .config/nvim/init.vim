@@ -52,7 +52,6 @@ Plug 'godlygeek/tabular'
 Plug 'romainl/vim-qf'
 
 " Modern generic interactive finder and dispatcher for Vim and NeoVim
-" Plug '~/code/vim-clap'
 Plug 'liuchengxu/vim-clap'
 
 " Statusline and theme
@@ -279,10 +278,20 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " Airline
 let g:airline_powerline_fonts = 1
-let g:airline_section_z = '%3p%% %4l:%-2c'
-let g:airline#extensions#hunks#enabled = 1
-let g:airline#extensions#obsession#enabled = 1
-let g:airline#extensions#obsession#indicator_text = '$'
+let g:airline#extensions#obsession#indicator_text = 'Ⓢ'
+function! AirlineInit()
+  let g:airline_section_z = airline#section#create(['obsession', '%3p%% %4l:%-2c'])
+endfunction
+augroup airline_init
+  autocmd!
+  autocmd User AirlineAfterInit call AirlineInit()
+augroup END
+
+" Slanted Dividers
+let g:airline_left_sep = "\ue0b8"
+let g:airline_left_alt_sep = "\ue0b9"
+let g:airline_right_sep = "\ue0be"
+let g:airline_right_alt_sep = "\ue0bf"
 
 " GitGutter
 let s:gitgutter_sign_all = exists('g:airline_powerline_fonts') ? '▸' : '∙'
@@ -511,6 +520,8 @@ nnoremap <silent><Leader>c :Clap<CR>
 nnoremap <silent><Leader>f :Clap files<CR>
 " Search buffers
 nnoremap <silent><Leader>b :Clap buffers<CR>
+" Grep
+nnoremap <silent><Leader>g :Clap grep<CR>
 " cwd from ~
 nnoremap <silent><Leader>d :Clap cd ~<CR>
 " cwd from .
