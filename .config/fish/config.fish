@@ -88,6 +88,8 @@ if test (uname)  = "Darwin"
   set -gx BROWSER "open"
 end
 
+set -gx BAT_CONFIG_PATH $XDG_CONFIG_HOME/bat/bat.conf
+
 ######################
 #  Path and pkgmang  #
 ######################
@@ -201,18 +203,13 @@ set fish_pager_color_progress $nord12
 set fish_pager_color_secondary $nord1
 
 
-#############
-#  Vi mode  #
-#############
+##########
+#  Misc  #
+##########
 
+# Vi mode
 set -g fish_key_bindings fish_vi_key_bindings
 
-
-###############
-#  Functions  #
-###############
-
-source "$XDG_CONFIG_HOME/fish/functions.fish"
 
 # Remove duplicates from $PATH
 varclear PATH > /dev/null
