@@ -156,7 +156,7 @@ if not type -q dircolors && type -q gdircolors
 end
 
 if not set -q LS_COLORS && test -s $XDG_CONFIG_HOME/dircolors
-  eval (gdircolors -c $XDG_CONFIG_HOME/dircolors)
+  eval (dircolors -c $XDG_CONFIG_HOME/dircolors)
 end
 
 set -gx SPACEFISH_CHAR_SYMBOL ❯
