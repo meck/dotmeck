@@ -30,6 +30,14 @@ end
 
 set -gx TMPPREFIX "$TMPDIR/fish"
 
+#####################
+#  MacOs functions  #
+#####################
+
+if test (uname)  = "Darwin"
+  set fish_function_path $XDG_CONFIG_HOME/fish/functions_macOs $fish_function_path
+end
+
 ##########
 #  Lang  #
 ##########
@@ -42,7 +50,7 @@ end
 #  Fisher  #
 ############
 
-if not test -s "$XDG_CONFIG_HOME/fish/functions/fisher.fish"
+if not functions -q fisher
   while true
     read -l -P 'Fisher missing, download and run? [y/n] ' confirm
     switch $confirm
@@ -89,6 +97,7 @@ if test (uname)  = "Darwin"
 end
 
 set -gx BAT_CONFIG_PATH $XDG_CONFIG_HOME/bat/bat.conf
+
 
 ######################
 #  Path and pkgmang  #
