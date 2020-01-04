@@ -78,13 +78,13 @@ set -gx EDITOR $VISUAL
 set -gx PAGER "less"
 
 # Set the default Less options.
-set -x LESS "-g -i -M -R -S -w -z-4"
+set -x LESS "-g -i -M -R -w -z-4"
 
-set -x LESS_TERMCAP_mb (printf "\e[01;31m")
-set -x LESS_TERMCAP_md (printf "\e[01;31m")
+set -x LESS_TERMCAP_mb (printf "\e[01;34m")
+set -x LESS_TERMCAP_md (printf "\e[01;34m")
 set -x LESS_TERMCAP_me (printf "\e[0m")
 set -x LESS_TERMCAP_se (printf "\e[0m")
-set -x LESS_TERMCAP_so (printf "\e[01;47;33m")
+set -x LESS_TERMCAP_so (printf "\e[01;44;30m")
 set -x LESS_TERMCAP_ue (printf "\e[0m")
 set -x LESS_TERMCAP_us (printf "\e[01;32m")
 
@@ -168,6 +168,8 @@ if not set -q LS_COLORS && test -s $XDG_CONFIG_HOME/dircolors
   eval (dircolors -c $XDG_CONFIG_HOME/dircolors)
 end
 
+set -x EXA_COLORS uu=35:gu=35
+
 set -gx SPACEFISH_CHAR_SYMBOL ❯
 
 # nord theme https://github.com/arcticicestudio/nord/issues/102
@@ -223,10 +225,6 @@ if command -qs exa
     command exa $argv
   end
 end
-
-# Vi mode
-set -g fish_key_bindings fish_vi_key_bindings
-
 
 # Remove duplicates from $PATH
 varclear PATH > /dev/null
