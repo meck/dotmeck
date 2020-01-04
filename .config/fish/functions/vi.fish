@@ -1,9 +1,9 @@
 function vi -d "Neovim alias if availible othervise vim"
   if type -q nvim
-    nvim $argv
+    command nvim $argv
   else if type -q vim
-    vim $argv
+    command vim $argv
   else
-    vi $argv
+    command vi $argv
   end
 end
