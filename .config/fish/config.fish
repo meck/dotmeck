@@ -218,7 +218,7 @@ set fish_pager_color_secondary $nord1
 
 # Can functions be conditionally autoloaded
 # with a fallback later in `$fish_function_path`?
-if command exa --version >/dev/null 2>/dev/null
+if command -qs exa
   function ls --description 'List contents of directory'
     command exa $argv
   end
