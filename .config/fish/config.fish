@@ -16,7 +16,7 @@ end
 #####################
 
 # Set TMPDIR if the variable is not set/empty or the directory doesn't exist
-if test -z "$TEMPDIR"
+if test -z "$TMPDIR"
   set -gx TMPDIR /tmp/fish-(id -u)
 end
 
