@@ -1,8 +1,6 @@
 [user]
 	name = meck
 	email = johan@meck.se
-[credential]
-	helper = osxkeychain
 [merge]
 	tool = vimdiff
 [mergetool]
