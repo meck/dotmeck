@@ -218,6 +218,10 @@ set fish_pager_color_secondary $nord1
 #  Misc  #
 ##########
 
+# GPG
+set -xg GPG_TTY (tty)
+
+
 # Can functions be conditionally autoloaded
 # with a fallback later in `$fish_function_path`?
 if command -qs exa
