@@ -2,18 +2,19 @@
 
 # Because Git submodule commands cannot operate without a work tree, they must
 # be run from within $HOME (assuming this is the root of your dotfiles)
-# Zpresto is installed as a submodule
 
 cd "$HOME" || exit
 
-
 system_type=$(uname -s)
+
+echo "Init submodules"
+yadm submodule update --recursive --init
 
 if [ "$system_type" = "Darwin" ]; then
 
   # install homebrew if it's missing
   if ! command -v brew >/dev/null 2>&1; then
-    read -p "Install homebrew (y/n)? " answer
+    read -r -p "Install homebrew (y/n)? " answer
     case ${answer:0:1} in
       y|Y )
           echo "Installing homebrew"
@@ -21,7 +22,7 @@ if [ "$system_type" = "Darwin" ]; then
           brew update
           # Check if we brewfile exists then install it
           if [ -f "$HOME/.config/Brewfile" ]; then
-            read -p "Install brewfile apps (y/n)?" answer
+            read -r -p "Install brewfile apps (y/n)?" answer
             case ${answer:0:1} in
                 y|Y )
                     echo "Installing homebrew bundle"
@@ -38,17 +39,27 @@ if [ "$system_type" = "Darwin" ]; then
     ;;
     esac
   fi
+
+  read -r -p "Add Brews fish and zsh to '/etc/shells' (y/n)?" answer
+  case ${answer:0:1} in
+    y|Y )
+      echo "Adding shells"
+      echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
+      echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells
+    ;;
+    * )
+    ;;
+  esac
+
 fi
 
-echo "Init submodules"
-yadm submodule update --recursive --init
 
-# Default shell to zsh
-read -p "Change default shell to zsh (y/n)?" answer
+# Default shell to fish
+read -r -p "Change default shell to fish (y/n)?" answer
 case ${answer:0:1} in
   y|Y )
-    echo "Setting shell to zsh"
-    sudo chsh -s '$(which zsh)' '$USER'
+    echo "Setting shell to fish"
+    sudo chsh -s '$(which fish)' '$USER'
   ;;
   * )
   ;;

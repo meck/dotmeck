@@ -2,9 +2,11 @@
     "languageserver": {
     "haskell": {
       "command": "hie-wrapper",
+      "args": ["--lsp"],
       "rootPatterns": [
-        ".stack.yaml",
-        "cabal.config",
+        "*.cabal",
+        "stack.yaml",
+        "cabal.project",
         "package.yaml"
       ],
       "filetypes": [
@@ -22,5 +24,17 @@
     }
   },
   "coc.source.emoji.filetypes": ["markdown", "vimwiki"],
-  "suggest.enablePreview":true
+  "suggest.enablePreview":true,
+  "diagnostic-languageserver.filetypes": {
+    "sh": "shellcheck"
+  },
+  "diagnostic-languageserver.formatFiletypes": {
+    "sh": "shfmt"
+  },
+  "diagnostic-languageserver.formatters": {
+    "shfmt": {
+      "command": "shfmt",
+      "args": ["-i", "2", "-bn", "-ci", "-sr"]
+    }
+  }
 }
