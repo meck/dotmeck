@@ -2,6 +2,7 @@
 #### My [yadm](https://yadm.io) managed dotfiles
 
 Neovim, fish, tmux, yabai, skhd, etc
+
 For macOS and Linux
 
 Setup a new machine:
