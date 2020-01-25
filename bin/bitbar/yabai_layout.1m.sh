@@ -113,4 +113,4 @@ fi
 
 echo "--Restart | bash='$0' param1=restart terminal=false refresh=true"
 echo "--Stop | bash='$0' param1=stop terminal=false refresh=true"
-echo "View Bindings | bash='$0' param1=quicklook param2='$HOME/.skhdrc' terminal=false"
+echo "View Bindings | bash='$0' param1=quicklook param2='$HOME/.config/skhd/skhdrc' terminal=false"
