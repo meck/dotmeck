@@ -51,8 +51,8 @@ Plug 'godlygeek/tabular'
 " Better quickfix window
 Plug 'romainl/vim-qf'
 
-" Modern generic interactive finder and dispatcher for Vim and NeoVim
-Plug 'liuchengxu/vim-clap'
+" Interactive selection, build rust extension if cargo is installed
+Plug 'liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
 
 " Statusline and theme
 Plug 'vim-airline/vim-airline'
@@ -250,7 +250,8 @@ let g:coc_global_extensions =
   \ , 'coc-vimlsp'
   \ , 'coc-yaml'
   \ , 'coc-emoji'
-  \ , 'coc-rls']
+  \ , 'coc-rls'
+  \ , 'coc-diagnostic' ]
 
 augroup CocAugrp
   " Highlight symbol under cursor on CursorHold
@@ -523,8 +524,8 @@ nnoremap <silent><Leader>b :Clap buffers<CR>
 " Grep
 nnoremap <silent><Leader>g :Clap grep<CR>
 " cwd from ~
-nnoremap <silent><Leader>d :Clap cd ~<CR>
+nnoremap <silent><Leader>D :Clap cd ~<CR>
 " cwd from .
-nnoremap <silent><Leader>D :Clap cd<CR>
+nnoremap <silent><Leader>d :Clap cd<CR>
 
 " }}}
