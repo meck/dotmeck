@@ -1,6 +1,5 @@
 " Misc {{{
 """""""""""
-
 " Encoding of this script
 scriptencoding utf-8
 
@@ -52,7 +51,7 @@ Plug 'godlygeek/tabular'
 Plug 'romainl/vim-qf'
 
 " Interactive selection, build rust extension if cargo is installed
-Plug 'liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
 
 " Statusline and theme
 Plug 'vim-airline/vim-airline'

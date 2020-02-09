@@ -8,6 +8,8 @@
 	<true/>
 	<key>AppleAntiAliasingThreshold</key>
 	<integer>1</integer>
+	<key>ApplePressAndHoldEnabled</key>
+	<false/>
 	<key>AppleScrollAnimationEnabled</key>
 	<integer>0</integer>
 	<key>AppleSmoothFixedFontsSizeThreshold</key>
@@ -1609,7 +1611,7 @@
 	<key>NSWindow Frame NSFontPanel</key>
 	<string>760 260 696 77 0 0 1680 1027 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
-	<string>1130 903 620 392 0 0 2880 1597 </string>
+	<string>970 768 620 392 0 0 2560 1417 </string>
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 126 606 469 0 0 1680 1027 </string>
 	<key>NSWindow Frame SharedPreferences</key>
@@ -1617,11 +1619,11 @@
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>230 833 592 584 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>25 35 2824 1538 0 0 2880 1597 </string>
+	<string>1945 35 1864 998 1920 0 1920 1057 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>25 25 840 978 0 0 1680 1027 </string>
+	<string>0 0 2560 1417 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>50 830 1368 718 0 0 2880 1597 </string>
+	<string>847 25 808 978 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
 	<string>1307 739 1200 623 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
@@ -3987,6 +3989,7 @@
 	<key>NoSyncAllAppVersions</key>
 	<array>
 		<string>3.3.6</string>
+		<string>3.3.8</string>
 		<string>3.3.1</string>
 		<string>3.3.3</string>
 		<string>3.3.0beta13</string>
@@ -4009,9 +4012,9 @@
 	<key>NoSyncFrame_SharedPreferences</key>
 	<dict>
 		<key>screenFrame</key>
-		<string>{{0, 0}, {2880, 1620}}</string>
+		<string>{{0, 0}, {2560, 1440}}</string>
 		<key>topLeft</key>
-		<string>{402, 1209}</string>
+		<string>{269, 595}</string>
 	</dict>
 	<key>NoSyncHaveRequestedFullDiskAccess</key>
 	<true/>
@@ -4024,7 +4027,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>0DA0DF30-2865-4658-811B-4B523C494B27</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>63</integer>
+	<integer>72</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -4912,12 +4915,6 @@
 			</dict>
 		</array>
 	</dict>
-	<key>NoSyncSearchHistory2</key>
-	<array>
-		<string>rust</string>
-		<string>VJHF</string>
-		<string>spinn</string>
-	</array>
 	<key>NoSyncTimeOfFirstLaunchOfVersionWithTip</key>
 	<real>514416392.41800499</real>
 	<key>PMPrintingExpandedStateForPrint2</key>
@@ -4970,7 +4967,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-01-07T01:25:19Z</date>
+	<date>2020-02-07T10:17:07Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateRelaunchingMarker</key>
@@ -5029,7 +5026,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.3.7</string>
+	<string>3.3.8</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>3</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

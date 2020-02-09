@@ -26,26 +26,34 @@ else
   let s:default_source = join([s:default_finder, s:default_opts[s:default_finder]], ' ')
 endif
 
-if !exists("g:ClapPrompt")
-  function! ClapFormat() abort
-    if g:clap.provider.id ==# 'cd'
-      if exists('g:__clap_provider_cwd')
-        let cwd = g:__clap_provider_cwd
-      else
-        let cwd = getcwd()
-      endif
-      return '%spinner% '. pathshorten(fnamemodify(expand(cwd), ':~:s?/$??')) . ' '
-    else
-      if exists("g:clap_prompt_format")
-        return g:clap.prompt_format
-      else
-        return ' %spinner%%forerunner_status%%provider_id%:'
-      endif
-    endif
-  endfunction
-  let g:ClapPrompt = function('ClapFormat')
-endif
+function! s:cd.on_enter() abort
+  call clap#spinner#set('foo')
+endfunction
 
+" if exists("g:ClapPrompt")
+"   let s:prevClapPrompt = funcref("g:ClapPrompt")
+" endif
+
+" function! ClapFormat() abort
+"   if g:clap.provider.id ==# 'cd'
+"     if exists('g:__clap_provider_cwd')
+"       let cwd = g:__clap_provider_cwd
+"     else
+"       let cwd = getcwd()
+"     endif
+"     return '%spinner% '. pathshorten(fnamemodify(expand(cwd), ':~:s?/$??')) . ' '
+"   elseif exists("s:prevClapPromt")
+"     call s:prevClapPrompt()
+"   else
+"     if exists("g:clap_prompt_format")
+"       return g:clap.prompt_format
+"     else
+"       return ' %spinner%%forerunner_status%%provider_id%:'
+"     endif
+"   endif
+" endfunction
+
+" let g:ClapPrompt = function('ClapFormat')
 
 function! s:cd.source() abort
   let dir = getcwd()

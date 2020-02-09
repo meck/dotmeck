@@ -110,11 +110,6 @@ set -gx PATH /usr/local/bin /usr/local/sbin $PATH
 # set -gx PATH "/usr/local/opt/coreutils/libexec/gnubin" $PATH
 # set -gx MANPATH "/usr/local/opt/coreutils/libexec/gnuman" $MANPATH
 
-# Nix
-if test -e "$HOME/.nix-profile/etc/profile.d/nix.sh" && functions -q bass
-  bass source "$HOME/.nix-profile/etc/profile.d/nix.sh" ';' "NIX_PATH=\"\$NIX_PATH\"" ';' "export PATH=\"\$PATH\""
-end
-
 # For my own scripts
 set -gx PATH "$HOME/bin" $PATH
 
@@ -142,6 +137,10 @@ else
   set -gx PATH $PATH "/usr/local/go/bin" "$GOPATH/bin"
 end
 
+# Nix
+if test -e "$HOME/.nix-profile/etc/profile.d/nix.sh" && functions -q bass
+  bass source "$HOME/.nix-profile/etc/profile.d/nix.sh" ';' "NIX_PATH=\"\$NIX_PATH\"" ';' "export PATH=\"\$PATH\""
+end
 
 #########
 #  FZF  #
