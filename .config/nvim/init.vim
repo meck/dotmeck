@@ -319,7 +319,14 @@ let g:clap_provider_grep_enable_icon = 0
 " VimWiki
 let g:vimwiki_list = [{'path': '~/vimwiki/',
                      \ 'path_html': '~/wiki/',
-                     \ 'auto_export': 1}]
+                     \ 'syntax': 'markdown',
+                     \ 'ext': '.md',
+                     \ 'template_path': '~/.config/wiki/',
+                     \ 'template_default':'GitHub',
+                     \ 'custom_wiki2html': '~/.config/wiki/wiki2html.sh',
+                     \ 'template_ext':'.html5',
+                     \ 'auto_export':1
+                     \ }]
 
 " Themes
 let g:nord_italic = 1
