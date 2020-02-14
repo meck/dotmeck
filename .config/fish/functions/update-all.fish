@@ -15,4 +15,11 @@ function update-all -d "Update everything in the user Env"
 
  echo "Updating Neovim Plugins..."
  nvim +PlugUpdate +qa
+
+ if type -q nix-env
+   echo "Updating Nix..."
+   nix-channel --update nixpkgs
+   nix-env -u '*'
+ end
+
 end
