@@ -94,6 +94,12 @@ Plug 'junegunn/goyo.vim'
 " Preview of register contents
 Plug 'junegunn/vim-peekaboo'
 
+" GnuPG
+Plug 'jamessan/vim-gnupg'
+
+" Graphviz
+Plug 'liuchengxu/graphviz.vim'
+
 "}}}
 "  Language Specific Plugins {{{
 """"""""""""""""""""""""""""""""
