@@ -46,6 +46,14 @@ OUTPUT=$OUTPUTDIR$FILENAME
 MATHJAX="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 # MATHJAX="/usr/share/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 
+# PANDOC GRAPHVIZ
+if [[ -x "$(command -v pandoc-filter-graphviz)" ]]
+  then
+      GRAPHFILTER='-F pandoc-filter-graphviz'
+  else
+      GRAPHFILTER=""
+fi
+
 # PREPANDOC PROCESSING AND PANDOC
 
 pandoc_template="pandoc \
@@ -55,7 +63,9 @@ pandoc_template="pandoc \
     -f $SYNTAX \
     -t html \
     -c $CSSFILENAME \
-    -M root_path:$ROOT_PATH"
+    -M root_path:$ROOT_PATH \
+    $GRAPHFILTER \
+    "
 
 # Searches for markdown links (without extension or .md) and appends a .html
 regex1='s/(\[.+\])\(([^.)]+)(\.md)?\)/\1(\2.html)/g'
