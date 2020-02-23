@@ -171,6 +171,11 @@ set -x EXA_COLORS uu=35:gu=35
 
 set -gx SPACEFISH_CHAR_SYMBOL ❯
 
+# Use starship for prompt if installed (Otherwise spacefish via fisher)
+if command -qa starship
+  starship init fish | source
+end
+
 # nord theme https://github.com/arcticicestudio/nord/issues/102
 set nord0 2e3440
 set nord1 3b4252
