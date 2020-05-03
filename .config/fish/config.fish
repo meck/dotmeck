@@ -122,6 +122,9 @@ set -gx PATH "$HOME/.cabal/bin" $PATH
 # For haskell stack install
 set -gx PATH "$HOME/.local/bin" $PATH
 
+# Latex
+set -gx PATH "/Library/TeX/texbin" $PATH
+
 # Rust
 set -gx PATH "$HOME/.cargo/bin" $PATH
 if type -q rustc

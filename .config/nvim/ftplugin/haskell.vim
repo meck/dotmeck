@@ -36,7 +36,13 @@ let g:intero_start_immediately = 0
 " Use ALE (works even when not using Intero)
 let g:intero_use_neomake = 0
 
-let g:intero_backend = { 'command': 'stack repl' }
+" let g:intero_backend = {
+"         \ 'command': 'stack repl'
+"         \ }
+let g:intero_backend = {
+        \ 'command': 'cabal repl',
+        \ 'options': '',
+        \}
 
 augroup interoMappings
   autocmd!
@@ -85,7 +91,7 @@ nnoremap <silent><Leader>hh :Clap hoogle ++query=<cword><CR>
 nnoremap <silent><Leader>hH :Clap hoogle<CR>
 
 " ----- alfred-hoogle -----
-nnoremap <silent><Leader>ho :silent execute 
+nnoremap <silent><Leader>ho :silent execute
     \ ':!/usr/bin/osascript -e '
     \ . shellescape(
     \ 'tell application id "com.runningwithcrayons.Alfred"

@@ -322,6 +322,8 @@ let g:clap_selected_sign = {
 let g:clap_enable_icon = 0
 let g:clap_provider_grep_enable_icon = 0
 
+autocmd FileType clap_input inoremap <silent> <buffer> <Esc> <Esc>:call clap#handler#exit()<CR>
+
 " VimWiki
 let g:vimwiki_list = [{'path': '~/vimwiki/',
                      \ 'path_html': '~/wiki/',
