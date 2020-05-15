@@ -27,6 +27,10 @@ focus, resize, warp          < r                ; resize
 # apen a new terminal window
 # cmd - return : $HOME/bin/iterm
 
+.blacklist [
+  "vmware fusion"
+]
+
 # Pass command to swap desktop to MacOs
 focus, resize, warp < ctrl - left            -> : ;
 focus, resize, warp < ctrl - right           -> : ;
