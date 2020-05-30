@@ -1,5 +1,0 @@
-# ~/.config/starship.toml
-
-[haskell]
-# buggy when working with cabal
-disabled = true
