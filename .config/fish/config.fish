@@ -228,6 +228,10 @@ set fish_pager_color_secondary $nord1
 # GPG
 set -xg GPG_TTY (tty)
 
+# Enable direnv if installed
+if command -qs direnv
+  eval (direnv hook fish)
+end
 
 # Can functions be conditionally autoloaded
 # with a fallback later in `$fish_function_path`?
