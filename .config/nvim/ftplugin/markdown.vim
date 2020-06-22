@@ -6,7 +6,4 @@ silent! call airline#extensions#whitespace#disable()
 let vim_markdown_preview_toggle=2
 let vim_markdown_preview_temp_file=1
 
-if executable('grip')
-  let vim_markdown_preview_github=1
-endif 
-
+let vim_markdown_preview_github=1

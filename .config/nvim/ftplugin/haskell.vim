@@ -23,54 +23,14 @@ let g:haskell_indent_do = 3
 let g:haskell_indent_in = 4
 let g:haskell_indent_guard = 4
 
+
 " ----- Coc.nvim -----
 setlocal signcolumn=yes
+
 
 " ----- ndmitchell/ghcid -----
 nnoremap <silent> <leader>hg :Ghcid<CR>
 
-" ----- parsonsmatt/intero-neovim -----
-" Wait with starting Intero
-let g:intero_start_immediately = 0
-
-" Use ALE (works even when not using Intero)
-let g:intero_use_neomake = 0
-
-" let g:intero_backend = {
-"         \ 'command': 'stack repl'
-"         \ }
-let g:intero_backend = {
-        \ 'command': 'cabal repl',
-        \ 'options': '',
-        \}
-
-augroup interoMappings
-  autocmd!
-
-  " Open and go to the New window
-  nnoremap <silent> <leader>io :execute 'InteroOpen' <Bar> :call <SID>win_by_bufname('Intero')<CR>
-  nnoremap <silent> <leader>ih :InteroHide<CR>
-  nnoremap <silent> <leader>is :InteroStart<CR>
-  nnoremap <silent> <leader>ik :InteroKill<CR>
-
-  " Reload the file in Intero after saving but only when intero is running
-  function! ReloadInteroIfRunning()
-    if exists('g:intero_started') && g:intero_started
-      :InteroReload
-    endif
-  endfunction
-  autocmd BufWritePost *.hs call ReloadInteroIfRunning()
-
-  " nnoremap <silent> <leader>wr :w \| :InteroReload<CR>
-
-  nnoremap <silent> <leader>il :execute 'InteroLoadCurrentModule' <Bar> :call <SID>win_by_bufname('Intero')<CR>
-  nnoremap <silent> <leader>if :execute 'InteroLoadCurrentFile' <Bar> :call <SID>win_by_bufname('Intero')<CR>
-
-
-  " Enter insertmode when going to the REPL
-  autocmd BufWinEnter,WinEnter Intero startinsert | setlocal winfixheight
-
-augroup END
 
 " ----- Code formating -----
 
@@ -84,21 +44,13 @@ noremap <leader>hfb :Brittany<CR>
 noremap <leader>hfi :Hindent<CR>
 noremap <leader>hfs :Stylishask<CR>
 
+
 " ----- vim-clap-hoogle -----
 " Search the word under the cursor
 nnoremap <silent><Leader>hh :Clap hoogle ++query=<cword><CR>
 " Open search
 nnoremap <silent><Leader>hH :Clap hoogle<CR>
 
-" ----- alfred-hoogle -----
-nnoremap <silent><Leader>ho :silent execute
-    \ ':!/usr/bin/osascript -e '
-    \ . shellescape(
-    \ 'tell application id "com.runningwithcrayons.Alfred"
-    \ to run trigger "ext_trig"
-    \ in workflow "se.meck.alfred-hoogle"
-    \ with argument "' . expand('<cword>') . '"'
-    \ )<CR>
 
 " ----- Tagbar -----
 
@@ -145,10 +97,3 @@ let g:tagbar_type_haskell = {
         \ 'instance' : 'ft'
     \ }
 \ }
-
-" Switch to buffer by name
-function! s:win_by_bufname(bufname)
-    let l:bufmap = map(range(1, winnr('$')), '[bufname(winbufnr(v:val)), v:val]')
-    let l:thewindow = filter(l:bufmap, 'v:val[0] =~ a:bufname')[0][1]
-    execute l:thewindow 'wincmd w'
-endfunction
