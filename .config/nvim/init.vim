@@ -3,7 +3,7 @@
 " Encoding of this script
 scriptencoding utf-8
 
-let s:vimDir = '$XDG_CONFIG_HOME/nvim'
+let s:vimDir = '$HOME/.config/nvim'
 
 " }}}
 "  Plugins {{{
@@ -51,11 +51,12 @@ Plug 'godlygeek/tabular'
 Plug 'romainl/vim-qf'
 
 " Interactive selection, build rust extension if cargo is installed
-Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
+" Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
+Plug 'liuchengxu/vim-clap'
 
 " Statusline and theme
 Plug 'vim-airline/vim-airline'
-
+" Plug 'liuchengxu/eleline.vim'
 " Themes
 Plug 'meck/nord-vim', { 'branch': 'develop' }
 " Waiting for PR
@@ -72,6 +73,10 @@ if filereadable('/etc/os-release')  && ( strpart(filter(readfile('/etc/os-releas
 else
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
+
+" Debugger
+Plug 'puremourning/vimspector'
+
 
 " Adds seamless navigation between tmux and vim
 Plug 'christoomey/vim-tmux-navigator'
@@ -256,6 +261,7 @@ let g:coc_global_extensions =
   \ , 'coc-yaml'
   \ , 'coc-emoji'
   \ , 'coc-rls'
+  \ , 'coc-clangd'
   \ , 'coc-diagnostic' ]
 
 augroup CocAugrp
