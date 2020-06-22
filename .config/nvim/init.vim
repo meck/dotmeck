@@ -48,8 +48,7 @@ Plug 'godlygeek/tabular'                        " Aligning stuff
 Plug 'romainl/vim-qf'                           " Better quickfix window
 Plug 'liuchengxu/vim-clap'                      " Interactive selection
 Plug 'vim-airline/vim-airline'                  " Statusline and theme
-" Plug 'meck/nord-vim', { 'branch': 'develop' }   " Theme - TODO Waiting for PR
-Plug '~/nord-vim', { 'branch': 'develop' }   " Theme - TODO Waiting for PR
+Plug 'meck/nord-vim', { 'branch': 'develop' }   " Theme - TODO Waiting for PR
 Plug 'sheerun/vim-polyglot'                     " Languge Files
 Plug 'neovim/nvim-lsp'                          " Builtin LSP
 Plug 'haorenW1025/diagnostic-nvim'              " Builtin LSP diagnostic
@@ -84,8 +83,8 @@ Plug 'plasticboy/vim-markdown'
 Plug 'rhysd/vim-gfm-syntax'
 Plug 'JamshedVesuna/vim-markdown-preview'
 
-Plug 'fatih/vim-go' , { 'for': 'go' }         " Go
-Plug 'rust-lang/rust.vim' , { 'for': 'rust' } " Rust
+Plug 'fatih/vim-go' , { 'for': 'go' }
+Plug 'rust-lang/rust.vim' , { 'for': 'rust' }
 
 call plug#end()
 
@@ -155,17 +154,10 @@ set numberwidth=5
 set relativenumber
 set number
 
-"Automatically switch line numbers
-function! Relativize(v)
-  if &number
-    let &relativenumber = a:v
-  endif
-endfunction
-augroup relativize
-  autocmd!
-  autocmd BufWinEnter,FocusGained,InsertLeave,WinEnter * call Relativize(1)
-  autocmd BufWinLeave,FocusLost,InsertEnter,WinLeave * call Relativize(0)
-augroup END
+" Live substitution
+set inccommand=split
+
+
 
 " Persistent Undo
 if has('persistent_undo')
@@ -177,6 +169,21 @@ if has('persistent_undo')
   set undofile
 endif
 
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+" Auto groups                                                         {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"Automatically switch line numbers
+augroup relativize
+  autocmd!
+  autocmd BufWinEnter,FocusGained,InsertLeave,WinEnter * call Relativize(1)
+  autocmd BufWinLeave,FocusLost,InsertEnter,WinLeave * call Relativize(0)
+augroup END
+
+
+
 " Quick fix window
 augroup quickfix
     autocmd!
@@ -185,8 +192,7 @@ augroup quickfix
             \| setlocal numberwidth=2
 augroup END
 
-" Live substitution
-set inccommand=split
+
 
 " Terminal
 augroup nvim_term
@@ -198,6 +204,22 @@ augroup nvim_term
 
   " No line numbers in terminals
   autocmd TermOpen * setlocal nonumber norelativenumber
+augroup END
+
+
+
+" Reload config after write
+augroup reload_vimrc
+    autocmd!
+    autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+augroup END
+
+
+
+" Highlight selection after yanking
+augroup highlight_yank
+    autocmd!
+    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)
 augroup END
 
 
@@ -214,6 +236,7 @@ function! TrimWhitespace()
     echo 'Stripped trailing whitespaccs'
 endfunction
 
+
 " Delete buffer if it is only open in a single window,
 " otherwise close the window
 function! CloseWindowOrKillBuffer()
@@ -225,6 +248,12 @@ function! CloseWindowOrKillBuffer()
   endif
 endfunction
 
+" Change Line Numbers
+function! Relativize(v)
+  if &number
+    let &relativenumber = a:v
+  endif
+endfunction
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
@@ -233,16 +262,6 @@ endfunction
 
 " Delete all but the current buffer
 command! Bonly silent! execute "%bd|e#|bd#"
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-" Auto groups                                                          {{{
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-augroup reload_vimrc
-    autocmd!
-    autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
-augroup END
 
 
 
@@ -268,10 +287,10 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 " Airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#obsession#indicator_text = 'Ⓢ'
+let g:airline#extensions#obsession#enabled = 1
 function! AirlineInit()
   call airline#parts#define_function('lsp', 'LspStatus')
-  let g:airline_section_c = airline#section#create(['bufferline', 'readonly', 'lsp'])
-  let g:airline_section_z = airline#section#create(['obsession', '%3p%% %4l:%-2c'])
+  let g:airline_section_c = airline#section#create(['file', 'readonly', 'lsp'])
 endfunction
 augroup airline_init
   autocmd!
@@ -279,10 +298,10 @@ augroup airline_init
 augroup END
 
 " Slanted Dividers
-let g:airline_left_sep = "\ue0b8"
-let g:airline_left_alt_sep = "\ue0b9"
-let g:airline_right_sep = "\ue0be"
-let g:airline_right_alt_sep = "\ue0bf"
+" let g:airline_left_sep = "\ue0b8"
+" let g:airline_left_alt_sep = "\ue0b9"
+" let g:airline_right_sep = "\ue0be"
+" let g:airline_right_alt_sep = "\ue0bf"
 
 
 " GitGutter
@@ -325,14 +344,13 @@ let g:vimwiki_list = [{'path': '~/vimwiki/',
                      \ }]
 
 
+
 " Themes
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
 let g:nord_underline = 1
-
 colorscheme nord
-
 
 
 
@@ -372,9 +390,22 @@ cmap w!! w !sudo tee >/dev/null %
 " Edit vimrc with F1 and source it automatically when saved
 nmap <silent><f1> :e $MYVIMRC<CR>
 
+" Clean trailing whitespaces
+noremap <silent> <Leader>wc :call TrimWhitespace()<CR>
+
 " Terminal spawning
 nnoremap <silent> <Leader>te :belowright split +resize\ 13 \| setlocal winfixheight \| terminal <CR>
 nnoremap <silent> <Leader>vte :belowright vsplit \| terminal <CR>
+
+" Navigate windows
+nnoremap <C-h> <C-\><C-n><C-w>h
+nnoremap <C-j> <C-\><C-n><C-w>j
+nnoremap <C-k> <C-\><C-n><C-w>k
+nnoremap <C-l> <C-\><C-n><C-w>l
+inoremap <C-h> <C-\><C-n><C-w>h
+inoremap <C-j> <C-\><C-n><C-w>j
+inoremap <C-k> <C-\><C-n><C-w>k
+inoremap <C-l> <C-\><C-n><C-w>l
 
 " Navigate terminal window
 tnoremap <C-h> <C-\><C-n><C-w>h
@@ -392,25 +423,15 @@ nnoremap <Leader>tt  :tabedit<Space>
 nnoremap <Leader>tm  :tabm<Space>
 nnoremap <Leader>td  :tabclose<CR>
 
-noremap <silent> <Leader>wc :call TrimWhitespace()<CR>
-
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 " Plugin mapping, functions and autocmds                              {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" TODO show hover as info in completion
-" TODO formating
-" TODO status airline
-" TODO get status/restart command
-
 " Snippets
-
-" Use completion to expand
-let g:UltiSnipsExpandTrigger="<Plug>(ultisnips_expand)"
+let g:UltiSnipsExpandTrigger="<Plug>(ultisnips_expand)" " Completion to expand
 let g:UltiSnipsJumpForwardTrigger="<tab>"
-
 
 
 " Completion
@@ -418,7 +439,6 @@ let g:completion_enable_snippet = 'UltiSnips'
 let g:completion_docked_hover = 1
 let g:completion_docked_minimum_size = 5
 let g:completion_docked_maximum_size = 20
-
 let g:completion_auto_change_source = 1
 let g:completion_chain_complete_list =  {
     \ 'default': [
@@ -436,12 +456,18 @@ inoremap <silent><expr> <TAB>
   \ <SID>check_back_space() ? "\<TAB>" :
   \ completion#trigger_completion()
 
+" Load completion plugin for all buffers
 augroup load_comp_grp
     autocmd!
     autocmd BufEnter * lua require'completion'.on_attach()
 augroup END
 
 
+
+" TODO show hover as info in completion HIE
+" TODO formating
+" TODO status airline
+" TODO get stop/restart command
 
 " LSP
 
@@ -473,8 +499,6 @@ local attach_and_map = function(client, bufnr)
     vim.api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
     vim.api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
   end
-
-
 
   -- Mappings
   local opts = { noremap=true, silent=true }
@@ -517,14 +541,24 @@ nvim_lsp.hie.setup{
   }
 }
 
--- Clangd
+-- clangd
 nvim_lsp.clangd.setup{
   cmd = { "clangd", "--background-index" };
   filetypes = { "c", "cpp", "objc", "objcpp" };
   on_attach = attach_and_map;
   capabilities = lsp_status.capabilities;
 }
+
+-- rnix
+nvim_lsp.rnix.setup{
+  cmd = { "rnix-lsp" };
+  filetypes = { "nix" };
+  on_attach = attach_and_map;
+  capabilities = lsp_status.capabilities;
+}
+
 EOF
+
 
 " Get status for airline
 function! LspStatus() abort
@@ -534,6 +568,10 @@ function! LspStatus() abort
   return ''
 endfunction
 
+
+" Stop all clients
+" restart with `:edit`
+command! LspStopAll call s:stop_all_clients()
 
 function! s:stop_all_clients()
 lua << EOF
@@ -550,7 +588,7 @@ lua << EOF
 EOF
 endfunction
 
-command! LspStopAll call s:stop_all_clients()
+
 
 " Gitgutter
 nmap <silent> ]g :GitGutterNextHunk <CR>
@@ -581,5 +619,7 @@ nnoremap <silent><Leader>g :Clap grep<CR>
 nnoremap <silent><Leader>D :Clap cd ~<CR>
 " cwd from .
 nnoremap <silent><Leader>d :Clap cd<CR>
+
+
 
 " }}}
