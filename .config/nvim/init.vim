@@ -266,9 +266,18 @@ command! Bonly silent! execute "%bd|e#|bd#"
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-" Plug-in Settings                                                    {{{
+" Lua Config                                                          {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+lua << EOF
+  require'lsp'
+EOF
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+" Plug-in Settings                                                    {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Vim Obsession
 augroup obsssions_autoload
@@ -285,23 +294,24 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 
 " Airline
+let g:airline_left_sep = "\ue0b8" " Slanted Dividers
+let g:airline_left_alt_sep = "\ue0b9"
+let g:airline_right_sep = "\ue0be"
+let g:airline_right_alt_sep = "\ue0bf"
+
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#obsession#indicator_text = 'Ⓢ'
 let g:airline#extensions#obsession#enabled = 1
+
 function! AirlineInit()
-  call airline#parts#define_function('lsp', 'LspStatus')
-  let g:airline_section_c = airline#section#create(['file', 'readonly', 'lsp'])
+  " call airline#parts#define_function('lsp', 'v:lua.lsp_get_airline_error')
+  " let g:airline_section_c = airline#section#create(['file', 'readonly', 'lsp'])
 endfunction
 augroup airline_init
   autocmd!
   autocmd User AirlineAfterInit call AirlineInit()
 augroup END
 
-" Slanted Dividers
-" let g:airline_left_sep = "\ue0b8"
-" let g:airline_left_alt_sep = "\ue0b9"
-" let g:airline_right_sep = "\ue0be"
-" let g:airline_right_alt_sep = "\ue0bf"
 
 
 " GitGutter
@@ -310,6 +320,7 @@ let g:gitgutter_sign_added = s:gitgutter_sign_all
 let g:gitgutter_sign_modified = s:gitgutter_sign_all
 let g:gitgutter_sign_removed = s:gitgutter_sign_all
 let g:gitgutter_sign_modified_removed = s:gitgutter_sign_all
+
 
 
 " Vim-Clap
@@ -345,7 +356,7 @@ let g:vimwiki_list = [{'path': '~/vimwiki/',
 
 
 
-" Themes
+" Theme
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
@@ -434,6 +445,7 @@ let g:UltiSnipsExpandTrigger="<Plug>(ultisnips_expand)" " Completion to expand
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 
 
+
 " Completion
 let g:completion_enable_snippet = 'UltiSnips'
 let g:completion_docked_hover = 1
@@ -461,132 +473,6 @@ augroup load_comp_grp
     autocmd!
     autocmd BufEnter * lua require'completion'.on_attach()
 augroup END
-
-
-
-" TODO show hover as info in completion HIE
-" TODO formating
-" TODO status airline
-" TODO get stop/restart command
-
-" LSP
-
-call sign_define("LspDiagnosticsErrorSign", {"text" : "✖", "texthl" : "LspDiagnosticsError"})
-call sign_define("LspDiagnosticsWarningSign", {"text" : "⚠", "texthl" : "LspDiagnosticsWarning"})
-call sign_define("LspDiagnosticsInformationSign", {"text" : "ℹ", "texthl" : "LspDiagnosticsInformation"})
-call sign_define("LspDiagnosticsHintSign", {"text" : "➤", "texthl" : "LspDiagnosticsHint"})
-
-lua << EOF
-
-local nvim_lsp = require'nvim_lsp'
-local lsp_status = require'lsp-status'
-
-lsp_status.register_progress()
-
-local attach_and_map = function(client, bufnr)
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- attach callbacks
-  lsp_status.on_attach(client, bufnr)
-  require'diagnostic'.on_attach()
-
-  -- Use `gq` for formating
-  vim.api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.buf.range_formatting()')
-
-  -- Highlight item under the cursor
-  if client.resolved_capabilities['document_highlight'] then
-    vim.api.nvim_command [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
-    vim.api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
-    vim.api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
-  end
-
-  -- Mappings
-  local opts = { noremap=true, silent=true }
-
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gh', '<cmd>lua vim.lsp.buf.document_highlight()<CR>', opts)
-
-  -- `diagnostics.vim` mappings
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[s', '<cmd>lua require"jumpLoc".jumpPrevLocationCycle()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']s', '<cmd>lua require"jumpLoc".jumpNextLocationCycle()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua require"jumpLoc".openDiagnostics()<CR>', opts)
-
-  -- Builtin lsp mappings
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>a', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ls', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lS', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
-end
-
--- HIE
-nvim_lsp.hie.setup{
-  cmd = {"hie", "--lsp"};
-  filetypes = { "haskell" ,  "lhs" , "hs" };
-  on_attach = attach_and_map;
-  capabilities = lsp_status.capabilities;
-  init_options = {
-    languageServerHaskell = {
-      hlintOn = true;
-      completionSnippetsOn = true;
-      formatOnImportOn = true;
-      formattingProvider = 'brittany';
-    }
-  }
-}
-
--- clangd
-nvim_lsp.clangd.setup{
-  cmd = { "clangd", "--background-index" };
-  filetypes = { "c", "cpp", "objc", "objcpp" };
-  on_attach = attach_and_map;
-  capabilities = lsp_status.capabilities;
-}
-
--- rnix
-nvim_lsp.rnix.setup{
-  cmd = { "rnix-lsp" };
-  filetypes = { "nix" };
-  on_attach = attach_and_map;
-  capabilities = lsp_status.capabilities;
-}
-
-EOF
-
-
-" Get status for airline
-function! LspStatus() abort
-  if luaeval('#vim.lsp.buf_get_clients() > 0')
-    return luaeval("require('lsp-status').status()")
-  endif
-  return ''
-endfunction
-
-
-" Stop all clients
-" restart with `:edit`
-command! LspStopAll call s:stop_all_clients()
-
-function! s:stop_all_clients()
-lua << EOF
-  local clients = vim.lsp.get_active_clients()
-
-  if #clients > 0 then
-    vim.lsp.stop_client(clients)
-    for _, v in pairs(clients) do
-      print("Stopped LSP client " .. v.name)
-    end
-  else
-    print("No LSP clients are running")
-  end
-EOF
-endfunction
 
 
 
