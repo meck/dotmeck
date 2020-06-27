@@ -1,17 +1,13 @@
--- TODO check nvim < 0.5
--- TODO fail gracefully on missing exe
 -- TODO show hover as info in completion HIE
--- TODO formating
 -- TODO status airline
--- TODO get stop/restart command
 
 local nvim_lsp = require'nvim_lsp'
 local lsp_status = require'lsp-status'
 local configs = require'nvim_lsp/configs'
 
+local vim = vim
 local api = vim.api
 local lsp = vim.lsp
-local fn = vim.fn
 
 local set_mappings = function(bufnr)
 
@@ -41,28 +37,48 @@ local set_mappings = function(bufnr)
 end
 
 
+Formatexpr_wrapper = function()
+
+ -- only reformat on explicit gq command
+ if not vim.fn.mode() == 'n' then
+    -- fall back to Vims internal reformatting
+    return 1
+ end
+
+ local opts = {}
+ local start_line = vim.v.lnum
+ local end_line = start_line + vim.v.count - 1
+ if start_line >= 0 and end_line >= 0 then
+   lsp.buf.range_formatting(opts, {start_line, 0}, {end_line, 0})
+ end
+
+ return 0
+end
+
+
 
 -- Called when a server starts
 local attach_fn = function(client, bufnr)
-
 
   -- Statusbar
   lsp_status.on_attach(client, bufnr)
   lsp_status.register_progress()
 
-
   -- Diagnostics
   require'diagnostic'.on_attach()
+
   -- Use plugin instead:
   -- api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
   -- Turn on signcolumn for the current window
-  -- TODO should be for all win with the current buf
   api.nvim_win_set_option(0, 'signcolumn', 'yes')
 
 
   -- Use `gq` for formating
   if client.resolved_capabilities['document_range_formatting'] then
-    api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.buf.range_formatting()')
+    -- https://github.com/neovim/neovim/issues/12528
+    -- api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.buf.range_formatting()')
+    api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.Formatexpr_wrapper()')
   end
 
 
@@ -78,7 +94,6 @@ end
 
 
 
--- `:LspStopAll` Stop all clients
 Lsp_stop_all = function()
   local clients = lsp.get_active_clients()
 
@@ -96,19 +111,26 @@ Lsp_stop_all = function()
   end
 end
 
-api.nvim_command("command! LspStopAll lua Lsp_stop_all()")
+-- `:LspStopAll` and `:LspRestartAll`
+api.nvim_command("command! LspStopAll call v:lua.Lsp_stop_all()")
+api.nvim_command("command! -bar LspRestartAll call v:lua.Lsp_stop_all() <bar> edit")
 
 
+api.nvim_command("command! Test lua require'lsp_statusline'.status()")
 
 if not Lsp_signs_defined then
-  fn.sign_define('LspDiagnosticsErrorSign', {text='✖', texthl='LspDiagnosticsError', linehl='', numhl=''})
-  fn.sign_define('LspDiagnosticsWarningSign', {text='⚠', texthl='LspDiagnosticsWarning', linehl='', numhl=''})
-  fn.sign_define('LspDiagnosticsInformationSign', {text='ℹ', texthl='LspDiagnosticsInfo', linehl='', numhl=''})
-  fn.sign_define('LspDiagnosticsHintSign', {text='◉', texthl='LspDiagnosticsHint', linehl='', numhl=''})
+  vim.fn.sign_define('LspDiagnosticsErrorSign', {text='✖', texthl='LspDiagnosticsError', linehl='', numhl=''})
+  vim.fn.sign_define('LspDiagnosticsWarningSign', {text='⚠', texthl='LspDiagnosticsWarning', linehl='', numhl=''})
+  vim.fn.sign_define('LspDiagnosticsInformationSign', {text='ℹ', texthl='LspDiagnosticsInfo', linehl='', numhl=''})
+  vim.fn.sign_define('LspDiagnosticsHintSign', {text='◉', texthl='LspDiagnosticsHint', linehl='', numhl=''})
   Lsp_signs_defined = true
 end
 
 
+
+---------------
+--  Servers  --
+---------------
 
 -- HLS
 if not configs.hls then
@@ -122,61 +144,69 @@ if not configs.hls then
   }
 end
 
-nvim_lsp.hls.setup{
-  on_attach = attach_fn;
-  init_options = {
-    languageServerHaskell = {
-      hlintOn = true;
-      completionSnippetsOn = true;
-      formatOnImportOn = true;
-   }
-  }
-};
+if vim.fn.executable("haskell-language-server") == 1 then
+  nvim_lsp.hls.setup{
+    on_attach = attach_fn;
+    init_options = {
+      languageServerHaskell = {
+        hlintOn = true;
+        completionSnippetsOn = true;
+        formatOnImportOn = true;
+     }
+    }
+  };
+end
 
 
 
 -- HIE
-nvim_lsp.hie.setup{
-  cmd = {"hie", "--lsp"};
-  filetypes = { "haskell" ,  "lhs" , "hs" };
-  on_attach = attach_fn;
-  capabilities = lsp_status.capabilities;
-  init_options = {
-    languageServerHaskell = {
-      hlintOn = true;
-      completionSnippetsOn = true;
-      formatOnImportOn = true;
-      formattingProvider = 'brittany';
+if vim.fn.executable("hie") == 1 then
+  nvim_lsp.hie.setup{
+    cmd = {"hie", "--lsp"};
+    filetypes = { "haskell" ,  "lhs" , "hs" };
+    on_attach = attach_fn;
+    capabilities = lsp_status.capabilities;
+    init_options = {
+      languageServerHaskell = {
+        hlintOn = true;
+        completionSnippetsOn = true;
+        formatOnImportOn = true;
+        formattingProvider = 'brittany';
+      }
     }
   }
-}
+end
 
 
 
 -- clangd
-nvim_lsp.clangd.setup{
-  cmd = { "clangd", "--background-index" };
-  filetypes = { "c", "cpp", "objc", "objcpp" };
-  on_attach = attach_fn;
-  capabilities = lsp_status.capabilities;
-}
+if vim.fn.executable("clangd") == 1 then
+  nvim_lsp.clangd.setup{
+    cmd = { "clangd", "--background-index" };
+    filetypes = { "c", "cpp", "objc", "objcpp" };
+    on_attach = attach_fn;
+    capabilities = lsp_status.capabilities;
+  }
+end
 
 
 
 -- Nix
-nvim_lsp.rnix.setup{
-  cmd = { "rnix-lsp" };
-  filetypes = { "nix" };
-  on_attach = attach_fn;
-  capabilities = lsp_status.capabilities;
-}
-
+if vim.fn.executable("rnix-lsp") == 1 then
+  nvim_lsp.rnix.setup{
+    cmd = { "rnix-lsp" };
+    filetypes = { "nix" };
+    on_attach = attach_fn;
+    capabilities = lsp_status.capabilities;
+  }
+end
 
 
 -- Lua
-nvim_lsp.sumneko_lua.setup{
-  cmd = { "lua-language-server" };
-  on_attach = attach_fn;
-  capabilities = lsp_status.capabilities;
-}
-
+if vim.fn.executable("lua-langauge-server") == 1 then
+  nvim_lsp.sumneko_lua.setup{
+    cmd = { "lua-language-server" };
+    on_attach = attach_fn;
+    capabilities = lsp_status.capabilities;
+  }
+end

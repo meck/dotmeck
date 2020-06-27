@@ -7,86 +7,8 @@
 " Encoding of this script
 scriptencoding utf-8
 
-let s:vimDir = '$HOME/.config/nvim'
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-" Plugins                                                             {{{
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Automatically install the plugin manager if not installed
-augroup plug_auto_install
-  autocmd!
-  if empty(glob(expand(s:vimDir . '/autoload/plug.vim')))
-    execute('silent !curl -fLo ' . s:vimDir . '/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    autocmd plug_auto_install VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
-augroup END
-
-" Start the plugin manager
-call plug#begin(expand(s:vimDir . '/plugged'))
-
-" Smart stuff
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-vinegar'
-
-
-" Git Stuff
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-git'
-Plug 'airblade/vim-gitgutter'
-
-
-Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim' " Gist
-Plug 'unblevable/quick-scope'                   " Preview targets for f/F/t/T
-Plug 'machakann/vim-sandwich'                   " Surround editing and objects
-Plug 'godlygeek/tabular'                        " Aligning stuff
-Plug 'romainl/vim-qf'                           " Better quickfix window
-Plug 'liuchengxu/vim-clap'                      " Interactive selection
-Plug 'vim-airline/vim-airline'                  " Statusline and theme
-Plug 'meck/nord-vim', { 'branch': 'develop' }   " Theme - TODO Waiting for PR
-Plug 'sheerun/vim-polyglot'                     " Languge Files
-Plug 'neovim/nvim-lsp'                          " Builtin LSP
-Plug 'haorenW1025/diagnostic-nvim'              " Builtin LSP diagnostic
-Plug 'wbthomason/lsp-status.nvim'               " Get LSP status for statusline
-Plug 'haorenW1025/completion-nvim'              " Completion with LSP support
-Plug 'steelsojka/completion-buffers'            " Buffers for completion-nvim
-Plug 'SirVer/ultisnips'                         " Snippets
-Plug 'honza/vim-snippets'                       " Default Snippets
-Plug 'majutsushi/tagbar'                        " Tagbar
-Plug 'mbbill/undotree'                          " UndoTree
-Plug 'vimwiki/vimwiki', { 'branch': 'dev' }     " Wiki
-Plug 'junegunn/vim-peekaboo'                    " Preview of register contents
-Plug 'jamessan/vim-gnupg'                       " GnuPG
-Plug 'liuchengxu/graphviz.vim'                  " Graphviz
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-" Language specific Plugins                                           {{{
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Haskell
-Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
-Plug 'meck/vim-brittany', { 'for': 'haskell' }
-Plug 'alx741/vim-hindent', { 'for': 'haskell' }
-Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
-Plug 'meck/vim-counterpoint', { 'for': 'haskell' }
-Plug 'meck/vim-clap-hoogle'
-
-" Markdown
-Plug 'plasticboy/vim-markdown'
-Plug 'rhysd/vim-gfm-syntax'
-Plug 'JamshedVesuna/vim-markdown-preview'
-
-Plug 'fatih/vim-go' , { 'for': 'go' }
-Plug 'rust-lang/rust.vim' , { 'for': 'rust' }
-
-call plug#end()
+" Load plugins
+runtime plugs.vim
 
 
 
@@ -269,9 +191,11 @@ command! Bonly silent! execute "%bd|e#|bd#"
 " Lua Config                                                          {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+if has("nvim-0.5.0")
 lua << EOF
   require'lsp'
 EOF
+endif
 
 
 
@@ -445,6 +369,7 @@ let g:UltiSnipsExpandTrigger="<Plug>(ultisnips_expand)" " Completion to expand
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 
 
+if has("nvim-0.5.0")
 
 " Completion
 let g:completion_enable_snippet = 'UltiSnips'
@@ -468,13 +393,14 @@ inoremap <silent><expr> <TAB>
   \ <SID>check_back_space() ? "\<TAB>" :
   \ completion#trigger_completion()
 
+
 " Load completion plugin for all buffers
 augroup load_comp_grp
     autocmd!
     autocmd BufEnter * lua require'completion'.on_attach()
 augroup END
 
-
+endif
 
 " Gitgutter
 nmap <silent> ]g :GitGutterNextHunk <CR>
