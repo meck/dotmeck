@@ -223,19 +223,40 @@ let g:airline_left_alt_sep = "\ue0b9"
 let g:airline_right_sep = "\ue0be"
 let g:airline_right_alt_sep = "\ue0bf"
 
+let g:airline_skip_empty_sections = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#obsession#indicator_text = 'Ⓢ'
 let g:airline#extensions#obsession#enabled = 1
 
+
+if has("nvim-0.5.0")
+
+lua << EOF
+ Lsp_status = require'lsp_statusline'.status_string
+ Lsp_curr_fn = require'lsp_statusline'.curr_fn
+ Lsp_errors = require'lsp_statusline'.errors
+ Lsp_warnings = require'lsp_statusline'.warnings
+EOF
+
 function! AirlineInit()
-  " call airline#parts#define_function('lsp', 'v:lua.lsp_get_airline_error')
-  " let g:airline_section_c = airline#section#create(['file', 'readonly', 'lsp'])
+
+  call airline#parts#define_function('lsp_cur_fn', 'v:lua.Lsp_curr_fn')
+  call airline#parts#define_function('lsp_status', 'v:lua.Lsp_status')
+  call airline#parts#define_function('lsp_errors', 'v:lua.Lsp_errors')
+  call airline#parts#define_function('lsp_warnings', 'v:lua.Lsp_warnings')
+
+  let g:airline_section_x = airline#section#create_right(['lsp_cur_fn', 'filetype'])
+  let g:airline_section_y = airline#section#create_right(['lsp_status'])
+  let g:airline_section_error = airline#section#create(['lsp_errors'])
+  let g:airline_section_warning = airline#section#create([ 'whitespace', 'lsp_warnings'])
+
 endfunction
 augroup airline_init
   autocmd!
   autocmd User AirlineAfterInit call AirlineInit()
 augroup END
 
+endif
 
 
 " GitGutter

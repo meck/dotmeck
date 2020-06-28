@@ -53,9 +53,9 @@ Plug 'liuchengxu/graphviz.vim'                  " Graphviz
 
 if has("nvim-0.5.0")
 Plug 'neovim/nvim-lsp'                          " Builtin LSP
-Plug 'haorenW1025/diagnostic-nvim'              " Builtin LSP diagnostic
-Plug 'wbthomason/lsp-status.nvim'               " Get LSP status for statusline
-Plug 'haorenW1025/completion-nvim'              " Completion with LSP support
+Plug 'nvim-lua/diagnostic-nvim'                 " Builtin LSP diagnostic
+Plug 'nvim-lua/lsp-status.nvim'                 " Get LSP status for statusline
+Plug 'nvim-lua/completion-nvim'                 " Completion with LSP support
 Plug 'steelsojka/completion-buffers'            " Buffers for completion-nvim
 endif
 
