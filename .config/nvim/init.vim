@@ -288,6 +288,7 @@ autocmd FileType clap_input inoremap <silent> <buffer> <Esc> <Esc>:call clap#han
 
 
 " VimWiki
+let g:vimwiki_global_ext = 0 " Only use in defined wikis
 let g:vimwiki_list = [{'path': '~/vimwiki/',
                      \ 'path_html': '~/wiki/',
                      \ 'syntax': 'markdown',
@@ -300,12 +301,19 @@ let g:vimwiki_list = [{'path': '~/vimwiki/',
                      \ }]
 
 
+" Pandoc
+let g:pandoc#formatting#mode = 'hA'
+let g:pandoc#spell#enabled = 0
+let g:pandoc#spell#default_langs = ["en","sv"]
+
 
 " Theme
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_uniform_diff_background = 1
 let g:nord_underline = 1
+" https://github.com/arcticicestudio/nord-vim/issues/211
+au Colorscheme * hi! link Conceal Number
 colorscheme nord
 
 
@@ -316,6 +324,7 @@ colorscheme nord
 
 " Space as leader works with showcmd
 let g:mapleader = "\<Space>"
+let g:maplocalleader = "\\"
 
 " Move across wrapped lines like regular lines
 noremap 0 ^

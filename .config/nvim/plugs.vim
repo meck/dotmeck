@@ -72,10 +72,13 @@ Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
 Plug 'meck/vim-counterpoint', { 'for': 'haskell' }
 Plug 'meck/vim-clap-hoogle'
 
-" Markdown
+" Markdown/Pandoc
 Plug 'plasticboy/vim-markdown'
 Plug 'rhysd/vim-gfm-syntax'
 Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'dhruvasagar/vim-table-mode'
 
 Plug 'fatih/vim-go' , { 'for': 'go' }
 Plug 'rust-lang/rust.vim' , { 'for': 'rust' }
