@@ -202,9 +202,9 @@ end
 
 
 -- Lua
-if vim.fn.executable("lua-language-server") == 1 then
+if vim.fn.executable("lua-lsp") == 1 then
   nvim_lsp.sumneko_lua.setup{
-    cmd = { "lua-language-server" };
+    cmd = { "lua-lsp" };
     on_attach = attach_fn;
     capabilities = lsp_status.capabilities;
   }

@@ -1,14 +1,11 @@
 ## Dotmeck
-#### My [yadm](https://yadm.io) managed dotfiles
+#### [yadm](https://yadm.io) managed dotfiles
 
-Neovim, fish, tmux, yabai, skhd, etc
-
-For macOS and Linux
+Mostly stuff thats not included in my nix setup
 
 Setup a new machine:
 ``` bash
 yadm clone "git@github.com:meck/dotmeck.git"
-yadm bootstrap
 ```
 
 If yadm is not available via package manager, somewhat inadvisable from a security perspective:

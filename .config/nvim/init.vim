@@ -293,9 +293,7 @@ let g:vimwiki_list = [{'path': '~/vimwiki/',
                      \ 'path_html': '~/wiki/',
                      \ 'syntax': 'markdown',
                      \ 'ext': '.md',
-                     \ 'template_path': '~/.config/wiki/',
-                     \ 'template_default':'GitHub',
-                     \ 'custom_wiki2html': '~/.config/wiki/wiki2html.sh',
+                     \ 'custom_wiki2html': 'vw-md2html',
                      \ 'template_ext':'.html5',
                      \ 'auto_export':1
                      \ }]
@@ -396,7 +394,6 @@ nnoremap <Leader>td  :tabclose<CR>
 
 " Snippets
 let g:UltiSnipsExpandTrigger="<Plug>(ultisnips_expand)" " Completion to expand
-let g:UltiSnipsJumpForwardTrigger="<tab>"
 
 
 if has("nvim-0.5.0")
