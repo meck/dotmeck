@@ -234,21 +234,15 @@ if has("nvim-0.5.0")
 lua << EOF
  Lsp_status = require'lsp_statusline'.status_string
  Lsp_curr_fn = require'lsp_statusline'.curr_fn
- Lsp_errors = require'lsp_statusline'.errors
- Lsp_warnings = require'lsp_statusline'.warnings
 EOF
 
 function! AirlineInit()
 
   call airline#parts#define_function('lsp_cur_fn', 'v:lua.Lsp_curr_fn')
   call airline#parts#define_function('lsp_status', 'v:lua.Lsp_status')
-  call airline#parts#define_function('lsp_errors', 'v:lua.Lsp_errors')
-  call airline#parts#define_function('lsp_warnings', 'v:lua.Lsp_warnings')
 
   let g:airline_section_x = airline#section#create_right(['lsp_cur_fn', 'filetype'])
   let g:airline_section_y = airline#section#create_right(['lsp_status'])
-  let g:airline_section_error = airline#section#create(['lsp_errors'])
-  let g:airline_section_warning = airline#section#create([ 'whitespace', 'lsp_warnings'])
 
 endfunction
 augroup airline_init
