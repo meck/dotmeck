@@ -32,31 +32,30 @@ Plug 'tpope/vim-git'
 Plug 'airblade/vim-gitgutter'
 
 
-Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim' " Gist
-Plug 'unblevable/quick-scope'                   " Preview targets for f/F/t/T
-Plug 'machakann/vim-sandwich'                   " Surround editing and objects
-Plug 'godlygeek/tabular'                        " Aligning stuff
-Plug 'romainl/vim-qf'                           " Better quickfix window
-Plug 'liuchengxu/vim-clap'                      " Interactive selection
-Plug 'vim-airline/vim-airline'                  " Statusline and theme
-Plug 'meck/nord-vim', { 'branch': 'develop' }   " Theme - TODO Waiting for PR
-Plug 'sheerun/vim-polyglot'                     " Language Files
-Plug 'SirVer/ultisnips'                         " Snippets
-Plug 'honza/vim-snippets'                       " Default Snippets
-Plug 'majutsushi/tagbar'                        " Tagbar
-Plug 'mbbill/undotree'                          " UndoTree
-Plug 'vimwiki/vimwiki', { 'branch': 'dev' }     " Wiki
-Plug 'junegunn/vim-peekaboo'                    " Preview of register contents
-Plug 'jamessan/vim-gnupg'                       " GnuPG
-Plug 'liuchengxu/graphviz.vim'                  " Graphviz
+Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim'              "  Gist
+Plug 'unblevable/quick-scope'                                "  Preview targets for f/F/t/T
+Plug 'machakann/vim-sandwich'                                "  Surround editing and objects
+Plug 'godlygeek/tabular'                                     "  Aligning stuff
+Plug 'romainl/vim-qf'                                        "  Better quickfix window
+Plug 'liuchengxu/vim-clap',{ 'do': ':Clap install-binary!' } "  Interactive selection
+Plug 'vim-airline/vim-airline'                               "  Statusline and theme
+Plug 'meck/nord-vim', { 'branch': 'develop' }                "  Theme - TODO Waiting for PR
+Plug 'sheerun/vim-polyglot'                                  "  Language Files
+Plug 'SirVer/ultisnips'                                      "  Snippets
+Plug 'honza/vim-snippets'                                    "  Default Snippets
+Plug 'majutsushi/tagbar'                                     "  Tagbar
+Plug 'mbbill/undotree'                                       "  UndoTree
+Plug 'junegunn/vim-peekaboo'                                 "  Preview of register contents
+Plug 'jamessan/vim-gnupg'                                    "  GnuPG
+Plug 'liuchengxu/graphviz.vim'                               "  Graphviz
 
 
 if has("nvim-0.5.0")
-Plug 'neovim/nvim-lsp'                          " Builtin LSP
-Plug 'nvim-lua/diagnostic-nvim'                 " Builtin LSP diagnostic
-Plug 'nvim-lua/lsp-status.nvim'                 " Get LSP status for statusline
-Plug 'nvim-lua/completion-nvim'                 " Completion with LSP support
-Plug 'steelsojka/completion-buffers'            " Buffers for completion-nvim
+Plug 'neovim/nvim-lsp'                                       "  Builtin LSP
+Plug 'nvim-lua/diagnostic-nvim'                              "  Builtin LSP diagnostic
+Plug 'nvim-lua/lsp-status.nvim'                              "  Get LSP status for statusline
+Plug 'nvim-lua/completion-nvim'                              "  Completion with LSP support
+Plug 'steelsojka/completion-buffers'                         "  Buffers for completion-nvim
 endif
 
 
@@ -73,11 +72,9 @@ Plug 'meck/vim-counterpoint', { 'for': 'haskell' }
 Plug 'meck/vim-clap-hoogle'
 
 " Markdown/Pandoc
-Plug 'plasticboy/vim-markdown'
-Plug 'rhysd/vim-gfm-syntax'
-Plug 'JamshedVesuna/vim-markdown-preview'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'dhruvasagar/vim-table-mode'
 
 Plug 'fatih/vim-go' , { 'for': 'go' }

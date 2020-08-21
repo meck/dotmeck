@@ -281,22 +281,14 @@ let g:clap_provider_grep_enable_icon = 0
 autocmd FileType clap_input inoremap <silent> <buffer> <Esc> <Esc>:call clap#handler#exit()<CR>
 
 
-" VimWiki
-let g:vimwiki_global_ext = 0 " Only use in defined wikis
-let g:vimwiki_list = [{'path': '~/vimwiki/',
-                     \ 'path_html': '~/wiki/',
-                     \ 'syntax': 'markdown',
-                     \ 'ext': '.md',
-                     \ 'custom_wiki2html': 'vw-md2html',
-                     \ 'template_ext':'.html5',
-                     \ 'auto_export':1
-                     \ }]
-
 
 " Pandoc
 let g:pandoc#formatting#mode = 'hA'
 let g:pandoc#spell#enabled = 0
 let g:pandoc#spell#default_langs = ["en","sv"]
+let g:pandoc#hypertext#create_if_no_alternates_exists = 1
+let g:pandoc#hypertext#autosave_on_edit_open_link = 1
+let g:pandoc#after#modules#enabled = ["tablemode", "ultisnips"]
 
 
 " Theme
