@@ -1,7 +1,9 @@
 ## Dotmeck
 #### [yadm](https://yadm.io) managed dotfiles
 
-Mostly stuff thats not included in my nix setup
+Mostly stuff thats not included in my nix setup.
+
+Nixos/Macos branches
 
 Setup a new machine:
 ``` bash

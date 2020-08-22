@@ -1,0 +1,135 @@
+# the default mode
+:: default : echo "" > $TMPDIR/current_skhd_mode;\
+             open -g "bitbar://refreshPlugin?name=skhd_mode.*?.sh"
+
+# a mode for focus operations
+:: focus @ : echo "focus" > $TMPDIR/current_skhd_mode;\
+             open -g "bitbar://refreshPlugin?name=skhd_mode.*?.sh"
+
+# a mode for warp operations
+:: warp @ : echo "warp" > $TMPDIR/current_skhd_mode;\
+            open -g "bitbar://refreshPlugin?name=skhd_mode.*?.sh"
+
+# a mode for resizing operations
+:: resize @ : echo "resize" > $TMPDIR/current_skhd_mode;\
+              open -g "bitbar://refreshPlugin?name=skhd_mode.*?.sh"
+
+# enter and exit modes
+default                      < alt - space      ; focus
+focus                        < alt - space      ; resize
+resize                       < alt - space      ; warp
+warp                         < alt - space      ; default
+focus, resize, warp          < escape           ; default
+focus, resize, warp          < w                ; warp
+focus, resize, warp          < r                ; resize
+
+# global commands
+# apen a new terminal window
+# cmd - return : $HOME/bin/iterm
+
+.blacklist [
+  "vmware fusion"
+]
+
+# Pass command to swap desktop to MacOs
+focus, resize, warp < ctrl - left            -> : ;
+focus, resize, warp < ctrl - right           -> : ;
+
+# focus window h and j cycles, this is dependent on the monitor order beeing correct
+default, focus, resize, warp < alt - h          :  yabai -m window --focus west \
+  || (yabai -m display --focus last && yabai -m window --focus last)
+default, focus, resize, warp < alt - l          :  yabai -m window --focus east \
+  || (yabai -m display --focus first && yabai -m window --focus first)
+default, focus, resize, warp < alt - j          :  yabai -m window --focus south
+default, focus, resize, warp < alt - k          :  yabai -m window --focus north
+default, focus, resize, warp < alt - return     :  yabai -m window --focus largest
+
+# focus monitor cycle around
+default, focus, resize, warp < shift + alt - h  :  yabai -m display --focus prev \
+  || (yabai -m display --focus last || yabai -m display --focus first)
+default, focus, resize, warp < shift + alt - l  :  yabai -m display --focus next \
+  || (yabai -m display --focus first || yabai -m display --focus last)
+
+focus, resize, warp < space                 :  yabai -m space --rotate 90                 # rotate tree
+focus, resize, warp < shift - space         :  yabai -m space --rotate 270                # rotate tree
+focus, resize, warp < i                     :  yabai -m space --mirror y-axis             # mirror vertical
+focus, resize, warp < o                     :  yabai -m space --mirror x-axis             # mirror horizontal
+focus, resize, warp < f                     :  yabai -m window --toggle native-fullscreen # toggle window native fullscreen
+focus, resize, warp < p                     :  yabai -m window --toggle zoom-parent       # toggle window parent zoom
+focus, resize, warp < s                     :  yabai -m window --toggle split             # toggle window split type
+focus, resize, warp < g                     :  yabai -m window --toggle float;\
+                                               yabai -m window --grid 6:6:1:1:4:4         # Float a centered window
+focus, resize, warp < q                     :  yabai -m space --balance                   # equalize size of windows
+
+# change layout of desktop: m ,
+focus, resize, warp < m                     :  yabai -m space --layout bsp;\
+                                               open -g "bitbar://refreshPlugin?name=yabai_layout.*?.sh"
+focus, resize, warp < 0x2B                  :  yabai -m space --layout float;\
+                                               open -g "bitbar://refreshPlugin?name=yabai_layout.*?.sh"
+
+# Turn on and off FFM: .
+focus, resize, warp < 0x2F                  :  yabai -m config focus_follows_mouse          autofocus
+focus, resize, warp < shift - 0x2F          :  yabai -m config focus_follows_mouse          off
+
+# Turn on and off border: /
+focus, resize, warp < 0x2C                  :  yabai -m config window_border                on
+focus, resize, warp < shift - 0x2C          :  yabai -m config window_border                off
+
+# Adjust Gaps and Paddning: Minus/Plus key
+focus, resize, warp < 0x18                  :  yabai -m space --padding rel:25:25:25:25; yabai -m space --gap rel:30
+focus, resize, warp < 0x1B                  :  yabai -m space --padding rel:-25:-25:-25:-25; yabai -m space --gap rel:-30
+focus, resize, warp < alt - 0x18            :  yabai -m space --gap rel:30
+focus, resize, warp < alt - 0x1B            :  yabai -m space --gap rel:-30
+focus, resize, warp < shift - 0x18          :  yabai -m space --padding rel:25:25:25:25
+focus, resize, warp < shift - 0x1B          :  yabai -m space --padding rel:-25:-25:-25:-25
+focus, resize, warp < 0                     :  yabai -m space --toggle padding; yabai -m space --toggle gap
+
+# swap window
+focus < h                                   :  yabai -m window --swap west
+focus < j                                   :  yabai -m window --swap south
+focus < k                                   :  yabai -m window --swap north
+focus < l                                   :  yabai -m window --swap east
+focus < return                              :  yabai -m window --swap largest
+
+# send window to monitor and follow focus
+focus < tab                                 :  yabai -m window --display next; yabai -m display --focus next
+focus < shift - tab                         :  yabai -m window --display prev; yabai -m display --focus prev
+focus < 1                                   :  yabai -m window --display 1; yabai -m display --focus 1
+focus < 2                                   :  yabai -m window --display 2; yabai -m display --focus 2
+focus < 3                                   :  yabai -m window --display 3; yabai -m display --focus 3
+
+# send window to monitor and dont follow focus
+focus < alt - tab                           :  yabai -m window --display next
+focus < alt + shift - tab                   :  yabai -m window --display prev
+focus < alt - 1                             :  yabai -m window --display 1
+focus < alt - 2                             :  yabai -m window --display 2
+focus < alt - 3                             :  yabai -m window --display 3
+
+# move window
+warp < h                                    :  yabai -m window --warp west
+warp < j                                    :  yabai -m window --warp south
+warp < k                                    :  yabai -m window --warp north
+warp < l                                    :  yabai -m window --warp east
+warp < return                               :  yabai -m window --warp largest
+
+# send window to desktop
+warp < tab                                  :  yabai -m window --space next
+warp < shift - tab                          :  yabai -m window --space prev
+warp < 1                                    :  yabai -m window --space 1
+warp < 2                                    :  yabai -m window --space 2
+warp < 3                                    :  yabai -m window --space 3
+warp < 4                                    :  yabai -m window --space 4
+warp < 5                                    :  yabai -m window --space 5
+warp < 6                                    :  yabai -m window --space 6
+
+# increase region size
+resize < h                                  :  yabai -m window --resize left:-30:0
+resize < j                                  :  yabai -m window --resize bottom:0:30
+resize < k                                  :  yabai -m window --resize top:0:-30
+resize < l                                  :  yabai -m window --resize right:30:0
+
+# decrease region size
+resize < shift - l                          :  yabai -m window --resize left:30:0
+resize < shift - k                          :  yabai -m window --resize bottom:0:-30
+resize < shift - j                          :  yabai -m window --resize top:0:30
+resize < shift - h                          :  yabai -m window --resize right:-30:0
