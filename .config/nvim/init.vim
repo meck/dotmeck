@@ -291,6 +291,13 @@ let g:pandoc#hypertext#autosave_on_edit_open_link = 1
 let g:pandoc#after#modules#enabled = ["tablemode", "ultisnips"]
 
 
+" Tablemode
+" Pandoc complatible layout
+let g:table_mode_corner ='+'
+let g:table_mode_corner_corner='+'
+let g:table_mode_header_fillchar='='
+
+
 " Theme
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
