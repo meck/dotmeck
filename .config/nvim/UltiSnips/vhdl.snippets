@@ -1,0 +1,41 @@
+# global !p
+# def split_line(text):
+#   import textwrap
+#   lines = textwrap.wrap(text, 78 - 19)
+#   output = list()
+#   for line in lines:
+#     output.append('--' + ' '*19 + line)
+#   snip_line = snip.tabstops[4].end[0]
+#   snip.buffer.append(output, snip_line + 1)
+#   del snip.buffer[snip_line]
+
+
+# endglobal
+
+# post_jump "if snip.tabstop == 0 : split_line(snip.tabstops[4].current_text)"
+snippet head "File Header" b
+--------------------------------------------------------------------------------
+-- File:             `!p snip.rv = fn`
+--
+-- Company:          ${2:Meck AB}
+-- Engineer:         ${3:Johan Eklund}
+-- Created:          `date +%m/%d/%y`
+--
+--
+-- Target Devices:   ${4:Intel MAX10}
+-- Testbench file:   ${5:No file}
+-- Tool versions:    ${6:Quartus v18.1 and ModelSim}
+--
+--
+-- Description:      ${7:${VISUAL}}
+--
+--
+-- In Signals:       ${8}
+--
+-- Out Signals:      ${9}
+--------------------------------------------------------------------------------
+${0}
+endsnippet
+
+
+
