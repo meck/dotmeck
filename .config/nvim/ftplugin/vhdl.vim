@@ -10,28 +10,45 @@ setlocal commentstring=--%s
 " Dirty fix while wating for
 " https://github.com/jeremiah-c-leary/vhdl-style-guide/issues/353
 
-noremap <F9> :call RunVSG()<CR>
+noremap <silent> <buffer> <F9> :call RunVSG()<CR>
 
-endfor
 if exists('*RunVSG')
     finish
 endif
 
 function RunVSG()
-  let s:cfgfile = findfile(".vsgrc", ".;")
-  if s:cfgfile ==# ""
-    let s:cfgfile = "nocmd"
-  else
-    let s:cfgcmd = '--configuration ' . s:cfgfile
+
+  " Save current as a temporary file
+  let s:tmpfile = tempname() . '.vhd'
+  execute 'silent write ' . s:tmpfile
+
+
+  " Traverse up the direcory tree for a cfg file
+  let s:cfgcmd = findfile(".vsgrc", ".;")
+  if s:cfgcmd !=# ""
+    let s:cfgcmd = "--configuration " . s:cfgcmd
   endif
-  let s:current_file = expand("%:p")
-  setl autoread
-  write!
-  cgetex system("vsg -f " . s:current_file . " " . s:cfgcmd . " --fix")
-  copen
-  wincmd p
-  edit
-  set autoread
+
+  " clear qf
+  call setqflist([])
+
+  " process the tempfile
+  cgetex system("vsg -f " . s:tmpfile . " " . s:cfgcmd . " -of syntastic --fix")
+
+  " replace the buffer contents
+  call nvim_buf_set_lines(bufnr('%') , 0, -1, 0, readfile(s:tmpfile))
+
+  " open if not empty
+  if len(getqflist()) == 0
+    echo "No Issues"
+  else
+    let s:winnr = winnr()
+    copen
+    if winnr() != s:winnr
+      wincmd p
+    endif
+  endif
+
 endfunction
 
 
