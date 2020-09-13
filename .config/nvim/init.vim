@@ -261,27 +261,6 @@ let g:gitgutter_sign_removed = s:gitgutter_sign_all
 let g:gitgutter_sign_modified_removed = s:gitgutter_sign_all
 
 
-
-" Vim-Clap
-let g:clap_search_box_border_symbols = { 'rounded': ["🭁", "🭌"], 'nil': ['', ''] }
-let g:clap_search_box_border_style = exists('g:airline_powerline_fonts') ? 'rounded' : 'nil'
-let g:clap_current_selection_sign = {
-      \ 'text': exists('g:airline_powerline_fonts') ? '▶' : '>>',
-      \ 'texthl': "Warning",
-      \ "linehl": "ClapCurrentSelection"
-      \ }
-let g:clap_selected_sign = {
-      \ 'text': exists('g:airline_powerline_fonts') ? '●' : ' >',
-      \ 'texthl': "Warning",
-      \ "linehl": "ClapSelected"
-      \ }
-let g:clap_enable_icon = 0
-let g:clap_provider_grep_enable_icon = 0
-
-autocmd FileType clap_input inoremap <silent> <buffer> <Esc> <Esc>:call clap#handler#exit()<CR>
-
-
-
 " Pandoc
 let g:pandoc#formatting#mode = 'hA'
 let g:pandoc#spell#enabled = 0
@@ -438,19 +417,16 @@ nnoremap <silent><Leader>u :UndotreeToggle<CR>
 
 
 
-" Clap
+" Telescope
 " Open Clap
-nnoremap <silent><Leader>c :Clap<CR>
+nnoremap <silent><Leader>c <cmd>lua require'telescope.builtin'.builtin{}<CR>
 " Search for files
-nnoremap <silent><Leader>f :Clap files<CR>
+nnoremap <silent><Leader>f <cmd>lua require'telescope.builtin'.find_files{}<CR>
+nnoremap <silent><Leader>F <cmd>lua require'telescope.builtin'.git_files{}<CR>
 " Search buffers
-nnoremap <silent><Leader>b :Clap buffers<CR>
+nnoremap <silent><Leader>b <cmd>lua require'telescope.builtin'.buffers{}<CR>
 " Grep
-nnoremap <silent><Leader>g :Clap grep<CR>
-" cwd from ~
-nnoremap <silent><Leader>D :Clap cd ~<CR>
-" cwd from .
-nnoremap <silent><Leader>d :Clap cd<CR>
+nnoremap <silent><Leader>g <cmd>lua require'telescope.builtin'.live_grep{}<CR>
 
 
 

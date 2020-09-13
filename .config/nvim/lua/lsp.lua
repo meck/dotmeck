@@ -135,7 +135,7 @@ if not configs.hls then
     default_config = {
       cmd = {"haskell-language-server", "--lsp"};
       filetypes = {"haskell"};
-      root_dir = require'nvim_lsp/util'.root_pattern("stack.yaml", "package.yaml", ".git");
+      root_dir = require'nvim_lsp/util'.root_pattern("stack.yaml", "package.yaml", ".git", "hie.yaml");
       settings = {};
     };
   }
