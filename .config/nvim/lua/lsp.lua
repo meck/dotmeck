@@ -135,7 +135,7 @@ if not configs.hls then
     default_config = {
       cmd = {"haskell-language-server", "--lsp"};
       filetypes = {"haskell"};
-      root_dir = require'nvim_lsp/util'.root_pattern("stack.yaml", "package.yaml", ".git");
+      root_dir = require'nvim_lsp/util'.root_pattern("stack.yaml", "package.yaml", ".git", "hie.yaml");
       settings = {};
     };
   }
@@ -176,18 +176,35 @@ if vim.fn.executable("hie") == 1 then
 end
 
 
--- clangd
-if vim.fn.executable("clangd") == 1 then
-  nvim_lsp.clangd.setup{
-    cmd = { "clangd", "--background-index" };
-    filetypes = { "c", "cpp", "objc", "objcpp" };
+-- -- clangd
+-- if vim.fn.executable("clangd") == 1 then
+--   nvim_lsp.clangd.setup{
+--     cmd = { "clangd", "--background-index" };
+--     filetypes = { "c", "cpp", "objc", "objcpp" };
+--     on_attach = attach_fn;
+--     capabilities = lsp_status.capabilities;
+--     callbacks = lsp_status.extensions.clangd.setup();
+--     init_options = { clangdFileStatus = true }
+--   }
+-- end
+
+-- ccls
+if vim.fn.executable("ccls") == 1 then
+  nvim_lsp.ccls.setup{
+    cmd = { "ccls", '--init={"cache.directory": "/tmp/ccls-cache"}' };
     on_attach = attach_fn;
     capabilities = lsp_status.capabilities;
-    callbacks = lsp_status.extensions.clangd.setup();
-    init_options = { clangdFileStatus = true }
+    init_options = {
+      -- Keep cache out from project dir
+      cache = { directory = "/tmp/ccls-cache" },
+      -- Disabled for NIOS
+      -- compilationDatabaseDirectory = "build",
+      client = { snippetSupport = true },
+      clang = { extraArgs = { "-Wno-extra", "-Wno-empty-body" } },
+      completion = { detailedLabel = false, caseSensitivity = 1 },
+    };
   }
 end
-
 
 
 -- Nix

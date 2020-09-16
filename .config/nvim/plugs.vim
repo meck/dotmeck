@@ -37,7 +37,6 @@ Plug 'unblevable/quick-scope'                                "  Preview targets 
 Plug 'machakann/vim-sandwich'                                "  Surround editing and objects
 Plug 'godlygeek/tabular'                                     "  Aligning stuff
 Plug 'romainl/vim-qf'                                        "  Better quickfix window
-Plug 'liuchengxu/vim-clap',{ 'do': ':Clap install-binary!' } "  Interactive selection
 Plug 'vim-airline/vim-airline'                               "  Statusline and theme
 Plug 'meck/nord-vim', { 'branch': 'develop' }                "  Theme - TODO Waiting for PR
 Plug 'sheerun/vim-polyglot'                                  "  Language Files
@@ -56,6 +55,9 @@ Plug 'nvim-lua/diagnostic-nvim'                              "  Builtin LSP diag
 Plug 'nvim-lua/lsp-status.nvim'                              "  Get LSP status for statusline
 Plug 'nvim-lua/completion-nvim'                              "  Completion with LSP support
 Plug 'steelsojka/completion-buffers'                         "  Buffers for completion-nvim
+Plug 'nvim-lua/popup.nvim'                                   "  Vim compatibility api
+Plug 'nvim-lua/plenary.nvim'                                 "  Functions
+Plug 'nvim-lua/telescope.nvim'                               "  Fuzzy
 endif
 
 
