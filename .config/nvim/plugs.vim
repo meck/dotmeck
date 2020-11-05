@@ -47,6 +47,8 @@ Plug 'mbbill/undotree'                                       "  UndoTree
 Plug 'junegunn/vim-peekaboo'                                 "  Preview of register contents
 Plug 'jamessan/vim-gnupg'                                    "  GnuPG
 Plug 'liuchengxu/graphviz.vim'                               "  Graphviz
+Plug 'tpope/vim-dispatch'                                    "  Async make
+Plug 'radenling/vim-dispatch-neovim'                         "  Vim-dispatch in neovim terminal
 
 
 if has("nvim-0.5.0")

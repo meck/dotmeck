@@ -129,6 +129,27 @@ end
 --  Servers  --
 ---------------
 
+-- vhdl-tool
+if not configs.vhdl_tool then
+ configs.vhdl_tool = {
+    default_config = {
+      cmd = {'vhdl-tool', 'lsp'};
+      filetypes = {'vhdl'};
+      root_dir = require'nvim_lsp/util'.root_pattern("vhdltool-config.yaml");
+      settings = {};
+    };
+  }
+end
+
+if vim.fn.executable("vhdl-tool") == 1 then
+  nvim_lsp.vhdl_tool.setup{
+    on_attach = attach_fn;
+    capabilities = lsp_status.capabilities;
+  }
+end
+
+
+
 -- HLS
 if not configs.hls then
   configs.hls = {
@@ -188,6 +209,7 @@ end
 --   }
 -- end
 
+
 -- ccls
 if vim.fn.executable("ccls") == 1 then
   nvim_lsp.ccls.setup{
@@ -200,7 +222,7 @@ if vim.fn.executable("ccls") == 1 then
       -- Disabled for NIOS
       -- compilationDatabaseDirectory = "build",
       client = { snippetSupport = true },
-      clang = { extraArgs = { "-Wno-extra", "-Wno-empty-body" } },
+      -- clang = { extraArgs = { "-Wno-extra", "-Wno-empty-body" } },
       completion = { detailedLabel = false, caseSensitivity = 1 },
     };
   }
