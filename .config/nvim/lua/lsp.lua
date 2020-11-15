@@ -1,6 +1,6 @@
-local nvim_lsp = require'nvim_lsp'
+local lspconfig = require'lspconfig'
 local lsp_status = require'lsp-status'
-local configs = require'nvim_lsp/configs'
+local configs = require'lspconfig/configs'
 
 local vim = vim
 local api = vim.api
@@ -12,9 +12,9 @@ local set_mappings = function(bufnr)
 
 
   -- `diagnostics.vim` mappings
-  api.nvim_buf_set_keymap(bufnr, 'n', '[s', '<cmd>lua require"jumpLoc".jumpPrevLocationCycle()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', ']s', '<cmd>lua require"jumpLoc".jumpNextLocationCycle()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua require"jumpLoc".openDiagnostics()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '[s', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', ']s', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
 
   -- Builtin lsp mappings
@@ -61,9 +61,6 @@ local attach_fn = function(client, bufnr)
   lsp_status.on_attach(client)
   lsp_status.register_progress()
 
-  -- Diagnostics
-  require'diagnostic'.on_attach()
-
   -- Use plugin instead:
   -- api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -108,18 +105,25 @@ Lsp_stop_all = function()
   end
 end
 
+
 -- `:LspStopAll` and `:LspRestartAll`
 api.nvim_command("command! LspStopAll call v:lua.Lsp_stop_all()")
 api.nvim_command("command! -bar LspRestartAll call v:lua.Lsp_stop_all() <bar> edit")
 
 
-api.nvim_command("command! Test lua require'lsp_statusline'.status()")
+-- Disable virual text
+lsp.handlers["textDocument/publishDiagnostics"] = lsp.with(
+ lsp.diagnostic.on_publish_diagnostics, {
+   virtual_text = false,
+ }
+)
 
+-- Signs and their highlights
 if not Lsp_signs_defined then
-  vim.fn.sign_define('LspDiagnosticsErrorSign', {text='✖', texthl='LspDiagnosticsError', linehl='', numhl=''})
-  vim.fn.sign_define('LspDiagnosticsWarningSign', {text='⚠', texthl='LspDiagnosticsWarning', linehl='', numhl=''})
-  vim.fn.sign_define('LspDiagnosticsInformationSign', {text='ℹ', texthl='LspDiagnosticsInfo', linehl='', numhl=''})
-  vim.fn.sign_define('LspDiagnosticsHintSign', {text='◉', texthl='LspDiagnosticsHint', linehl='', numhl=''})
+  vim.fn.sign_define('LspDiagnosticsSignError', {text='✖', texthl='LspDiagnosticsDefaultError', linehl='', numhl=''})
+  vim.fn.sign_define('LspDiagnosticsSignWarning', {text='⚠', texthl='LspDiagnosticsDefaultWarning', linehl='', numhl=''})
+  vim.fn.sign_define('LspDiagnosticsSignInformation', {text='ℹ', texthl='LspDiagnosticsDefaultInfo', linehl='', numhl=''})
+  vim.fn.sign_define('LspDiagnosticsSignHint', {text='◉', texthl='LspDiagnosticsDefaultHint', linehl='', numhl=''})
   Lsp_signs_defined = true
 end
 
@@ -135,14 +139,14 @@ if not configs.vhdl_tool then
     default_config = {
       cmd = {'vhdl-tool', 'lsp'};
       filetypes = {'vhdl'};
-      root_dir = require'nvim_lsp/util'.root_pattern("vhdltool-config.yaml");
+      root_dir = require'lspconfig/util'.root_pattern("vhdltool-config.yaml");
       settings = {};
     };
   }
 end
 
 if vim.fn.executable("vhdl-tool") == 1 then
-  nvim_lsp.vhdl_tool.setup{
+  lspconfig.vhdl_tool.setup{
     on_attach = attach_fn;
     capabilities = lsp_status.capabilities;
   }
@@ -151,19 +155,8 @@ end
 
 
 -- HLS
-if not configs.hls then
-  configs.hls = {
-    default_config = {
-      cmd = {"haskell-language-server", "--lsp"};
-      filetypes = {"haskell"};
-      root_dir = require'nvim_lsp/util'.root_pattern("stack.yaml", "package.yaml", ".git", "hie.yaml");
-      settings = {};
-    };
-  }
-end
-
-if vim.fn.executable("haskell-language-server") == 1 then
-  nvim_lsp.hls.setup{
+if vim.fn.executable("haskell-language-server-wrapper") == 1 then
+  lspconfig.hls.setup{
     on_attach = attach_fn;
     capabilities = lsp_status.capabilities;
     init_options = {
@@ -178,41 +171,9 @@ end
 
 
 
--- HIE
-if vim.fn.executable("hie") == 1 then
-  nvim_lsp.hie.setup{
-    cmd = {"hie", "--lsp"};
-    filetypes = { "haskell" ,  "lhs" , "hs" };
-    on_attach = attach_fn;
-    capabilities = lsp_status.capabilities;
-    init_options = {
-      languageServerHaskell = {
-        hlintOn = true;
-        completionSnippetsOn = true;
-        formatOnImportOn = true;
-        formattingProvider = 'brittany';
-      }
-    }
-  }
-end
-
-
--- -- clangd
--- if vim.fn.executable("clangd") == 1 then
---   nvim_lsp.clangd.setup{
---     cmd = { "clangd", "--background-index" };
---     filetypes = { "c", "cpp", "objc", "objcpp" };
---     on_attach = attach_fn;
---     capabilities = lsp_status.capabilities;
---     callbacks = lsp_status.extensions.clangd.setup();
---     init_options = { clangdFileStatus = true }
---   }
--- end
-
-
 -- ccls
 if vim.fn.executable("ccls") == 1 then
-  nvim_lsp.ccls.setup{
+  lspconfig.ccls.setup{
     cmd = { "ccls", '--init={"cache.directory": "/tmp/ccls-cache"}' };
     on_attach = attach_fn;
     capabilities = lsp_status.capabilities;
@@ -231,7 +192,7 @@ end
 
 -- Nix
 if vim.fn.executable("rnix-lsp") == 1 then
-  nvim_lsp.rnix.setup{
+  lspconfig.rnix.setup{
     cmd = { "rnix-lsp" };
     filetypes = { "nix" };
     on_attach = attach_fn;
@@ -242,7 +203,7 @@ end
 
 -- Lua
 if vim.fn.executable("lua-lsp") == 1 then
-  nvim_lsp.sumneko_lua.setup{
+  lspconfig.sumneko_lua.setup{
     cmd = { "lua-lsp" };
     on_attach = attach_fn;
     capabilities = lsp_status.capabilities;
