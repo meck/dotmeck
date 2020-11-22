@@ -18,6 +18,8 @@
 	<string>manual</string>
 	<key>AutoHideTmuxClientSession</key>
 	<false/>
+	<key>Command</key>
+	<string></string>
 	<key>CopySelection</key>
 	<true/>
 	<key>Custom Color Presets</key>
@@ -1619,15 +1621,15 @@
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>230 833 592 584 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>847 25 808 978 0 0 1680 1027 </string>
+	<string>847 28 805 975 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>847 25 808 978 0 0 1680 1027 </string>
+	<string>25 26 805 975 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>847 25 808 978 0 0 2560 1417 </string>
+	<string>1287 717 1246 676 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>1307 739 1200 623 0 0 2560 1417 </string>
+	<string>1287 717 1246 676 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>121 372 1010 1073 0 0 2880 1597 </string>
+	<string>1287 27 1246 1366 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 5</key>
 	<string>474 126 1010 1073 0 0 2880 1597 </string>
 	<key>NeverWarnAboutShortLivedSessions_067F3752-E1C4-4C74-8EE9-B390B168C590</key>
@@ -1907,7 +1909,7 @@
 			<key>Columns</key>
 			<integer>120</integer>
 			<key>Command</key>
-			<string>/usr/local/bin/zsh</string>
+			<string>/Users/meck/.nix-profile/bin/fish</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Alpha Component</key>
@@ -3420,7 +3422,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-08-21T10:22:04Z</date>
+	<date>2020-09-06T16:49:29Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateGroupIdentifier</key>

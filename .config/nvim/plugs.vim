@@ -47,11 +47,12 @@ Plug 'mbbill/undotree'                                       "  UndoTree
 Plug 'junegunn/vim-peekaboo'                                 "  Preview of register contents
 Plug 'jamessan/vim-gnupg'                                    "  GnuPG
 Plug 'liuchengxu/graphviz.vim'                               "  Graphviz
+Plug 'tpope/vim-dispatch'                                    "  Async make
+Plug 'radenling/vim-dispatch-neovim'                         "  Vim-dispatch in neovim terminal
 
 
 if has("nvim-0.5.0")
 Plug 'neovim/nvim-lsp'                                       "  Builtin LSP
-Plug 'nvim-lua/diagnostic-nvim'                              "  Builtin LSP diagnostic
 Plug 'nvim-lua/lsp-status.nvim'                              "  Get LSP status for statusline
 Plug 'nvim-lua/completion-nvim'                              "  Completion with LSP support
 Plug 'steelsojka/completion-buffers'                         "  Buffers for completion-nvim

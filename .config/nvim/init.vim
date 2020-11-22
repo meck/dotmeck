@@ -37,7 +37,7 @@ set hidden                              " Allow hidden buffers
 set exrc                                " Source .nvimrc or .vimrc in current directory
 set secure                              " Limit autocmds and shell cmds from above
 set foldlevelstart=99                   " Open new files with no folds closed
-set updatetime=300                      " For quicker diagnostics with coc.nvim
+set updatetime=300                      " For quicker diagnostics
 set shortmess+=c                        " Don't show the number of matches
 
 " Scrolling
@@ -170,10 +170,24 @@ function! CloseWindowOrKillBuffer()
   endif
 endfunction
 
+
 " Change Line Numbers
 function! Relativize(v)
   if &number
     let &relativenumber = a:v
+  endif
+endfunction
+
+
+" Toggle to swedish keymap
+" and spelling
+function! SweMap()
+  if (&keymap !=# "")
+    set keymap=""
+    set spelllang=en_us
+  else
+    set keymap=swe-us
+    set spelllang=sv
   endif
 endfunction
 
@@ -328,6 +342,11 @@ nmap <silent><f1> :e $MYVIMRC<CR>
 " Clean trailing whitespaces
 noremap <silent> <Leader>wc :call TrimWhitespace()<CR>
 
+" Use custom swedish keymap
+nnoremap <silent> <Leader>s :call SweMap()<CR>
+
+nnoremap <silent> Q :call CloseWindowOrKillBuffer()<CR>
+
 " Terminal spawning
 nnoremap <silent> <Leader>te :belowright split +resize\ 13 \| setlocal winfixheight \| terminal <CR>
 nnoremap <silent> <Leader>vte :belowright vsplit \| terminal <CR>
@@ -418,15 +437,15 @@ nnoremap <silent><Leader>u :UndotreeToggle<CR>
 
 
 " Telescope
-" Open Clap
-nnoremap <silent><Leader>c <cmd>lua require'telescope.builtin'.builtin{}<CR>
+" View avalible
+nnoremap <silent><Leader>c <cmd>lua require'telescope.builtin'.builtin(require('telescope.themes').get_dropdown({}))<CR>
 " Search for files
-nnoremap <silent><Leader>f <cmd>lua require'telescope.builtin'.find_files{}<CR>
-nnoremap <silent><Leader>F <cmd>lua require'telescope.builtin'.git_files{}<CR>
+nnoremap <silent><Leader>f <cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({}))<CR>
+nnoremap <silent><Leader>F <cmd>lua require'telescope.builtin'.git_files(require('telescope.themes').get_dropdown({}))<CR>
 " Search buffers
-nnoremap <silent><Leader>b <cmd>lua require'telescope.builtin'.buffers{}<CR>
+nnoremap <silent><Leader>b <cmd>lua require'telescope.builtin'.buffers(require('telescope.themes').get_dropdown({}))<CR>
 " Grep
-nnoremap <silent><Leader>g <cmd>lua require'telescope.builtin'.live_grep{}<CR>
+nnoremap <silent><Leader>g <cmd>lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({}))<CR>
 
 
 
