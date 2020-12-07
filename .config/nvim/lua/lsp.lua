@@ -170,22 +170,14 @@ if vim.fn.executable("haskell-language-server-wrapper") == 1 then
 end
 
 
-
--- ccls
-if vim.fn.executable("ccls") == 1 then
-  lspconfig.ccls.setup{
-    cmd = { "ccls", '--init={"cache.directory": "/tmp/ccls-cache"}' };
+-- clangd
+if vim.fn.executable("clangd") == 1 then
+  lspconfig.clangd.setup{
+    cmd = { vim.fn.exepath('clangd'), '--clang-tidy', '--suggest-missing-includes' };
+    filetypes = { "c", "cpp", "objc", "objcpp" };
     on_attach = attach_fn;
     capabilities = lsp_status.capabilities;
-    init_options = {
-      -- Keep cache out from project dir
-      cache = { directory = "/tmp/ccls-cache" },
-      -- Disabled for NIOS
-      -- compilationDatabaseDirectory = "build",
-      client = { snippetSupport = true },
-      -- clang = { extraArgs = { "-Wno-extra", "-Wno-empty-body" } },
-      completion = { detailedLabel = false, caseSensitivity = 1 },
-    };
+    init_options = { clangdFileStatus = true }
   }
 end
 
