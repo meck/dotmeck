@@ -437,15 +437,15 @@ nnoremap <silent><Leader>u :UndotreeToggle<CR>
 
 
 " Telescope
-" View avalible
-nnoremap <silent><Leader>c <cmd>lua require'telescope.builtin'.builtin(require('telescope.themes').get_dropdown({}))<CR>
+" View avalible lists
+nnoremap <silent><Leader>c <cmd>lua require'telescope.builtin'.builtin{}<CR>
 " Search for files
-nnoremap <silent><Leader>f <cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({}))<CR>
-nnoremap <silent><Leader>F <cmd>lua require'telescope.builtin'.git_files(require('telescope.themes').get_dropdown({}))<CR>
+nnoremap <silent><Leader>f <cmd>lua require'telescope.builtin'.find_files{}<CR>
+nnoremap <silent><Leader>F <cmd>lua require'telescope.builtin'.git_files{}<CR>
 " Search buffers
-nnoremap <silent><Leader>b <cmd>lua require'telescope.builtin'.buffers(require('telescope.themes').get_dropdown({}))<CR>
+nnoremap <silent><Leader>b <cmd>lua require'telescope.builtin'.buffers{}<CR>
 " Grep
-nnoremap <silent><Leader>g <cmd>lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({}))<CR>
+nnoremap <silent><Leader>g <cmd>lua require'telescope.builtin'.live_grep{}<CR>
 
 
 

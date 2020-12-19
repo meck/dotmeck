@@ -46,7 +46,6 @@ Plug 'majutsushi/tagbar'                                     "  Tagbar
 Plug 'mbbill/undotree'                                       "  UndoTree
 Plug 'junegunn/vim-peekaboo'                                 "  Preview of register contents
 Plug 'jamessan/vim-gnupg'                                    "  GnuPG
-Plug 'liuchengxu/graphviz.vim'                               "  Graphviz
 Plug 'tpope/vim-dispatch'                                    "  Async make
 Plug 'radenling/vim-dispatch-neovim'                         "  Vim-dispatch in neovim terminal
 
@@ -72,7 +71,6 @@ Plug 'meck/vim-brittany', { 'for': 'haskell' }
 Plug 'alx741/vim-hindent', { 'for': 'haskell' }
 Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
 Plug 'meck/vim-counterpoint', { 'for': 'haskell' }
-Plug 'meck/vim-clap-hoogle'
 
 " Markdown/Pandoc
 Plug 'vim-pandoc/vim-pandoc'
@@ -80,8 +78,10 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'dhruvasagar/vim-table-mode'
 
+" Misc
 Plug 'fatih/vim-go' , { 'for': 'go' }
 Plug 'rust-lang/rust.vim' , { 'for': 'rust' }
+Plug 'liuchengxu/graphviz.vim'
 
 call plug#end()
 
