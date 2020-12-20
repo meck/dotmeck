@@ -193,6 +193,17 @@ if vim.fn.executable("rnix-lsp") == 1 then
 end
 
 
+-- Bash
+if vim.fn.executable("bash-language-server") == 1 then
+  lspconfig.bashls.setup{
+    cmd = { "bash-language-server", "start" };
+    filetypes = { "sh" };
+    on_attach = attach_fn;
+    capabilities = lsp_status.capabilities;
+  }
+end
+
+
 -- Lua
 if vim.fn.executable("lua-lsp") == 1 then
   lspconfig.sumneko_lua.setup{

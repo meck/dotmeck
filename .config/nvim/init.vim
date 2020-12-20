@@ -426,11 +426,6 @@ nmap <silent> [g :GitGutterPrevHunk <CR>
 
 
 
-" Tagbar
-nnoremap <Leader>tb :TagbarToggle <CR>
-
-
-
 " UndoTree
 nnoremap <silent><Leader>u :UndotreeToggle<CR>
 

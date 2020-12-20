@@ -42,7 +42,6 @@ Plug 'meck/nord-vim', { 'branch': 'develop' }                "  Theme - TODO Wai
 Plug 'sheerun/vim-polyglot'                                  "  Language Files
 Plug 'SirVer/ultisnips'                                      "  Snippets
 Plug 'honza/vim-snippets'                                    "  Default Snippets
-Plug 'majutsushi/tagbar'                                     "  Tagbar
 Plug 'mbbill/undotree'                                       "  UndoTree
 Plug 'junegunn/vim-peekaboo'                                 "  Preview of register contents
 Plug 'jamessan/vim-gnupg'                                    "  GnuPG
@@ -67,9 +66,6 @@ endif
 
 " Haskell
 Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
-Plug 'meck/vim-brittany', { 'for': 'haskell' }
-Plug 'alx741/vim-hindent', { 'for': 'haskell' }
-Plug 'alx741/vim-stylishask', { 'for': 'haskell' }
 Plug 'meck/vim-counterpoint', { 'for': 'haskell' }
 
 " Markdown/Pandoc
