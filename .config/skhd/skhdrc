@@ -1,18 +1,18 @@
 # the default mode
 :: default : echo "" > $TMPDIR/current_skhd_mode;\
-             open -g "bitbar://refreshPlugin?name=skhd_mode.*?.sh"
+    open -g "swiftbar://refreshplugin?name=skhd_mode"
 
 # a mode for focus operations
 :: focus @ : echo "focus" > $TMPDIR/current_skhd_mode;\
-             open -g "bitbar://refreshPlugin?name=skhd_mode.*?.sh"
+             open -g "swiftbar://refreshplugin?name=skhd_mode"
 
 # a mode for warp operations
 :: warp @ : echo "warp" > $TMPDIR/current_skhd_mode;\
-            open -g "bitbar://refreshPlugin?name=skhd_mode.*?.sh"
+            open -g "swiftbar://refreshplugin?name=skhd_mode"
 
 # a mode for resizing operations
 :: resize @ : echo "resize" > $TMPDIR/current_skhd_mode;\
-              open -g "bitbar://refreshPlugin?name=skhd_mode.*?.sh"
+              open -g "swiftbar://refreshplugin?name=skhd_mode"
 
 # enter and exit modes
 default                      < alt - space      ; focus
@@ -63,9 +63,9 @@ focus, resize, warp < q                     :  yabai -m space --balance         
 
 # change layout of desktop: m ,
 focus, resize, warp < m                     :  yabai -m space --layout bsp;\
-                                               open -g "bitbar://refreshPlugin?name=yabai_layout.*?.sh"
+                                               open -g "swiftbar://refreshplugin?name=yabai_layout"
 focus, resize, warp < 0x2B                  :  yabai -m space --layout float;\
-                                               open -g "bitbar://refreshPlugin?name=yabai_layout.*?.sh"
+                                               open -g "swiftbar://refreshplugin?name=yabai_layout"
 
 # Turn on and off FFM: .
 focus, resize, warp < 0x2F                  :  yabai -m config focus_follows_mouse          autofocus

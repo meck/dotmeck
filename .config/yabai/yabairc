@@ -48,7 +48,7 @@ yabai -m rule --add app="The Unarchiver" manage=off
 yabai -m rule --add app="PCalc" manage=off grid=3:3:0:1:1:1
 
 # Update icon
-yabai -m signal --add event=display_changed action='open -g "bitbar://refreshPlugin?name=yabai_layout.*?.sh"' label=update_layout_disp
-yabai -m signal --add event=space_changed action='open -g "bitbar://refreshPlugin?name=yabai_layout.*?.sh"' label=update_layout_space
+yabai -m signal --add event=display_changed action='open -g "swiftbar://refreshplugin?name=yabai_layout"' label=update_layout_disp
+yabai -m signal --add event=space_changed action='open -g "swiftbar://refreshplugin?name=yabai_layout"' label=update_layout_space
 
 echo "yabai configuration loaded.."

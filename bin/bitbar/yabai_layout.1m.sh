@@ -1,11 +1,17 @@
 #!/bin/bash
 
-# <bitbar.title>chunkwm/skhd helper</bitbar.title>
+# <bitbar.title>yabai/skhd helper</bitbar.title>
 # <bitbar.version>v1.0</bitbar.version>
 # <bitbar.author>Meck</bitbar.author>
 # <bitbar.author.github>meck</bitbar.author.github>
-# <bitbar.desc>Plugin that displays desktop mode of chunkwm.</bitbar.desc>
-# <bitbar.dependencies>brew,chunkwm,skhd</bitbar.dependencies>
+# <bitbar.desc>Plugin that displays desktop mode of yabai.</bitbar.desc>
+# <bitbar.dependencies>brew,yabai,skhd</bitbar.dependencies>
+
+# <swiftbar.hideAbout>true</swiftbar.hideAbout>
+# <swiftbar.hideRunInTerminal>true</swiftbar.hideRunInTerminal>
+# <swiftbar.hideLastUpdated>true</swiftbar.hideLastUpdated>
+# <swiftbar.hideDisablePlugin>true</swiftbar.hideDisablePlugin>
+# <swiftbar.hideSwiftBar>true</swiftbar.hideSwiftBar>
 
 # Info about chunkwm, see: https://github.com/koekeishiya/chunkwm
 # For skhd, see: https://github.com/koekeishiya/skhd

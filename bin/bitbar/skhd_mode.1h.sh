@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# <swiftbar.hideAbout>true</swiftbar.hideAbout>
+# <swiftbar.hideRunInTerminal>true</swiftbar.hideRunInTerminal>
+# <swiftbar.hideLastUpdated>true</swiftbar.hideLastUpdated>
+# <swiftbar.hideDisablePlugin>true</swiftbar.hideDisablePlugin>
+# <swiftbar.hideSwiftBar>true</swiftbar.hideSwiftBar>
+
 export PATH=/usr/local/bin:$PATH
 
 # skhd saves the current keyboard mode to this file
@@ -10,12 +16,10 @@ if [[ -r $modefile ]]
       mod="$(echo "$mod" | awk '{print toupper($0)}')"
       if [[ -n $mod ]]
           then
-        skhd_mode=" --- $mod --- "
+        skhd_mode="< $mod >"
         echo -e "$skhd_mode | \
-          ansi=true \
-          size=20 \
-          font=Courier \
           dropdown=false \
-          trim=false color=#bf616a"
+          trim=false \
+          color=#bf616a"
       fi
 fi
