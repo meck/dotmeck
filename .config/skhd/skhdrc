@@ -1,6 +1,6 @@
 # the default mode
 :: default : echo "" > $TMPDIR/current_skhd_mode;\
-    open -g "swiftbar://refreshplugin?name=skhd_mode"
+             open -g "swiftbar://refreshplugin?name=skhd_mode"
 
 # a mode for focus operations
 :: focus @ : echo "focus" > $TMPDIR/current_skhd_mode;\
@@ -63,9 +63,15 @@ focus, resize, warp < q                     :  yabai -m space --balance         
 
 # change layout of desktop: m ,
 focus, resize, warp < m                     :  yabai -m space --layout bsp;\
+<<<<<<< HEAD
                                                open -g "swiftbar://refreshplugin?name=yabai_layout"
 focus, resize, warp < 0x2B                  :  yabai -m space --layout float;\
                                                open -g "swiftbar://refreshplugin?name=yabai_layout"
+=======
+                                               open -g "bitbar://refreshPlugin?name=yabai_layout.*?.sh"
+focus, resize, warp < 0x2B                  :  yabai -m space --layout float;\
+                                               open -g "bitbar://refreshPlugin?name=yabai_layout.*?.sh"
+>>>>>>> c85a00cd93ff3afddbc8c09b3df8499d2b779a99
 
 # Turn on and off FFM: .
 focus, resize, warp < 0x2F                  :  yabai -m config focus_follows_mouse          autofocus
