@@ -68,11 +68,12 @@ endif
 Plug 'ndmitchell/ghcid', { 'for': 'haskell', 'rtp': 'plugins/nvim' }
 Plug 'meck/vim-counterpoint', { 'for': 'haskell' }
 
-" Markdown/Pandoc
+" Markdown/Pandoc/Tex
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'dhruvasagar/vim-table-mode'
+Plug 'lervag/vimtex'
 
 " Misc
 Plug 'fatih/vim-go' , { 'for': 'go' }
