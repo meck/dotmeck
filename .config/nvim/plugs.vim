@@ -25,6 +25,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-vinegar'
 
+Plug 'kyazdani42/nvim-web-devicons'
 
 " Git Stuff
 Plug 'tpope/vim-fugitive'
@@ -38,7 +39,7 @@ Plug 'machakann/vim-sandwich'                                "  Surround editing
 Plug 'godlygeek/tabular'                                     "  Aligning stuff
 Plug 'romainl/vim-qf'                                        "  Better quickfix window
 Plug 'vim-airline/vim-airline'                               "  Statusline and theme
-Plug 'meck/nord-vim', { 'branch': 'develop' }                "  Theme - TODO Waiting for PR
+Plug 'meck/nord-vim', { 'branch': 'custom' }                 "  Theme - TODO Waiting for PR
 Plug 'sheerun/vim-polyglot'                                  "  Language Files
 Plug 'SirVer/ultisnips'                                      "  Snippets
 Plug 'honza/vim-snippets'                                    "  Default Snippets
