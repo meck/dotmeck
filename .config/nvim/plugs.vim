@@ -55,6 +55,7 @@ Plug 'neovim/nvim-lsp'                                       "  Builtin LSP
 Plug 'nvim-lua/lsp-status.nvim'                              "  Get LSP status for statusline
 Plug 'nvim-lua/completion-nvim'                              "  Completion with LSP support
 Plug 'steelsojka/completion-buffers'                         "  Buffers for completion-nvim
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  "  Treesitter
 Plug 'nvim-lua/popup.nvim'                                   "  Vim compatibility api
 Plug 'nvim-lua/plenary.nvim'                                 "  Functions
 Plug 'nvim-lua/telescope.nvim'                               "  Fuzzy

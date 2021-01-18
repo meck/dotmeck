@@ -202,7 +202,7 @@ command! Bonly silent! execute "%bd|e#|bd#"
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-" Lua Config                                                          {{{
+" LSP Config                                                          {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 if has("nvim-0.5.0")
@@ -267,6 +267,34 @@ augroup END
 endif
 
 
+" Treesitter
+if has("nvim-0.5.0")
+lua << EOF
+  require'nvim-treesitter.configs'.setup {
+    ensure_installed = "maintained",
+
+    highlight = {
+      enable = true
+    },
+
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = "gnn",
+        node_incremental = "grn",
+        scope_incremental = "grc",
+        node_decremental = "grm",
+      }
+    },
+
+    indent = {
+      enable = true
+    }
+  }
+EOF
+endif
+
+
 " GitGutter
 let s:gitgutter_sign_all = exists('g:airline_powerline_fonts') ? '▸' : '∙'
 let g:gitgutter_sign_added = s:gitgutter_sign_all
@@ -282,6 +310,11 @@ let g:pandoc#spell#default_langs = ["en","sv"]
 let g:pandoc#hypertext#create_if_no_alternates_exists = 1
 let g:pandoc#hypertext#autosave_on_edit_open_link = 1
 let g:pandoc#after#modules#enabled = ["tablemode", "ultisnips"]
+
+
+" Pandoc syntax
+"https://github.com/vim-pandoc/vim-pandoc-syntax/issues/344#issuecomment-761563470
+" let g:pandoc#syntax#codeblocks#embeds#langs = ["bash=sh", "haskell", "vhdl"]
 
 
 " Tablemode
