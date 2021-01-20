@@ -69,7 +69,7 @@ packer.startup(function()
   -- Git Stuff
   use 'tpope/vim-fugitive'
   use 'tpope/vim-git'
-  use 'airblade/vim-gitgutter'
+  use 'mhinz/vim-signify'
   use {
     'mattn/gist-vim',                                              --  Gists
     requires = {'mattn/gist-vim'}
