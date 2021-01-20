@@ -8,7 +8,7 @@
 scriptencoding utf-8
 
 " Load plugins
-runtime plugs.vim
+lua require'plugins'
 
 
 
