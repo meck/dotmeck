@@ -270,6 +270,10 @@ endif
 " Treesitter
 if has("nvim-0.5.0")
 lua << EOF
+
+if vim.fn.executable('llvm') > 0 or
+   vim.fn.executable('gcc') > 0
+then
   require'nvim-treesitter.configs'.setup {
     ensure_installed = "maintained",
 
@@ -291,6 +295,10 @@ lua << EOF
       enable = true
     }
   }
+else
+  print("No C compiler for Treesitter")
+end
+
 EOF
 endif
 
