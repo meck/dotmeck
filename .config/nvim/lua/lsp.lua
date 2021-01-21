@@ -205,10 +205,26 @@ end
 
 
 -- Lua
-if vim.fn.executable("lua-lsp") == 1 then
+if vim.fn.executable("lua-language-server") == 1 then
   lspconfig.sumneko_lua.setup{
-    cmd = { "lua-lsp" };
+    cmd = { "lua-language-server" };
     on_attach = attach_fn;
     capabilities = lsp_status.capabilities;
+    settings = {
+      Lua = {
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = {'vim'},
+        },
+        workspace = {
+        -- Make the server aware of Neovim runtime files
+          library = {
+            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+          },
+        },
+      },
+    },
   }
+
 end

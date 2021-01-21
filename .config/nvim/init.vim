@@ -8,7 +8,7 @@
 scriptencoding utf-8
 
 " Load plugins
-runtime plugs.vim
+lua require'plugins'
 
 
 
@@ -202,7 +202,7 @@ command! Bonly silent! execute "%bd|e#|bd#"
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-" Lua Config                                                          {{{
+" LSP Config                                                          {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 if has("nvim-0.5.0")
@@ -267,12 +267,47 @@ augroup END
 endif
 
 
-" GitGutter
-let s:gitgutter_sign_all = exists('g:airline_powerline_fonts') ? '▸' : '∙'
-let g:gitgutter_sign_added = s:gitgutter_sign_all
-let g:gitgutter_sign_modified = s:gitgutter_sign_all
-let g:gitgutter_sign_removed = s:gitgutter_sign_all
-let g:gitgutter_sign_modified_removed = s:gitgutter_sign_all
+" Treesitter
+if has("nvim-0.5.0")
+lua << EOF
+
+if vim.fn.executable('llvm') > 0 or
+   vim.fn.executable('gcc') > 0
+then
+  require'nvim-treesitter.configs'.setup {
+    ensure_installed = "maintained",
+
+    highlight = {
+      enable = true
+    },
+
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = "gnn",
+        node_incremental = "grn",
+        scope_incremental = "grc",
+        node_decremental = "grm",
+      }
+    },
+
+    indent = {
+      enable = true
+    }
+  }
+else
+  print("No C compiler for Treesitter")
+end
+
+EOF
+endif
+
+
+" Signify
+let g:signify_sign_add               = '∙'
+let g:signify_sign_delete            = '▸'
+let g:signify_sign_delete_first_line = '▸'
+let g:signify_sign_change            = '∙'
 
 
 " Pandoc
@@ -282,6 +317,11 @@ let g:pandoc#spell#default_langs = ["en","sv"]
 let g:pandoc#hypertext#create_if_no_alternates_exists = 1
 let g:pandoc#hypertext#autosave_on_edit_open_link = 1
 let g:pandoc#after#modules#enabled = ["tablemode", "ultisnips"]
+
+
+" Pandoc syntax
+"https://github.com/vim-pandoc/vim-pandoc-syntax/issues/344#issuecomment-761563470
+" let g:pandoc#syntax#codeblocks#embeds#langs = ["bash=sh", "haskell", "vhdl"]
 
 
 " Tablemode
