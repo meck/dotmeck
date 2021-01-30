@@ -72,7 +72,7 @@ packer.startup(function()
   use 'mhinz/vim-signify'
   use {
     'mattn/gist-vim',                                              --  Gists
-    requires = {'mattn/gist-vim'}
+    requires = {'mattn/webapi-vim'}
   }
 
   -- Formating
