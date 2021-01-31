@@ -1,2 +1,3 @@
-au BufRead,BufNewFile *.vht setfiletype vhdl
-au BufRead,BufNewFile *.psl setfiletype vhdl
+autocmd BufRead,BufNewFile *.vhd set filetype=vhdl
+autocmd BufRead,BufNewFile *.psl set filetype=vhdl
+autocmd BufRead,BufNewFile *.vho set filetype=vhdl
