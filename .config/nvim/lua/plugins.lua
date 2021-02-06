@@ -33,6 +33,7 @@ packer.startup(function()
   -- LSP
   use 'neovim/nvim-lsp'                                            -- Builtin LSP
   use 'nvim-lua/lsp-status.nvim'                                   -- Get LSP status for statusline
+  use 'kosayoda/nvim-lightbulb'                                    -- Indicate code actions gutter
 
   -- UI
   use 'tpope/vim-vinegar'                                           -- Better netrw behavior

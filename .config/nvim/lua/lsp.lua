@@ -6,34 +6,6 @@ local vim = vim
 local api = vim.api
 local lsp = vim.lsp
 
-local set_mappings = function(bufnr)
-
-  local opts = { noremap=true, silent=true }
-
-
-  -- `diagnostics.vim` mappings
-  api.nvim_buf_set_keymap(bufnr, 'n', '[s', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', ']s', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-
-
-  -- Builtin lsp mappings
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'K',  '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>a',  '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r',  '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e',  '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ls', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lS', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
-
-end
-
-
 Formatexpr_wrapper = function()
 
  -- only reformat on explicit gq command
@@ -56,6 +28,8 @@ end
 
 -- Called when a server starts
 local attach_fn = function(client, bufnr)
+
+  local opts = { noremap=true, silent=true }
 
   -- Statusbar
   lsp_status.on_attach(client)
@@ -83,7 +57,34 @@ local attach_fn = function(client, bufnr)
     api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
   end
 
-  set_mappings(bufnr)
+  -- `nvim-lightbulb` and mapping "leader a"
+  if client.resolved_capabilities.code_action then
+    vim.cmd [[autocmd CursorHold,CursorHoldI <buffer> lua require'nvim-lightbulb'.update_lightbulb()]]
+    api.nvim_buf_set_keymap(bufnr, 'n', '<leader>a',
+      '<cmd>lua require\'telescope.builtin\'.lsp_code_actions()<CR>', opts)
+  end
+
+
+  -- `diagnostics.vim` mappings
+  api.nvim_buf_set_keymap(bufnr, 'n', '[s', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', ']s', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+
+  -- Builtin lsp mappings
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gd',    '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gD',    '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gy',    '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gi',    '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gr',    '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'K',     '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gs',    '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r',  '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e',  '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ls', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lS', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
+
 end
 
 
@@ -124,6 +125,7 @@ if not Lsp_signs_defined then
   vim.fn.sign_define('LspDiagnosticsSignWarning', {text='⚠', texthl='LspDiagnosticsDefaultWarning', linehl='', numhl=''})
   vim.fn.sign_define('LspDiagnosticsSignInformation', {text='ℹ', texthl='LspDiagnosticsDefaultInfo', linehl='', numhl=''})
   vim.fn.sign_define('LspDiagnosticsSignHint', {text='◉', texthl='LspDiagnosticsDefaultHint', linehl='', numhl=''})
+  vim.fn.sign_define('LightBulbSign', { text = "⋄", texthl = "Number" }) -- nvim-lightbulb
   Lsp_signs_defined = true
 end
 
