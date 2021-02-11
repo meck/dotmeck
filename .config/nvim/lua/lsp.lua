@@ -42,14 +42,6 @@ local attach_fn = function(client, bufnr)
   api.nvim_win_set_option(0, 'signcolumn', 'yes')
 
 
-  -- Use `gq` for formating
-  if client.resolved_capabilities['document_range_formatting'] then
-    -- https://github.com/neovim/neovim/issues/12528
-    -- api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.buf.range_formatting()')
-    api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.Formatexpr_wrapper()')
-  end
-
-
   -- Highlight item under the cursor
   if client.resolved_capabilities['document_highlight'] then
     api.nvim_command [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
@@ -78,12 +70,23 @@ local attach_fn = function(client, bufnr)
   api.nvim_buf_set_keymap(bufnr, 'n', 'gi',    '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   api.nvim_buf_set_keymap(bufnr, 'n', 'gr',    '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   api.nvim_buf_set_keymap(bufnr, 'n', 'K',     '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   api.nvim_buf_set_keymap(bufnr, 'n', 'gs',    '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r',  '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e',  '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ls', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
   api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lS', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
+
+  -- Explicit LSP formatting
+  if client.resolved_capabilities.document_formatting then
+    api.nvim_buf_set_keymap(bufnr, "n", "<leader>gq", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  end
+
+  -- Use `gq` for range formating
+  -- https://github.com/neovim/neovim/issues/12528
+  if client.resolved_capabilities.document_range_formatting then
+    api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.Formatexpr_wrapper()')
+  end
+
 
 end
 
@@ -200,6 +203,15 @@ if vim.fn.executable("bash-language-server") == 1 then
   lspconfig.bashls.setup{
     cmd = { "bash-language-server", "start" };
     filetypes = { "sh" };
+    on_attach = attach_fn;
+    capabilities = lsp_status.capabilities;
+  }
+end
+
+
+-- Rust
+if vim.fn.executable("rust-analyzer") == 1 then
+  lspconfig.rust_analyzer.setup{
     on_attach = attach_fn;
     capabilities = lsp_status.capabilities;
   }
