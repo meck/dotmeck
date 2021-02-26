@@ -54,6 +54,7 @@ packer.startup(function()
   use 'unblevable/quick-scope'                                      -- Preview targets for f/F/t/T
 
   -- Completion and snippets
+  use 'jiangmiao/auto-pairs'                                        -- Bracket Pairs
   use 'nvim-lua/completion-nvim'                                    -- Completion with LSP support
   use 'steelsojka/completion-buffers'                               -- Buffers for completion-nvim
   use {
