@@ -10,7 +10,6 @@ if not packer_exists then
   vim.cmd("!git clone https://github.com/wbthomason/packer.nvim "..install_path)
 end
 
-
 ------------------------------------------------------------------------
 --                              Plugins                               --
 ------------------------------------------------------------------------
@@ -28,12 +27,12 @@ packer.startup(function()
 
   -- Visual
   use {'meck/nord-vim',  branch = 'custom' }                        -- Theme TODO Waiting for PR
-  use 'vim-airline/vim-airline'                                     -- Statusline and theme
+  use 'hoob3rt/lualine.nvim'                                        -- Statusline
 
   -- LSP
-  use 'neovim/nvim-lsp'                                            -- Builtin LSP
-  use 'nvim-lua/lsp-status.nvim'                                   -- Get LSP status for statusline
-  use 'kosayoda/nvim-lightbulb'                                    -- Indicate code actions gutter
+  use 'neovim/nvim-lsp'                                             -- Builtin LSP
+  use 'nvim-lua/lsp-status.nvim'                                    -- Get LSP status for statusline
+  use 'kosayoda/nvim-lightbulb'                                     -- Indicate code actions gutter
 
   -- UI
   use 'tpope/vim-vinegar'                                           -- Better netrw behavior
@@ -80,6 +79,7 @@ packer.startup(function()
   -- Formating
   use 'godlygeek/tabular'                                          -- Aligning stuff
   use 'dhruvasagar/vim-table-mode'                                 -- Textbased tables
+  use 'ntpeters/vim-better-whitespace'                             -- Strip trailing ws
 
   -- Utillites
   use {

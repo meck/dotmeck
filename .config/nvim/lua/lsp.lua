@@ -215,6 +215,20 @@ end
 lspconfig.vhdl_tool.setup{}
 
 
+-- vhdl-tool
+if not configs.ghdl_ls then
+ configs.ghdl_ls = {
+    default_config = {
+      cmd = {'ghdl-ls'};
+      filetypes = {'vhdl'};
+      root_dir = lspconfig.util.root_pattern("hdl-prj.json");
+      settings = {};
+    };
+  }
+end
+lspconfig.ghdl_ls.setup{}
+
+
 -- Lua
 lspconfig.sumneko_lua.setup{
   cmd = { "lua-language-server" };
@@ -234,6 +248,10 @@ lspconfig.sumneko_lua.setup{
     },
   },
 }
+
+
+-- vimls
+lspconfig.vimls.setup{}
 
 
 -- cssls
