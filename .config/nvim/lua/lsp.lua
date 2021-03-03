@@ -1,6 +1,7 @@
 local lspconfig = require'lspconfig'
 local lsp_status = require'lsp-status'
 local configs = require'lspconfig/configs'
+local util = require 'lspconfig/util'
 
 local vim = vim
 local api = vim.api
@@ -163,6 +164,28 @@ lspconfig.util.default_config = vim.tbl_extend(
 --  Servers  --
 ---------------
 
+-- efm
+local efm_lang = require'efm'
+local efm_filetypes = {}
+for k,_ in pairs(efm_lang) do
+  efm_filetypes[#efm_filetypes+1] = k
+end
+
+lspconfig.efm.setup({
+    -- Git or local location
+    root_dir = function(fname)
+      return util.find_git_ancestor(fname) or util.path.dirname(fname)
+    end;
+    -- cmd = {'efm-langserver', "-logfile", "/tmp/efm.log", "-loglevel", "10"},
+    init_options = { documentFormatting = true, },
+    filetypes = efm_filetypes,
+    settings = {
+        rootMarkers = {'.git/'},
+        languages = efm_lang,
+    },
+})
+
+
 -- clangd
 lspconfig.clangd.setup{
   cmd = { vim.fn.exepath('clangd'), '--clang-tidy', '--suggest-missing-includes' };
@@ -194,13 +217,6 @@ lspconfig.rnix.setup{
 lspconfig.rust_analyzer.setup{}
 
 
--- Bash
-lspconfig.bashls.setup{
-  cmd = { "bash-language-server", "start" };
-  filetypes = { "sh" };
-}
-
-
 -- vhdl-tool
 if not configs.vhdl_tool then
  configs.vhdl_tool = {
@@ -215,26 +231,13 @@ end
 lspconfig.vhdl_tool.setup{}
 
 
--- vhdl-tool
-if not configs.ghdl_ls then
- configs.ghdl_ls = {
-    default_config = {
-      cmd = {'ghdl-ls'};
-      filetypes = {'vhdl'};
-      root_dir = lspconfig.util.root_pattern("hdl-prj.json");
-      settings = {};
-    };
-  }
-end
-lspconfig.ghdl_ls.setup{}
-
-
 -- Lua
 lspconfig.sumneko_lua.setup{
   cmd = { "lua-language-server" };
   settings = {
     Lua = {
       diagnostics = {
+        enable = true,
         -- Get the language server to recognize the `vim` global
         globals = {'vim'},
       },
@@ -248,11 +251,3 @@ lspconfig.sumneko_lua.setup{
     },
   },
 }
-
-
--- vimls
-lspconfig.vimls.setup{}
-
-
--- cssls
-lspconfig.cssls.setup{}
