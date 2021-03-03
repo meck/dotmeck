@@ -42,14 +42,6 @@ local attach_fn = function(client, bufnr)
   api.nvim_win_set_option(0, 'signcolumn', 'yes')
 
 
-  -- Use `gq` for formating
-  if client.resolved_capabilities['document_range_formatting'] then
-    -- https://github.com/neovim/neovim/issues/12528
-    -- api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.buf.range_formatting()')
-    api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.Formatexpr_wrapper()')
-  end
-
-
   -- Highlight item under the cursor
   if client.resolved_capabilities['document_highlight'] then
     api.nvim_command [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
@@ -62,28 +54,56 @@ local attach_fn = function(client, bufnr)
     vim.cmd [[autocmd CursorHold,CursorHoldI <buffer> lua require'nvim-lightbulb'.update_lightbulb()]]
     api.nvim_buf_set_keymap(bufnr, 'n', '<leader>a',
       '<cmd>lua require\'telescope.builtin\'.lsp_code_actions()<CR>', opts)
+    api.nvim_buf_set_keymap(bufnr, 'v', '<leader>a',
+      '<cmd>lua require\'telescope.builtin\'.lsp_range_code_actions()<CR>', opts)
   end
 
 
   -- `diagnostics.vim` mappings
-  api.nvim_buf_set_keymap(bufnr, 'n', '[s', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', ']s', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '[s',
+    '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', ']s',
+    '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld',
+    '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
 
   -- Builtin lsp mappings
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gd',    '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gD',    '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gy',    '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gi',    '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gr',    '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'K',     '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', 'gs',    '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r',  '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e',  '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ls', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
-  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lS', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gd',
+    '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gD',
+    '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gy',
+    '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gi',
+    '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gr',
+    '<cmd>lua require\'telescope.builtin\'.lsp_references()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'K',
+    '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', 'gs',
+    '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r',
+    '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e',
+    '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ls',
+    '<cmd>lua require\'telescope.builtin\'.lsp_document_symbols()<CR>', opts)
+  api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lS',
+    '<cmd>lua require\'telescope.builtin\'.lsp_workspace_symbols()<CR>', opts)
+
+  -- Explicit LSP formatting
+  if client.resolved_capabilities.document_formatting then
+    api.nvim_buf_set_keymap(bufnr, "n", "<leader>gq",
+      "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  end
+
+  -- Use `gq` for range formating
+  -- https://github.com/neovim/neovim/issues/12528
+  if client.resolved_capabilities.document_range_formatting then
+    api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.Formatexpr_wrapper()')
+  end
+
 
 end
 
@@ -125,15 +145,61 @@ if not Lsp_signs_defined then
   vim.fn.sign_define('LspDiagnosticsSignWarning', {text='⚠', texthl='LspDiagnosticsDefaultWarning', linehl='', numhl=''})
   vim.fn.sign_define('LspDiagnosticsSignInformation', {text='ℹ', texthl='LspDiagnosticsDefaultInfo', linehl='', numhl=''})
   vim.fn.sign_define('LspDiagnosticsSignHint', {text='◉', texthl='LspDiagnosticsDefaultHint', linehl='', numhl=''})
-  vim.fn.sign_define('LightBulbSign', { text = "⋄", texthl = "Number" }) -- nvim-lightbulb
+  vim.fn.sign_define('LightBulbSign', { text = "⚑", texthl = "Number" }) -- nvim-lightbulb
   Lsp_signs_defined = true
 end
 
-
+-- default for all servers
+lspconfig.util.default_config = vim.tbl_extend(
+  "force",
+  lspconfig.util.default_config,
+  {
+    on_attach = attach_fn;
+    capabilities = lsp_status.capabilities;
+  }
+)
 
 ---------------
 --  Servers  --
 ---------------
+
+-- clangd
+lspconfig.clangd.setup{
+  cmd = { vim.fn.exepath('clangd'), '--clang-tidy', '--suggest-missing-includes' };
+  filetypes = { "c", "cpp", "objc", "objcpp" };
+  init_options = { clangdFileStatus = true }
+}
+
+
+-- HLS
+lspconfig.hls.setup{
+  init_options = {
+    languageServerHaskell = {
+      hlintOn = true;
+      completionSnippetsOn = true;
+      formatOnImportOn = true;
+   }
+  }
+}
+
+
+-- Nix
+lspconfig.rnix.setup{
+  cmd = { "rnix-lsp" };
+  filetypes = { "nix" };
+}
+
+
+-- Rust
+lspconfig.rust_analyzer.setup{}
+
+
+-- Bash
+lspconfig.bashls.setup{
+  cmd = { "bash-language-server", "start" };
+  filetypes = { "sh" };
+}
+
 
 -- vhdl-tool
 if not configs.vhdl_tool then
@@ -141,92 +207,52 @@ if not configs.vhdl_tool then
     default_config = {
       cmd = {'vhdl-tool', 'lsp'};
       filetypes = {'vhdl'};
-      root_dir = require'lspconfig/util'.root_pattern("vhdltool-config.yaml");
+      root_dir = lspconfig.util.root_pattern("vhdltool-config.yaml");
       settings = {};
     };
   }
 end
+lspconfig.vhdl_tool.setup{}
 
-if vim.fn.executable("vhdl-tool") == 1 then
-  lspconfig.vhdl_tool.setup{
-    on_attach = attach_fn;
-    capabilities = lsp_status.capabilities;
+
+-- vhdl-tool
+if not configs.ghdl_ls then
+ configs.ghdl_ls = {
+    default_config = {
+      cmd = {'ghdl-ls'};
+      filetypes = {'vhdl'};
+      root_dir = lspconfig.util.root_pattern("hdl-prj.json");
+      settings = {};
+    };
   }
 end
-
-
-
--- HLS
-if vim.fn.executable("haskell-language-server-wrapper") == 1 then
-  lspconfig.hls.setup{
-    on_attach = attach_fn;
-    capabilities = lsp_status.capabilities;
-    init_options = {
-      languageServerHaskell = {
-        hlintOn = true;
-        completionSnippetsOn = true;
-        formatOnImportOn = true;
-     }
-    }
-  };
-end
-
-
--- clangd
-if vim.fn.executable("clangd") == 1 then
-  lspconfig.clangd.setup{
-    cmd = { vim.fn.exepath('clangd'), '--clang-tidy', '--suggest-missing-includes' };
-    filetypes = { "c", "cpp", "objc", "objcpp" };
-    on_attach = attach_fn;
-    capabilities = lsp_status.capabilities;
-    init_options = { clangdFileStatus = true }
-  }
-end
-
-
--- Nix
-if vim.fn.executable("rnix-lsp") == 1 then
-  lspconfig.rnix.setup{
-    cmd = { "rnix-lsp" };
-    filetypes = { "nix" };
-    on_attach = attach_fn;
-    capabilities = lsp_status.capabilities;
-  }
-end
-
-
--- Bash
-if vim.fn.executable("bash-language-server") == 1 then
-  lspconfig.bashls.setup{
-    cmd = { "bash-language-server", "start" };
-    filetypes = { "sh" };
-    on_attach = attach_fn;
-    capabilities = lsp_status.capabilities;
-  }
-end
+lspconfig.ghdl_ls.setup{}
 
 
 -- Lua
-if vim.fn.executable("lua-language-server") == 1 then
-  lspconfig.sumneko_lua.setup{
-    cmd = { "lua-language-server" };
-    on_attach = attach_fn;
-    capabilities = lsp_status.capabilities;
-    settings = {
-      Lua = {
-        diagnostics = {
-          -- Get the language server to recognize the `vim` global
-          globals = {'vim'},
-        },
-        workspace = {
-        -- Make the server aware of Neovim runtime files
-          library = {
-            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-          },
+lspconfig.sumneko_lua.setup{
+  cmd = { "lua-language-server" };
+  settings = {
+    Lua = {
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+      workspace = {
+      -- Make the server aware of Neovim runtime files
+        library = {
+          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
         },
       },
     },
-  }
+  },
+}
 
-end
+
+-- vimls
+lspconfig.vimls.setup{}
+
+
+-- cssls
+lspconfig.cssls.setup{}

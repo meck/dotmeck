@@ -1,6 +1,5 @@
-" {{{
 " vim: set foldmarker={{{,}}} foldmethod=marker foldlevel=1 :
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Misc                                                                {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -58,7 +57,7 @@ set textwidth=0                         " Set per file type
 set linebreak                           " Line break smartly
 
 " Completion
-set completeopt=menuone,noinsert
+set completeopt=menuone,noselect
 
 " Command line completion
 set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git
@@ -69,7 +68,6 @@ set wildmenu
 set incsearch
 set smartcase
 set ignorecase
-set nohlsearch
 
 " Line numbers
 set numberwidth=5
@@ -141,7 +139,8 @@ augroup END
 " Highlight selection after yanking
 augroup highlight_yank
     autocmd!
-    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)
+    autocmd TextYankPost * silent!
+          \ lua vim.highlight.on_yank {higroup="IncSearch", timeout=350}
 augroup END
 
 
@@ -149,15 +148,6 @@ augroup END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 " Functions                                                           {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Whitespace clean
-function! TrimWhitespace()
-    let l:save = winsaveview()
-    %s/\s\+$//e
-    call winrestview(l:save)
-    echo 'Stripped trailing whitespaccs'
-endfunction
-
 
 " Delete buffer if it is only open in a single window,
 " otherwise close the window
@@ -202,18 +192,6 @@ command! Bonly silent! execute "%bd|e#|bd#"
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-" LSP Config                                                          {{{
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-if has("nvim-0.5.0")
-lua << EOF
-  require'lsp'
-EOF
-endif
-
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 " Plug-in Settings                                                    {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -226,81 +204,12 @@ augroup obsssions_autoload
             \ endif
 augroup END
 
+" Better Whitespace
+let g:show_spaces_that_precede_tabs=1
+hi! link ExtraWhitespace Error
 
 " Quick-scope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
-
-" Airline
-let g:airline_left_sep = "\ue0b8" " Slanted Dividers
-let g:airline_left_alt_sep = "\ue0b9"
-let g:airline_right_sep = "\ue0be"
-let g:airline_right_alt_sep = "\ue0bf"
-
-let g:airline_skip_empty_sections = 1
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#obsession#indicator_text = 'Ⓢ'
-let g:airline#extensions#obsession#enabled = 1
-
-
-if has("nvim-0.5.0")
-
-lua << EOF
- Lsp_status = require'lsp_statusline'.status_string
- Lsp_curr_fn = require'lsp_statusline'.curr_fn
-EOF
-
-function! AirlineInit()
-
-  call airline#parts#define_function('lsp_cur_fn', 'v:lua.Lsp_curr_fn')
-  call airline#parts#define_function('lsp_status', 'v:lua.Lsp_status')
-
-  let g:airline_section_x = airline#section#create_right(['lsp_cur_fn', 'filetype'])
-  let g:airline_section_y = airline#section#create_right(['lsp_status'])
-
-endfunction
-augroup airline_init
-  autocmd!
-  autocmd User AirlineAfterInit call AirlineInit()
-augroup END
-
-endif
-
-
-" Treesitter
-if has("nvim-0.5.0")
-lua << EOF
-
-if vim.fn.executable('llvm') > 0 or
-   vim.fn.executable('gcc') > 0
-then
-  require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained",
-
-    highlight = {
-      enable = true
-    },
-
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = "gnn",
-        node_incremental = "grn",
-        scope_incremental = "grc",
-        node_decremental = "grm",
-      }
-    },
-
-    indent = {
-      enable = true
-    }
-  }
-else
-  print("No C compiler for Treesitter")
-end
-
-EOF
-endif
 
 
 " Signify
@@ -320,9 +229,9 @@ let g:pandoc#hypertext#autosave_on_edit_open_link = 1
 let g:pandoc#after#modules#enabled = ["tablemode", "ultisnips"]
 
 
-" Pandoc syntax
+" Pandoc syntax, no haskell
 "https://github.com/vim-pandoc/vim-pandoc-syntax/issues/344#issuecomment-761563470
-" let g:pandoc#syntax#codeblocks#embeds#langs = ["bash=sh", "haskell", "vhdl"]
+let g:pandoc#syntax#codeblocks#embeds#langs = ["bash=sh", "vhdl"]
 
 
 " Tablemode
@@ -381,7 +290,7 @@ cmap w!! w !sudo tee >/dev/null %
 nmap <silent><f1> :e $MYVIMRC<CR>
 
 " Clean trailing whitespaces
-noremap <silent> <Leader>wc :call TrimWhitespace()<CR>
+noremap <silent> <Leader>wc :StripWhitespace<CR>
 
 " Use custom swedish keymap
 nnoremap <silent> <Leader>s :call SweMap()<CR>
@@ -424,65 +333,28 @@ nnoremap <Leader>td  :tabclose<CR>
 " Plugin mapping, functions and autocmds                              {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Snippets
-let g:UltiSnipsExpandTrigger="<Plug>(ultisnips_expand)" " Completion to expand
-
-
-if has("nvim-0.5.0")
-
-" Completion
-let g:completion_enable_snippet = 'UltiSnips'
-let g:completion_docked_hover = 1
-let g:completion_docked_minimum_size = 5
-let g:completion_docked_maximum_size = 20
-let g:completion_auto_change_source = 1
-let g:completion_chain_complete_list =  {
-    \ 'default': [
-    \    {'complete_items': ['lsp', 'snippet', 'path']},
-    \    {'complete_items': ['buffers']},
-    \]}
-
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-inoremap <silent><expr> <TAB>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<TAB>" :
-  \ completion#trigger_completion()
-
-
-" Load completion plugin for all buffers
-augroup load_comp_grp
-    autocmd!
-    autocmd BufEnter * lua require'completion'.on_attach()
-augroup END
-
-endif
-
 " Gitgutter
 nmap <silent> ]g :GitGutterNextHunk <CR>
 nmap <silent> [g :GitGutterPrevHunk <CR>
-
 
 
 " UndoTree
 nnoremap <silent><Leader>u :UndotreeToggle<CR>
 
 
-
-" Telescope
-" View avalible lists
-nnoremap <silent><Leader>c <cmd>lua require'telescope.builtin'.builtin{}<CR>
-" Search for files
-nnoremap <silent><Leader>f <cmd>lua require'telescope.builtin'.find_files{}<CR>
-nnoremap <silent><Leader>F <cmd>lua require'telescope.builtin'.git_files{}<CR>
-" Search buffers
-nnoremap <silent><Leader>b <cmd>lua require'telescope.builtin'.buffers{}<CR>
-" Grep
-nnoremap <silent><Leader>g <cmd>lua require'telescope.builtin'.live_grep{}<CR>
+" TODO Tempory fix, see:
+" http://github.com/vim/vim/issues/4738
+" `0` argument sets file to local
+nnoremap <silent>gx :call netrw#BrowseX(netrw#GX(),0)<cr>
 
 
 
-" }}}
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+" Lua                                                                 {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Lua General Settings
+lua require'settings'
+
+" LSP
+lua require'lsp'
