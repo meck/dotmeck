@@ -1,6 +1,5 @@
-" {{{
 " vim: set foldmarker={{{,}}} foldmethod=marker foldlevel=1 :
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Misc                                                                {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -58,7 +57,7 @@ set textwidth=0                         " Set per file type
 set linebreak                           " Line break smartly
 
 " Completion
-set completeopt=menuone,noinsert
+set completeopt=menuone,noselect
 
 " Command line completion
 set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git
@@ -69,7 +68,6 @@ set wildmenu
 set incsearch
 set smartcase
 set ignorecase
-set nohlsearch
 
 " Line numbers
 set numberwidth=5
@@ -141,7 +139,8 @@ augroup END
 " Highlight selection after yanking
 augroup highlight_yank
     autocmd!
-    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)
+    autocmd TextYankPost * silent!
+          \ lua vim.highlight.on_yank {higroup="IncSearch", timeout=350}
 augroup END
 
 
@@ -333,44 +332,6 @@ nnoremap <Leader>td  :tabclose<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 " Plugin mapping, functions and autocmds                              {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Snippets
-let g:UltiSnipsExpandTrigger="<Plug>(ultisnips_expand)" " Completion to expand
-
-
-if has("nvim-0.5.0")
-
-" Completion
-let g:completion_enable_snippet = 'UltiSnips'
-let g:completion_docked_hover = 1
-let g:completion_docked_minimum_size = 5
-let g:completion_docked_maximum_size = 20
-let g:completion_auto_change_source = 1
-let g:completion_chain_complete_list =  {
-    \ 'default': [
-    \    {'complete_items': ['lsp', 'snippet', 'path']},
-    \    {'complete_items': ['buffers']},
-    \]}
-
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-inoremap <silent><expr> <TAB>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<TAB>" :
-  \ completion#trigger_completion()
-
-
-" Load completion plugin for all buffers
-augroup load_comp_grp
-    autocmd!
-    autocmd BufEnter * lua require'completion'.on_attach()
-augroup END
-
-endif
-
 
 " Gitgutter
 nmap <silent> ]g :GitGutterNextHunk <CR>

@@ -19,6 +19,7 @@ vim.cmd [[packadd packer.nvim
           autocmd BufWritePost plugins.lua PackerCompile]]
 
 local packer = require('packer')
+local use = packer.use
 
 packer.init()
 packer.startup(function()
@@ -53,9 +54,7 @@ packer.startup(function()
   use 'unblevable/quick-scope'                                      -- Preview targets for f/F/t/T
 
   -- Completion and snippets
-  use 'jiangmiao/auto-pairs'                                        -- Bracket Pairs
-  use 'nvim-lua/completion-nvim'                                    -- Completion with LSP support
-  use 'steelsojka/completion-buffers'                               -- Buffers for completion-nvim
+  use 'hrsh7th/nvim-compe'                                          -- Completion engine
   use {
     'SirVer/ultisnips',                                             -- Snippets
     requires = {'honza/vim-snippets'}                               -- Default snippets
@@ -77,6 +76,7 @@ packer.startup(function()
   }
 
   -- Formating
+  use 'jiangmiao/auto-pairs'                                       -- Bracket Pairs
   use 'godlygeek/tabular'                                          -- Aligning stuff
   use 'dhruvasagar/vim-table-mode'                                 -- Textbased tables
   use 'ntpeters/vim-better-whitespace'                             -- Strip trailing ws
