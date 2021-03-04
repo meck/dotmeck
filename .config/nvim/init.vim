@@ -70,8 +70,8 @@ set smartcase
 set ignorecase
 
 " Line numbers
-set numberwidth=5
-set relativenumber
+set numberwidth=4
+set norelativenumber
 set number
 
 " Live substitution
@@ -98,8 +98,12 @@ endif
 "Automatically switch line numbers
 augroup relativize
   autocmd!
-  autocmd BufWinEnter,FocusGained,InsertLeave,WinEnter * call Relativize(1)
-  autocmd BufWinLeave,FocusLost,InsertEnter,WinLeave * call Relativize(0)
+  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu
+    \ && mode() != "i"
+    \ && &modifiable
+    \ | set rnu   | endif
+  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu
+    \ | set nornu | endif
 augroup END
 
 
@@ -160,13 +164,6 @@ function! CloseWindowOrKillBuffer()
   endif
 endfunction
 
-
-" Change Line Numbers
-function! Relativize(v)
-  if &number
-    let &relativenumber = a:v
-  endif
-endfunction
 
 
 " Toggle to swedish keymap
