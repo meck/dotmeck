@@ -62,10 +62,8 @@ do
       lualine_a = {'mode', lang_status},
       lualine_b = {'branch', 'diff'},
       lualine_c = {obsession_status, 'filename'},
-      lualine_x = {'fileformat', 'filetype'},
-      lualine_y = {
-        lsp_curr_fn, {'diagnostics', sources = {'nvim_lsp'}}, lsp_status
-      },
+      lualine_x = {'fileformat', 'filetype', lsp_curr_fn},
+      lualine_y = {lsp_status, {'diagnostics', sources = {'nvim_lsp'}}},
       lualine_z = {'progress', 'location'}
     },
     inactive_sections = {

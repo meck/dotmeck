@@ -1,56 +1,25 @@
-local vim = vim
-local diagnostics = require('lsp-status/diagnostics')
 local messages = require('lsp-status/messaging').messages
 
 local aliases = {pyls_ms = 'MPLS'}
 local spinner_frames = {'⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'}
+local circle_numbers = {
+  '❶', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾', '❿'
+}
 
 local M = {}
 
 M.curr_fn = function()
   local f = vim.b.lsp_current_function
-  if f and f ~= '' then
-    return f
-  else
-    return ''
+  if not f then
+    f = ''
   end
-end
-
-M.errors = function()
-  if #vim.lsp.buf_get_clients() == 0 then return '' end
-
-  local buf_diagnostics = diagnostics()
-  if buf_diagnostics.errors and buf_diagnostics.errors > 0 then
-    return buf_diagnostics.errors
-  end
-  return ''
-end
-
-M.warnings = function()
-  if #vim.lsp.buf_get_clients() == 0 then return '' end
-
-  local buf_diagnostics = diagnostics()
-  local status_parts = {}
-
-  if buf_diagnostics.warnings and buf_diagnostics.warnings > 0 then
-    table.insert(status_parts, buf_diagnostics.warnings .. '⚠ ')
-  end
-
-  if buf_diagnostics.info and buf_diagnostics.info > 0 then
-    table.insert(status_parts, buf_diagnostics.info .. 'ℹ')
-  end
-
-  if buf_diagnostics.hints and buf_diagnostics.hints > 0 then
-    table.insert(status_parts, buf_diagnostics.hints .. '◉')
-  end
-
-  return vim.trim(table.concat(status_parts, ' '))
-
+  return f
 end
 
 M.status_string = function()
 
-  if #vim.lsp.buf_get_clients() == 0 then return '' end
+  local n_clients = #vim.lsp.buf_get_clients()
+  if n_clients < 1 then return '' end
 
   local buf_messages = messages()
 
@@ -96,7 +65,8 @@ M.status_string = function()
   local status_line = table.concat(msgs, ' ')
 
   if status_line ~= '' then return status_line end
-  return '✓'
+  return circle_numbers[n_clients]
+
 end
 
 return M
