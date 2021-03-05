@@ -70,8 +70,8 @@ set smartcase
 set ignorecase
 
 " Line numbers
-set numberwidth=5
-set relativenumber
+set numberwidth=4
+set norelativenumber
 set number
 
 " Live substitution
@@ -82,7 +82,7 @@ set inccommand=split
 " Persistent Undo
 if has('persistent_undo')
   " Create the undo directory if it dosent exsist
-  let s:myUndoDir = expand(stdpath("data") . '/undodir')
+  let s:myUndoDir = expand(stdpath('data') . '/undodir')
   call system('mkdir -p ' . s:myUndoDir)
   " Set the directory
   let &undodir = s:myUndoDir
@@ -98,8 +98,12 @@ endif
 "Automatically switch line numbers
 augroup relativize
   autocmd!
-  autocmd BufWinEnter,FocusGained,InsertLeave,WinEnter * call Relativize(1)
-  autocmd BufWinLeave,FocusLost,InsertEnter,WinLeave * call Relativize(0)
+  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu
+    \ && mode() != "i"
+    \ && &modifiable
+    \ | set rnu   | endif
+  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu
+    \ | set nornu | endif
 augroup END
 
 
@@ -161,18 +165,11 @@ function! CloseWindowOrKillBuffer()
 endfunction
 
 
-" Change Line Numbers
-function! Relativize(v)
-  if &number
-    let &relativenumber = a:v
-  endif
-endfunction
-
 
 " Toggle to swedish keymap
 " and spelling
 function! SweMap()
-  if (&keymap !=# "")
+  if (&keymap !=# '')
     set keymap=""
     set spelllang=en_us
   else
@@ -223,15 +220,15 @@ let g:signify_priority               = 5
 " Pandoc
 let g:pandoc#formatting#mode = 'hA'
 let g:pandoc#spell#enabled = 0
-let g:pandoc#spell#default_langs = ["en","sv"]
+let g:pandoc#spell#default_langs = ['en','sv']
 let g:pandoc#hypertext#create_if_no_alternates_exists = 1
 let g:pandoc#hypertext#autosave_on_edit_open_link = 1
-let g:pandoc#after#modules#enabled = ["tablemode", "ultisnips"]
+let g:pandoc#after#modules#enabled = ['tablemode', 'ultisnips']
 
 
 " Pandoc syntax, no haskell
 "https://github.com/vim-pandoc/vim-pandoc-syntax/issues/344#issuecomment-761563470
-let g:pandoc#syntax#codeblocks#embeds#langs = ["bash=sh", "vhdl"]
+let g:pandoc#syntax#codeblocks#embeds#langs = ['bash=sh', 'vhdl']
 
 
 " Tablemode
