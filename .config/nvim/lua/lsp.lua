@@ -211,6 +211,9 @@ if not configs.vhdl_tool then
 end
 lspconfig.vhdl_tool.setup {}
 
+-- Pyright
+lspconfig.pyright.setup {}
+
 -- Lua
 lspconfig.sumneko_lua.setup {
   cmd = {"lua-language-server"},
@@ -231,3 +234,6 @@ lspconfig.sumneko_lua.setup {
     }
   }
 }
+
+-- yaml
+lspconfig.yamlls.setup{}

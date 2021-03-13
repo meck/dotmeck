@@ -91,7 +91,7 @@ telescope.setup {
 }
 
 -- View avalible lists
-map('n', '<Leader>c', [[<cmd>lua require'telescope.builtin'.builtin{}<CR>]],
+map('n', '<Leader><Leader>', [[<cmd>lua require'telescope.builtin'.builtin{}<CR>]],
     {noremap = true, silent = true})
 -- Search for files
 map('n', '<Leader>f', [[<cmd>lua require'telescope.builtin'.find_files{}<CR>]],
