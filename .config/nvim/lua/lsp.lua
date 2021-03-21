@@ -159,20 +159,20 @@ lspconfig.util.default_config = vim.tbl_extend("force",
 ---------------
 
 -- efm
-local efm_lang = require 'efm'
-local efm_filetypes = {}
-for k, _ in pairs(efm_lang) do efm_filetypes[#efm_filetypes + 1] = k end
+-- local efm_lang = require 'efm'
+-- local efm_filetypes = {}
+-- for k, _ in pairs(efm_lang) do efm_filetypes[#efm_filetypes + 1] = k end
 
-lspconfig.efm.setup({
-  -- Git or local location
-  root_dir = function(fname)
-    return util.find_git_ancestor(fname) or util.path.dirname(fname)
-  end,
-  -- cmd = {'efm-langserver', "-logfile", "/tmp/efm.log", "-loglevel", "10"},
-  init_options = {documentFormatting = true},
-  filetypes = efm_filetypes,
-  settings = {rootMarkers = {'.git/'}, languages = efm_lang}
-})
+-- lspconfig.efm.setup({
+--   -- Git or local location
+--   root_dir = function(fname)
+--     return util.find_git_ancestor(fname) or util.path.dirname(fname)
+--   end,
+--   -- cmd = {'efm-langserver', "-logfile", "/tmp/efm.log", "-loglevel", "10"},
+--   init_options = {documentFormatting = true},
+--   filetypes = efm_filetypes,
+--   settings = {rootMarkers = {'.git/'}, languages = efm_lang}
+-- })
 
 -- clangd
 lspconfig.clangd.setup {

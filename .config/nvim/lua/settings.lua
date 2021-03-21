@@ -63,14 +63,15 @@ do
       lualine_b = {'branch', 'diff'},
       lualine_c = {obsession_status, 'filename'},
       lualine_x = {'fileformat', 'filetype', lsp_curr_fn},
-      lualine_y = {lsp_status, {'diagnostics', sources = {'nvim_lsp'}}},
+      lualine_y = {lsp_status, {'diagnostics', sources = {'nvim_lsp', 'ale'}}},
       lualine_z = {'progress', 'location'}
     },
     inactive_sections = {
 
       lualine_b = {'branch', 'diff'},
       lualine_c = {obsession_status, 'filename'}
-    }
+    },
+    extensions = {'fugitive'}
   }
 end
 
@@ -110,27 +111,12 @@ map('n', '<Leader>g', [[<cmd>lua require'telescope.builtin'.live_grep{}<CR>]],
 ------------------
 --  Treesitter  --
 ------------------
-if vim.fn.executable("gcc") == 1 or vim.fn.executable("clang") == 1 then
-  require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained",
-
-    highlight = {enable = true},
-
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        -- init_selection = "gnn",
-        -- node_incremental = "grn",
-        -- scope_incremental = "grc",
-        -- node_decremental = "grm",
-      }
-    },
-
-    indent = {enable = true}
-  }
-else
-  vim.notify("Treesitter disabled", vim.log.levels.INFO)
-end
+require'nvim-treesitter.configs'.setup {
+  -- Maintain grammars thru nix/home manger
+  highlight = {enable = true},
+  incremental_selection = {enable = false},
+  indent = {enable = true}
+}
 
 ------------------
 --  nvim-compe  --
@@ -150,17 +136,14 @@ require'compe'.setup {
   documentation = true,
 
   source = {
-    path = true,
-    buffer = true,
+    path = {priority = 9},
+    buffer = {priority = 8},
+    nvim_lsp = {priority = 10, sort = false},
+    nvim_lua = {priority = 8},
+    treesitter = {priority = 9},
+    ultisnips = {priority = 10},
     calc = true,
-    nvim_lsp = true,
-    nvim_lua = true,
-    spell = true,
-    tags = true,
-    treesitter = true,
-    ultisnips = true,
-    vsnip = false,
-    snippets_nvim = false
+    spell = true
   }
 }
 
@@ -183,8 +166,8 @@ end
 _G.tab_complete = function()
   if vim.fn.pumvisible() == 1 then
     return t "<C-n>"
-  -- elseif vim.fn.call("vsnip#available", {1}) == 1 then
-  --   return t "<Plug>(vsnip-expand-or-jump)"
+    -- elseif vim.fn.call("vsnip#available", {1}) == 1 then
+    --   return t "<Plug>(vsnip-expand-or-jump)"
   elseif check_back_space() then
     return t "<Tab>"
   else
@@ -194,8 +177,8 @@ end
 _G.s_tab_complete = function()
   if vim.fn.pumvisible() == 1 then
     return t "<C-p>"
-  -- elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
-  --   return t "<Plug>(vsnip-jump-prev)"
+    -- elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
+    --   return t "<Plug>(vsnip-jump-prev)"
   else
     return t "<S-Tab>"
   end

@@ -192,6 +192,18 @@ command! Bonly silent! execute "%bd|e#|bd#"
 " Plug-in Settings                                                    {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" ALE
+let g:ale_detail_to_floating_preview = 1
+let g:ale_cursor_detail = 1
+let g:ale_disable_lsp = 1
+let g:ale_sign_error = '✖'
+let g:ale_sign_warning = '⚠'
+let g:ale_sign_info = 'ℹ'
+let g:ale_sign_style_error = '✖'
+let g:ale_sign_style_warning = '⚠'
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
+
+
 " Vim Obsession
 augroup obsssions_autoload
   autocmd!
@@ -201,9 +213,6 @@ augroup obsssions_autoload
             \ endif
 augroup END
 
-" Better Whitespace
-let g:show_spaces_that_precede_tabs=1
-hi! link ExtraWhitespace Error
 
 " Quick-scope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
@@ -329,6 +338,11 @@ nnoremap <Leader>td  :tabclose<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 " Plugin mapping, functions and autocmds                              {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" ALE
+nmap <silent> ]a :ALENextWrap <CR>
+nmap <silent> [a :ALEPreviousWrap <CR>
+
 
 " Gitgutter
 nmap <silent> ]g :GitGutterNextHunk <CR>
