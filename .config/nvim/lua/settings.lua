@@ -63,7 +63,7 @@ do
       lualine_b = {'branch', 'diff'},
       lualine_c = {obsession_status, 'filename'},
       lualine_x = {'fileformat', 'filetype', lsp_curr_fn},
-      lualine_y = {lsp_status, {'diagnostics', sources = {'nvim_lsp', 'ale'}}},
+      lualine_y = {lsp_status, {'diagnostics', sources = {'nvim_lsp'}}},
       lualine_z = {'progress', 'location'}
     },
     inactive_sections = {
@@ -196,7 +196,8 @@ map("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 map("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 
 map("i", "<C-Space>", "compe#complete()", {expr = true, silent = true})
-map("i", "<CR>", "compe#confirm('<CR>')", {expr = true, silent = true})
+map("i", "<CR>", "compe#confirm({ 'keys': '<Plug>delimitMateCR', 'mode': '' })",
+    {expr = true, silent = true})
 map("i", "<C-e>", "compe#close('<C-e>')", {expr = true, silent = true})
 -- map("i", "<C-f>", "compe#scroll({ 'delta': +4 })", {expr = true, silent = true})
 -- map("i", "<C-d>", "compe#scroll({ 'delta': -4 })", {expr = true, silent = true})
