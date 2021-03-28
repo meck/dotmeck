@@ -20,7 +20,6 @@ vim.cmd [[packadd packer.nvim
 
 local packer = require('packer')
 local use = packer.use
-
 packer.init()
 packer.startup(function()
 
@@ -30,7 +29,7 @@ packer.startup(function()
   use {'meck/nord-vim', branch = 'custom'} -- Theme TODO Waiting for PR
   use 'hoob3rt/lualine.nvim' -- Statusline
 
-  -- LSP
+  -- LSP and lint
   use 'neovim/nvim-lsp' -- Builtin LSP
   use 'nvim-lua/lsp-status.nvim' -- Get LSP status for statusline
   use 'kosayoda/nvim-lightbulb' -- Indicate code actions gutter
@@ -73,10 +72,9 @@ packer.startup(function()
   }
 
   -- Formating
-  use 'jiangmiao/auto-pairs' -- Bracket Pairs
+  use 'Raimondi/delimitMate' -- Auto delimiters
   use 'godlygeek/tabular' -- Aligning stuff
   use 'dhruvasagar/vim-table-mode' -- Textbased tables
-  use 'ntpeters/vim-better-whitespace' -- Strip trailing ws
 
   -- Utillites
   use {

@@ -23,6 +23,21 @@ M.lua = {
   }
 }
 
+M.python = {
+  {
+    -- black
+    formatCommand = 'black --quiet -',
+    formatStdin = true
+  }, {
+    -- pylint
+    lintCommand = 'pylint --output-format text --score no --msg-template {path}:{line}:{column}:{C}:pylint:{msg} ${INPUT}',
+    lintFormats = {"%f:%l:%c:%t:%m"},
+    lintStdin = false,
+    lintOffsetColumns = 1,
+    lintCategoryMap = {I = 'H', R = 'I', C = 'I', W = 'W', E = 'E', F = 'E'}
+  }
+}
+
 M.vim = {
   {
     -- vint

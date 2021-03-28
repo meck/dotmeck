@@ -93,29 +93,15 @@ local attach_fn = function(client, bufnr)
 
 end
 
-Lsp_stop_all = function()
-  local clients = lsp.get_active_clients()
-
-  if #clients > 0 then
-
-    lsp.stop_client(clients)
-    for _, v in pairs(clients) do print("Stopped LSP client " .. v.name) end
-
-  else
-
-    print("No LSP clients are running")
-
-  end
-end
-
--- `:LspStopAll` and `:LspRestartAll`
-api.nvim_command("command! LspStopAll call v:lua.Lsp_stop_all()")
-api.nvim_command(
-    "command! -bar LspRestartAll call v:lua.Lsp_stop_all() <bar> edit")
 
 -- Disable virual text
 lsp.handlers["textDocument/publishDiagnostics"] =
-    lsp.with(lsp.diagnostic.on_publish_diagnostics, {virtual_text = false})
+    lsp.with(lsp.diagnostic.on_publish_diagnostics, {
+      underline = true,
+      virtual_text = false,
+      signs = true,
+      update_in_insert = false
+    })
 
 -- Signs and their highlights
 if not Lsp_signs_defined then
@@ -158,7 +144,7 @@ lspconfig.util.default_config = vim.tbl_extend("force",
 --  Servers  --
 ---------------
 
--- efm
+-- EFM Langserver
 local efm_lang = require 'efm'
 local efm_filetypes = {}
 for k, _ in pairs(efm_lang) do efm_filetypes[#efm_filetypes + 1] = k end
@@ -174,7 +160,7 @@ lspconfig.efm.setup({
   settings = {rootMarkers = {'.git/'}, languages = efm_lang}
 })
 
--- clangd
+-- Clangd
 lspconfig.clangd.setup {
   cmd = {vim.fn.exepath('clangd'), '--clang-tidy', '--suggest-missing-includes'},
   filetypes = {"c", "cpp", "objc", "objcpp"},
@@ -211,6 +197,9 @@ if not configs.vhdl_tool then
 end
 lspconfig.vhdl_tool.setup {}
 
+-- Pyright
+lspconfig.pyright.setup {}
+
 -- Lua
 lspconfig.sumneko_lua.setup {
   cmd = {"lua-language-server"},
@@ -231,3 +220,6 @@ lspconfig.sumneko_lua.setup {
     }
   }
 }
+
+-- yaml
+lspconfig.yamlls.setup {}

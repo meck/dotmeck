@@ -201,9 +201,6 @@ augroup obsssions_autoload
             \ endif
 augroup END
 
-" Better Whitespace
-let g:show_spaces_that_precede_tabs=1
-hi! link ExtraWhitespace Error
 
 " Quick-scope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']

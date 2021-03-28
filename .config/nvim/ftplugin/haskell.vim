@@ -24,9 +24,5 @@ let g:haskell_indent_in = 2
 let g:haskell_indent_guard = 2
 
 
-" ----- For diagnostics -----
-setlocal signcolumn=yes
-
-
 " ----- ndmitchell/ghcid -----
 nnoremap <silent> <leader>hg :Ghcid<CR>
