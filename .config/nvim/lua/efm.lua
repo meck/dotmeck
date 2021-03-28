@@ -30,11 +30,11 @@ M.python = {
     formatStdin = true
   }, {
     -- pylint
-    lintCommand = 'pylint --output-format=text --msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg}" --reports=no',
-    lintFormats = {
-      "%A%f:%l:%c:%t: %m", "%A%f:%l: %m", "%A%f:(%l): %m", "%-Z%p^%.%#",
-      "%-G%.%#"
-    }
+    lintCommand = 'pylint --output-format text --score no --msg-template {path}:{line}:{column}:{C}:pylint:{msg} ${INPUT}',
+    lintFormats = {"%f:%l:%c:%t:%m"},
+    lintStdin = false,
+    lintOffsetColumns = 1,
+    lintCategoryMap = {I = 'H', R = 'I', C = 'I', W = 'W', E = 'E', F = 'E'}
   }
 }
 
