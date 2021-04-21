@@ -108,6 +108,7 @@ packer.startup(function()
   -- Misc
   use {'fatih/vim-go', ft = 'go'}
   use {'rust-lang/rust.vim', ft = 'rust'}
+  use {'https://github.com/kergoth/vim-bitbake'}
   use 'liuchengxu/graphviz.vim'
 
 end)

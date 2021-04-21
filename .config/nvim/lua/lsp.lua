@@ -93,7 +93,6 @@ local attach_fn = function(client, bufnr)
 
 end
 
-
 -- Disable virual text
 lsp.handlers["textDocument/publishDiagnostics"] =
     lsp.with(lsp.diagnostic.on_publish_diagnostics, {
@@ -102,23 +101,22 @@ lsp.handlers["textDocument/publishDiagnostics"] =
       signs = true,
       update_in_insert = false
     })
-
 -- Signs and their highlights
 if not Lsp_signs_defined then
   vim.fn.sign_define('LspDiagnosticsSignError', {
-    text = '✖',
+    text = '',
     texthl = 'LspDiagnosticsDefaultError',
     linehl = '',
     numhl = ''
   })
   vim.fn.sign_define('LspDiagnosticsSignWarning', {
-    text = '⚠',
+    text = '',
     texthl = 'LspDiagnosticsDefaultWarning',
     linehl = '',
     numhl = ''
   })
   vim.fn.sign_define('LspDiagnosticsSignInformation', {
-    text = 'ℹ',
+    text = '',
     texthl = 'LspDiagnosticsDefaultInfo',
     linehl = '',
     numhl = ''
@@ -129,7 +127,12 @@ if not Lsp_signs_defined then
     linehl = '',
     numhl = ''
   })
-  vim.fn.sign_define('LightBulbSign', {text = "⚑", texthl = "Number"}) -- nvim-lightbulb
+  vim.fn.sign_define('LightBulbSign', {
+    text = "⚑",
+    texthl = "Number",
+    linehl = '',
+    numhl = ''
+  }) -- nvim-lightbulb
   Lsp_signs_defined = true
 end
 
@@ -223,3 +226,7 @@ lspconfig.sumneko_lua.setup {
 
 -- yaml
 lspconfig.yamlls.setup {}
+
+-- bash
+lspconfig.bashls.setup {}
+
