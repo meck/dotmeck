@@ -225,7 +225,7 @@ let g:pandoc#after#modules#enabled = ['tablemode', 'ultisnips']
 
 " Pandoc syntax, no haskell
 "https://github.com/vim-pandoc/vim-pandoc-syntax/issues/344#issuecomment-761563470
-let g:pandoc#syntax#codeblocks#embeds#langs = ['bash=sh', 'vhdl']
+let g:pandoc#syntax#codeblocks#embeds#langs = ['bash=sh', 'vhdl', 'python']
 
 
 " Tablemode
